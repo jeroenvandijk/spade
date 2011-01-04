@@ -10,13 +10,11 @@ require 'v8'
 
 require 'spade/context'
 require 'spade/exports'
+require 'spade/version'
 
 module Spade
-  
-  VERSION = '0.0.1'
-  
   SPADE_DIR = '.spade'
-  
+
   # find the current path with a package.json or .packages or cur_path
   def self.discover_root(cur_path)
     ret = File.expand_path(cur_path)
@@ -24,10 +22,7 @@ module Spade
       return ret if File.exists?(File.join(ret,'package.json')) || File.exists?(File.join(ret,'.spade'))
       ret = File.dirname ret
     end
-    
+
     return cur_path
   end
-
 end
-      
-  

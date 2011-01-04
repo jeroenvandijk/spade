@@ -1,23 +1,24 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
- 
+
+require 'spade/version'
+
 Gem::Specification.new do |s|
   s.name        = "spade"
-  s.version     = "0.8.0"
+  s.version     = Spade::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Charles Jolley"]
   s.email       = ["charles@sproutcore.com"]
   s.homepage    = "http://github.com/sproutcore/spade"
-  s.summary     = "Unified JavaScript runner for browser and command line"
-  s.description = "..."
- 
+  s.summary = s.description = "Unified JavaScript runner for browser and command line"
+
   s.required_rubygems_version = ">= 1.3.6"
-  #s.rubyforge_project         = "spade"
- 
-  #s.add_development_dependency "rspec"
- 
-  s.files        = Dir.glob("{bin,lib,packages}/**/*") + %w(README.md)
-  s.executables  = ['spade']
-  s.require_path = 'lib'
+
+  s.files      = `git ls-files`.split("\n")
+  s.test_files = `git ls-files -- {test,spec,features}/*`
+
+  s.executables        = ['spade']
+  s.default_executable = "spade"
+  s.require_paths      = ["lib"]
 end
