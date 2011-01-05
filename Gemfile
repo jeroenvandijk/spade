@@ -7,7 +7,5 @@ gem "therubyracer", "0.8.0"
 gem "thor",         "0.14.3"
 
 group :development do
-  gem "aruba"
-  gem "cucumber"
   gem "rspec"
 end

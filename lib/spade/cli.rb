@@ -105,10 +105,14 @@ module Spade
       Rack::Handler::WEBrick.run static, :Port => options[:port].to_i
     end
 
-
     desc "update", "Update package info in the current project"
     def update
       Bundle.update(options[:working], :verbose => options[:verbose])
+    end
+
+    desc "push [FILENAME]", "Deploy a spade package to the world"
+    def push(package)
+      say "Enter your Spade credentials."
     end
 
     protected
