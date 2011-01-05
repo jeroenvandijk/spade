@@ -3,6 +3,5 @@ lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
 $:.unshift(lib) if File.exists?(lib)
 
 require 'spade'
-require 'spade/cli'
 
 Spade::CLI.start

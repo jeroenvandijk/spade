@@ -5,12 +5,14 @@
 # ==========================================================================
 
 require 'rubygems'
-require 'eventmachine'
-require 'v8'
+require 'fileutils'
+require 'net/http'
+require 'net/https'
+require 'uri'
 
-require 'spade/context'
-require 'spade/exports'
-require 'spade/version'
+require 'eventmachine'
+require 'thor'
+require 'v8'
 
 module Spade
   SPADE_DIR = '.spade'
@@ -26,3 +28,11 @@ module Spade
     return cur_path
   end
 end
+
+require 'spade/bundle'
+require 'spade/cli'
+require 'spade/context'
+require 'spade/exports'
+require 'spade/remote'
+require 'spade/shell'
+require 'spade/version'

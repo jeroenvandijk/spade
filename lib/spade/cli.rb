@@ -4,10 +4,6 @@
 # License:   Licened under MIT license (see LICENSE)
 # ==========================================================================
 
-require 'thor'
-require 'spade/shell'
-require 'spade/bundle'
-
 module Spade
   EXENAME = 'spade'
 
@@ -110,9 +106,17 @@ module Spade
       Bundle.update(options[:working], :verbose => options[:verbose])
     end
 
-    desc "push [FILENAME]", "Deploy a spade package to the world"
-    def push(package)
+    desc "login", "Log in with your Spade credentials"
+    def login
       say "Enter your Spade credentials."
+      email    = ask "   Email:"
+      password = ask "Password:"
+
+      if Remote.login(email, password)
+        say "Logged in!"
+      else
+        say "Incorrect email or password."
+      end
     end
 
     protected
