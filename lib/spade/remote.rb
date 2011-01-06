@@ -23,10 +23,25 @@ module Spade
       end
     end
 
+    def self.push(package)
+      response = rubygems_api_request :post, "api/v1/gems" do |request|
+        request.body = Gem.read_binary package
+        request.add_field "Content-Length", request.body.size
+        request.add_field "Content-Type",   "application/octet-stream"
+        request.add_field "Authorization",  api_key
+      end
+
+      response.body
+    end
+
     def self.api_key=(api_key)
       File.open(spade_dir("credentials"), "w") do |file|
         file.write YAML.dump(:spade_api_key => api_key)
       end
+    end
+
+    def self.api_key
+      YAML.load_file(spade_dir("credentials"))[:spade_api_key]
     end
 
     def self.install(package)

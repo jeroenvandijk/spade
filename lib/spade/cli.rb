@@ -146,6 +146,11 @@ module Spade
       end
     end
 
+    desc "push", "Distribute your spade package"
+    def push(package)
+      say Remote.push(package)
+    end
+
     protected
 
     # Replace start such that if you don't pass an original task, we try to 
