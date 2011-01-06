@@ -108,8 +108,16 @@ module Spade
 
     desc "install [PACKAGE]", "Installs a spade package"
     def install(package)
-      Remote.install(package)
-      say "DONE!!"
+      begin
+        packages = Remote.install(package)
+        packages.each do |spec|
+          say "Successfully installed #{spec.full_name}"
+        end
+      rescue Gem::InstallError => e
+        say "Install error #{e}"
+      rescue Gem::GemNotFoundException => e
+        say "Can't find package #{package}"
+      end
     end
 
     desc "login", "Log in with your Spade credentials"

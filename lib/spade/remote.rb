@@ -35,23 +35,14 @@ module Spade
     end
 
     def self.install(package)
-      require 'rubygems/commands/install_command'
+      require 'rubygems/dependency_installer'
 
       Gem.sources.replace [uri.to_s]
       Gem.use_paths(spade_dir)
 
-      begin
-        inst = Gem::DependencyInstaller.new {}
-        inst.install package, Gem::Requirement.new([">= 0"])
-
-        inst.installed_gems.each do |spec|
-          puts "Successfully installed #{spec.full_name}"
-        end
-      rescue Gem::InstallError => e
-        puts "Install error #{e}"
-      rescue Gem::GemNotFoundException => e
-        puts "Can't find package #{package}"
-      end
+      inst = Gem::DependencyInstaller.new {}
+      inst.install package, Gem::Requirement.new([">= 0"])
+      inst.installed_gems
     end
   end
 end
