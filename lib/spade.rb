@@ -9,8 +9,10 @@ require 'fileutils'
 require 'net/http'
 require 'net/https'
 require 'uri'
+require 'yaml'
 
 require 'eventmachine'
+require 'highline'
 require 'thor'
 require 'v8'
 

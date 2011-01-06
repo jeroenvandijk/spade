@@ -19,6 +19,7 @@ describe "logging in" do
     end
 
     env["HOME"] = home.to_s
+    env["SPADE_URL"] = "http://localhost:9292"
     start_fake(protected_fake)
   end
 
@@ -29,6 +30,13 @@ describe "logging in" do
   it "first asks for credentials" do
     spade "login"
     stdout.should contain_line("Enter your Spade credentials.")
+  end
+
+  it "says email that user is logging in as" do
+    spade "login"
+    input email
+    input password
+    stdout.read.should include("Logging in as #{email}...")
   end
 
   it "makes a request out for the api key and stores it in ~/.spade/credentials" do

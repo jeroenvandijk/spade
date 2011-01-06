@@ -108,9 +108,20 @@ module Spade
 
     desc "login", "Log in with your Spade credentials"
     def login
+      highline = HighLine.new
       say "Enter your Spade credentials."
-      email    = ask "   Email:"
-      password = ask "Password:"
+
+      email = highline.ask "\nEmail:" do |q|
+        next unless STDIN.tty?
+        q.readline = true
+      end
+
+      password = highline.ask "\nPassword:" do |q|
+        next unless STDIN.tty?
+        q.echo = "*"
+      end
+
+      say "\nLogging in as #{email}..."
 
       if Remote.login(email, password)
         say "Logged in!"

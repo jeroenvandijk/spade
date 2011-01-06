@@ -1,7 +1,12 @@
 module Spade
   class Remote
+    def self.uri(path)
+      host = ENV["SPADE_URL"] || "https://sproutcutter.heroku.com"
+      URI("#{host}#{path}")
+    end
+
     def self.login(email, password)
-      uri  = URI("http://localhost:9292/api/v1/api_key")
+      uri  = uri("/api/v1/api_key")
       http = Net::HTTP.new(uri.host, uri.port)
 
       if uri.scheme == "https"
