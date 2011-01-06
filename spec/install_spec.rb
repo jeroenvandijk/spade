@@ -29,7 +29,7 @@ describe "installing gems" do
     end
 
     env["HOME"] = home.to_s
-    env["SPADE_URL"] = "http://localhost:9292"
+    env["RUBYGEMS_HOST"] = "http://localhost:9292"
     start_fake(fake)
   end
 

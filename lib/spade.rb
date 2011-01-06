@@ -5,6 +5,9 @@
 # ==========================================================================
 
 require 'rubygems'
+require 'rubygems/dependency_installer'
+require 'rubygems/gemcutter_utilities'
+
 require 'fileutils'
 require 'net/http'
 require 'net/https'
