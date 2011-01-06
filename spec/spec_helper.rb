@@ -4,6 +4,7 @@ Dir[File.expand_path("../support/*.rb", __FILE__)].each do |file|
   require file
 end
 
+require 'rubygems/format'
 require 'rack'
 require 'system_timer'
 

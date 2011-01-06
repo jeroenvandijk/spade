@@ -106,6 +106,11 @@ module Spade
       Bundle.update(options[:working], :verbose => options[:verbose])
     end
 
+    desc "install [PACKAGE]", "Installs a spade package"
+    def install(package)
+      Remote.install(package)
+    end
+
     desc "login", "Log in with your Spade credentials"
     def login
       highline = HighLine.new

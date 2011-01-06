@@ -1,8 +1,12 @@
 module Spade
   class Remote
-    def self.uri(path)
+    def self.uri(*path)
       host = ENV["SPADE_URL"] || "https://sproutcutter.heroku.com"
-      URI("#{host}#{path}")
+      URI(File.join(host, *path))
+    end
+
+    def self.spade_dir(*path)
+      File.join(ENV["HOME"], ".spade", *path)
     end
 
     def self.login(email, password)
@@ -19,17 +23,30 @@ module Spade
 
       case response
       when Net::HTTPSuccess
-        spade_dir   = File.join(ENV["HOME"], ".spade")
-        credentials = File.join(spade_dir, "credentials")
-        contents    = YAML.dump(:spade_api_key => response.body)
+        contents = YAML.dump(:spade_api_key => response.body)
         FileUtils.mkdir_p(spade_dir)
-        File.open(credentials, "w") do |file|
+        File.open(spade_dir("credentials"), "w") do |file|
           file.write YAML.dump(:spade_api_key => response.body)
         end
         true
       else
         false
       end
+    end
+
+    def self.install(package)
+      require 'rubygems/commands/install_command'
+
+      Gem.sources.replace [uri.to_s]
+      Gem.use_paths(spade_dir)
+      #Gem.configuration.verbose = 1
+
+      command = Gem::Commands::InstallCommand.new
+      command.options[:generate_ri] = false
+      command.options[:generate_rdoc] = false
+      command.options[:args] = package
+      command.options[:domain] = :remote
+      command.execute
     end
   end
 end

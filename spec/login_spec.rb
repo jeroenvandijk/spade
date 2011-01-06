@@ -23,10 +23,6 @@ describe "logging in" do
     start_fake(protected_fake)
   end
 
-  after do
-    stop_fake
-  end
-
   it "first asks for credentials" do
     spade "login"
     stdout.should contain_line("Enter your Spade credentials.")
