@@ -4,7 +4,9 @@ module Spade
     ENV["RUBYGEMS_HOST"] ||= "https://sproutcutter.heroku.com"
 
     def self.spade_dir(*path)
-      File.join(ENV["HOME"], ".spade", *path)
+      base = File.join(ENV["HOME"], ".spade")
+      FileUtils.mkdir_p(base)
+      File.join(base, *path)
     end
 
     def self.login(email, password)
@@ -14,14 +16,16 @@ module Spade
 
       case response
       when Net::HTTPSuccess
-        contents = YAML.dump(:spade_api_key => response.body)
-        FileUtils.mkdir_p(spade_dir)
-        File.open(spade_dir("credentials"), "w") do |file|
-          file.write YAML.dump(:spade_api_key => response.body)
-        end
+        self.api_key = response.body
         true
       else
         false
+      end
+    end
+
+    def self.api_key=(api_key)
+      File.open(spade_dir("credentials"), "w") do |file|
+        file.write YAML.dump(:spade_api_key => api_key)
       end
     end
 
