@@ -39,14 +39,19 @@ module Spade
 
       Gem.sources.replace [uri.to_s]
       Gem.use_paths(spade_dir)
-      #Gem.configuration.verbose = 1
 
-      command = Gem::Commands::InstallCommand.new
-      command.options[:generate_ri] = false
-      command.options[:generate_rdoc] = false
-      command.options[:args] = package
-      command.options[:domain] = :remote
-      command.execute
+      begin
+        inst = Gem::DependencyInstaller.new {}
+        inst.install package, Gem::Requirement.new([">= 0"])
+
+        inst.installed_gems.each do |spec|
+          puts "Successfully installed #{spec.full_name}"
+        end
+      rescue Gem::InstallError => e
+        puts "Install error #{e}"
+      rescue Gem::GemNotFoundException => e
+        puts "Can't find package #{package}"
+      end
     end
   end
 end

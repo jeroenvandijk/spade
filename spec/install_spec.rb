@@ -40,4 +40,12 @@ describe "installing gems" do
     File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_true
     File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_true
   end
+
+  it "fails when installing an invalid gem" do
+    spade "install", "fake"
+
+    stdout.should contain_line("Can't find package fake")
+    File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_false
+    File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_false
+  end
 end

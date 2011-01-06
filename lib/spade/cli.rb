@@ -109,6 +109,7 @@ module Spade
     desc "install [PACKAGE]", "Installs a spade package"
     def install(package)
       Remote.install(package)
+      say "DONE!!"
     end
 
     desc "login", "Log in with your Spade credentials"
