@@ -48,4 +48,16 @@ describe "installing gems" do
     File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_false
     File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_false
   end
+
+  it "fails if spade can't write to the spade directory" do
+    FileUtils.mkdir_p home(".spade")
+    FileUtils.chmod 0555, home(".spade")
+
+    spade "install", "rake"
+
+    stdout.read.should include("You don't have write permissions")
+
+    File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_false
+    File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_false
+  end
 end

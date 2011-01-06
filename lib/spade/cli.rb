@@ -114,9 +114,11 @@ module Spade
           say "Successfully installed #{spec.full_name}"
         end
       rescue Gem::InstallError => e
-        say "Install error #{e}"
+        say "Install error: #{e}"
       rescue Gem::GemNotFoundException => e
         say "Can't find package #{package}"
+      rescue Gem::FilePermissionError => e
+        say e.message
       end
     end
 
