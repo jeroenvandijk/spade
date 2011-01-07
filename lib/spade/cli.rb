@@ -16,7 +16,7 @@ module Spade
       :desc    => 'Root working directory.'
 
     class_option :verbose, :type => :boolean, :default => false,
-      :aliases => ['-v'],
+      :aliases => ['-V'],
       :desc => 'Show additional debug information while running'
 
     class_option :require, :type => :array, :required => false,
