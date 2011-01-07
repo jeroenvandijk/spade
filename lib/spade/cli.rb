@@ -107,10 +107,11 @@ module Spade
     end
 
     desc "install [PACKAGE]", "Installs one or many spade packages"
+    method_option :version, :default => ">= 0", :type => :string, :aliases => ['-v'], :desc => 'Port number'
     def install(*packages)
       begin
         packages.each do |package|
-          installed = Remote.install(package)
+          installed = Remote.install(package, options[:version])
           installed.each do |spec|
             say "Successfully installed #{spec.full_name}"
           end

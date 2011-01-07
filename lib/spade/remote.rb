@@ -56,12 +56,12 @@ module Spade
       end
     end
 
-    def self.install(package)
+    def self.install(package, options)
       Gem.sources.replace [ENV["RUBYGEMS_HOST"]]
       Gem.use_paths(spade_dir)
 
       inst = Gem::DependencyInstaller.new {}
-      inst.install package, Gem::Requirement.new([">= 0"])
+      inst.install package, Gem::Requirement.new([options])
       inst.installed_gems
     end
   end

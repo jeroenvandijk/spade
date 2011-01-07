@@ -3,36 +3,9 @@ require "spec_helper"
 describe "installing gems" do
   before do
     cd(home)
-
-    fake = lambda do |env|
-      request  = Rack::Request.new(env)
-
-      if request.path =~ /specs/
-        index = [
-          ["builder", Gem::Version.new("3.0.0"), "ruby"],
-          ["rake",    Gem::Version.new("0.8.7"), "ruby"]
-        ]
-        compressed = StringIO.new
-        gzip = Zlib::GzipWriter.new(compressed)
-        gzip.write(Marshal.dump(index))
-        gzip.close
-
-        [200, {"Content-Type" => "application/octet-stream"}, compressed.string]
-      elsif request.path =~ /\/quick\/Marshal\.4\.8\/(.*\.gem)spec\.rz$/
-        spec  = Gem::Format.from_file_by_path(fixtures($1).to_s).spec
-        value = Gem.deflate(Marshal.dump(spec))
-
-        [200, {"Content-Type" => "application/octet-stream"}, value]
-      elsif request.path =~ /\/gems\/(.*\.gem)$/
-        [200, {"Content-Type" => "application/octet-stream"}, File.read(fixtures($1))]
-      else
-        [200, {"Content-Type" => "text/plain"}, "fake gem server"]
-      end
-    end
-
     env["HOME"] = home.to_s
     env["RUBYGEMS_HOST"] = "http://localhost:9292"
-    start_fake(fake)
+    start_fake(FakeGemServer.new)
   end
 
   it "installs a valid gem" do
@@ -89,5 +62,16 @@ describe "installing gems" do
 
     "rake-0.8.7".should_not be_fetched
     "rake-0.8.7".should_not be_unpacked
+  end
+
+  it "installs gems with a different version" do
+    spade "install", "rake", "-v", "0.8.6"
+
+    stdout.read.should include("Successfully installed rake-0.8.6")
+
+    "rake-0.8.7".should_not be_fetched
+    "rake-0.8.7".should_not be_unpacked
+    "rake-0.8.6".should be_fetched
+    "rake-0.8.6".should be_unpacked
   end
 end
