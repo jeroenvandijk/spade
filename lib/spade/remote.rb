@@ -4,7 +4,7 @@ module Spade
     ENV["RUBYGEMS_HOST"] ||= "https://sproutcutter.heroku.com"
 
     def self.spade_dir(*path)
-      base = File.join(ENV["HOME"], ".spade")
+      base = File.join(ENV["HOME"], SPADE_DIR)
       FileUtils.mkdir_p(base)
       File.join(base, *path)
     end
