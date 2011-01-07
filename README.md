@@ -14,10 +14,18 @@ packages:
     git clone git://github.com/charlesjolley/spade.git
     cd spade
     git submodule update --init
-    bundle install
-    
+    bundle
+
 You should now be able to run the demos in the examples folder.  Be sure to 
 check out any README files in the example folders for instructions there.
+
+Run the test suite:
+
+    rake
+
+Run an individual test:
+
+    bundle exec rspec spec/login_spec.rb
 
 # Quick Start Guide
 
@@ -27,11 +35,11 @@ Let's write a simple script.  Create a new file called 'main.js' and put in
 the following:
 
     console.log('Hello World');
-  
+
 Now run this from the command line:
 
     spade main.js
-  
+
 Now we want to run this in the browser.  To run in the browser, you need to 
 make a JavaScript _package_.  A package is simply a folder containing your 
 JavaScript structured in a way that the module system can understand.  All
@@ -59,7 +67,7 @@ Your index.html should contain the following:
       <body>
       </body>
     </html>
-    
+
 This index.html file will simply load a boot script that we are about to 
 generate.
 
@@ -68,12 +76,12 @@ The package.json should list at minimum the app name and dependencies:
     {
       "name": "hello-world"
     }
-    
+
 Next, we need to setup this package so it includes any dependencies.  To do 
 this, use the `spade update` command:
 
     spade update
-    
+
 This will create a new, hidden '.spade' directory with info along with a new
 file called spade-boot.js.  This contains the bootstrap needed to get your 
 modules loading in the browser.
@@ -82,7 +90,7 @@ Finally, to load in the browser, you will need to access your files through a se
 preview server with:
 
     spade preview
-    
+
 Then visit http://localhost:4020/index.html
 
 If you open the JavaScript console you should see `Hello World` printed out.
@@ -98,17 +106,17 @@ console that comes with spade.  When you drop into the console you can load
 modules from your project onto the command line.
 
     spade console
-    
+
 From within the console, load your main hello-world module to see it log:
 
     require('hello-world/main');
-    
+
 You should see it log 'Hello World'.
 
 # Defining Packages
 
 In addition to creating packages as apps, as we did above.  You can also 
-define shared package libraries.  
+define shared package libraries.
 
 TODO: Finish this...
 
@@ -116,7 +124,20 @@ TODO: Finish this...
 
 Drop a ruby file into a package and then you can require it.  The Ruby should
 set the Spade.exports to a new instance of a class to make it into the exports
-for the class.  
+for the class.
 
 Note that Ruby modules only work when code is run from the command line.
 
+## Distributing your packages
+
+Distributing your spade packages is easy, first:
+
+    spade login
+
+Once you've bundled your package...
+
+    spade push pkg/awesome-0.0.0.spade
+
+Then it should be available for install with:
+
+    spade install awesome
