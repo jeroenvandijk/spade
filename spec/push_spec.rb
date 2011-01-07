@@ -23,15 +23,25 @@ describe "pushing a gem" do
     start_fake(fake)
   end
 
-  it "registers a gem when sent with the right api key" do
-    FileUtils.mkdir_p(home(".spade"))
-    File.open(home(".spade", "credentials"), "w") do |file|
-      file.write YAML.dump(:spade_api_key => api_key)
+  context "with a good api key" do
+    before do
+      FileUtils.mkdir_p(home(".spade"))
+      File.open(home(".spade", "credentials"), "w") do |file|
+        file.write YAML.dump(:spade_api_key => api_key)
+      end
     end
 
-    spade "push", "../../spec/fixtures/rake-0.8.7.gem"
+    it "registers a gem when sent with the right api key" do
+      spade "push", "../../spec/fixtures/rake-0.8.7.gem"
 
-    stdout.read.should include("Successfully registered rake (0.8.7)")
+      stdout.read.should include("Successfully registered rake (0.8.7)")
+    end
+
+    it "ignores files that don't exist" do
+      spade "push", "rake-1.0.0.gem"
+
+      stdout.read.should include("No such file")
+    end
   end
 
   it "shows rejection message if wrong api key is supplied" do

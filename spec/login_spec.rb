@@ -23,16 +23,13 @@ describe "logging in" do
     start_fake(protected_fake)
   end
 
-  it "first asks for credentials" do
-    spade "login"
-    stdout.read.should include("Enter your Spade credentials.")
-  end
-
   it "says email that user is logging in as" do
     spade "login"
     input email
     input password
-    stdout.read.should include("Logging in as #{email}...")
+    output = stdout.read
+    output.should include("Enter your Spade credentials.")
+    output.should include("Logging in as #{email}...")
   end
 
   it "makes a request out for the api key and stores it in ~/.spade/credentials" do

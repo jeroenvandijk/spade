@@ -24,9 +24,15 @@ module Spade
     end
 
     def self.push(package)
+      begin
+        body = Gem.read_binary package
+      rescue Exception => ex
+        return ex.to_s
+      end
+
       response = rubygems_api_request :post, "api/v1/gems" do |request|
-        request.body = Gem.read_binary package
-        request.add_field "Content-Length", request.body.size
+        request.body = body
+        request.add_field "Content-Length", body.size
         request.add_field "Content-Type",   "application/octet-stream"
         request.add_field "Authorization",  api_key
       end
