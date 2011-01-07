@@ -36,7 +36,7 @@ describe "installing gems" do
   it "installs a valid gem" do
     spade "install", "rake"
 
-    stdout.should contain_line("Successfully installed rake-0.8.7")
+    stdout.read.should include("Successfully installed rake-0.8.7")
     File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_true
     File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_true
   end
@@ -44,7 +44,7 @@ describe "installing gems" do
   it "fails when installing an invalid gem" do
     spade "install", "fake"
 
-    stdout.should contain_line("Can't find package fake")
+    stdout.read.should include("Can't find package fake")
     File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_false
     File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_false
   end

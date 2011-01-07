@@ -41,7 +41,12 @@ module Spade
     end
 
     def self.api_key
-      YAML.load_file(spade_dir("credentials"))[:spade_api_key]
+      credentials = spade_dir("credentials")
+      if File.exists?(credentials)
+        YAML.load_file(credentials)[:spade_api_key]
+      else
+        false
+      end
     end
 
     def self.install(package)

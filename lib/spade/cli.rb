@@ -148,7 +148,11 @@ module Spade
 
     desc "push", "Distribute your spade package"
     def push(package)
-      say Remote.push(package)
+      if Remote.api_key
+        say Remote.push(package)
+      else
+        say "Please login first with `spade login`."
+      end
     end
 
     protected

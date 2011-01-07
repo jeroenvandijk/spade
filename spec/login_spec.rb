@@ -25,7 +25,7 @@ describe "logging in" do
 
   it "first asks for credentials" do
     spade "login"
-    stdout.should contain_line("Enter your Spade credentials.")
+    stdout.read.should include("Enter your Spade credentials.")
   end
 
   it "says email that user is logging in as" do

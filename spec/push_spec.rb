@@ -31,6 +31,23 @@ describe "pushing a gem" do
 
     spade "push", "../../spec/fixtures/rake-0.8.7.gem"
 
-    stdout.should contain_line("Successfully registered rake (0.8.7)")
+    stdout.read.should include("Successfully registered rake (0.8.7)")
+  end
+
+  it "shows rejection message if wrong api key is supplied" do
+    FileUtils.mkdir_p(home(".spade"))
+    File.open(home(".spade", "credentials"), "w") do |file|
+      file.write YAML.dump(:spade_api_key => "beefbeef")
+    end
+
+    spade "push", "../../spec/fixtures/rake-0.8.7.gem"
+
+    stdout.read.should include("One cannot simply walk into Mordor!")
+  end
+
+  it "asks for login first if api key does not exist" do
+    spade "push", "../../spec/fixtures/rake-0.8.7.gem"
+
+    stdout.read.should include("Please login first with `spade login`")
   end
 end
