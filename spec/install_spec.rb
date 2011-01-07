@@ -39,8 +39,9 @@ describe "installing gems" do
     spade "install", "rake"
 
     stdout.read.should include("Successfully installed rake-0.8.7")
-    File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_true
-    File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_true
+
+    "rake-0.8.7".should be_fetched
+    "rake-0.8.7".should be_unpacked
   end
 
   it "installs a multiple gems" do
@@ -50,9 +51,8 @@ describe "installing gems" do
 
     %w[builder-3.0.0 rake-0.8.7].each do |pkg|
       output.should include("Successfully installed #{pkg}")
-      output.should include("Successfully installed #{pkg}")
-      File.directory?(home(".spade", "gems", pkg)).should be_true
-      File.exist?(home(".spade", "cache", "#{pkg}.gem")).should be_true
+      pkg.should be_fetched
+      pkg.should be_unpacked
     end
   end
 
@@ -62,16 +62,21 @@ describe "installing gems" do
     output = stdout.read
     output.should include("Can't find package fake")
     output.should include("Successfully installed rake-0.8.7")
-    File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_true
-    File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_true
+
+    "rake-0.8.7".should be_fetched
+    "rake-0.8.7".should be_unpacked
+    "fake-0".should_not be_fetched
+    "fake-0".should_not be_unpacked
   end
 
   it "fails when installing an invalid gem" do
     spade "install", "fake"
 
     stdout.read.should include("Can't find package fake")
-    File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_false
-    File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_false
+    "rake-0.8.7".should_not be_fetched
+    "rake-0.8.7".should_not be_unpacked
+    "fake-0".should_not be_fetched
+    "fake-0".should_not be_unpacked
   end
 
   it "fails if spade can't write to the spade directory" do
@@ -82,7 +87,7 @@ describe "installing gems" do
 
     stdout.read.should include("You don't have write permissions")
 
-    File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_false
-    File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_false
+    "rake-0.8.7".should_not be_fetched
+    "rake-0.8.7".should_not be_unpacked
   end
 end
