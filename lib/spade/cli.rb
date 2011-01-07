@@ -106,17 +106,19 @@ module Spade
       Bundle.update(options[:working], :verbose => options[:verbose])
     end
 
-    desc "install [PACKAGE]", "Installs a spade package"
-    def install(package)
+    desc "install [PACKAGE]", "Installs one or many spade package"
+    def install(*packages)
       begin
-        packages = Remote.install(package)
-        packages.each do |spec|
-          say "Successfully installed #{spec.full_name}"
+        packages.each do |package|
+          installed = Remote.install(package)
+          installed.each do |spec|
+            say "Successfully installed #{spec.full_name}"
+          end
         end
       rescue Gem::InstallError => e
         say "Install error: #{e}"
       rescue Gem::GemNotFoundException => e
-        say "Can't find package #{package}"
+        say "Can't find package #{e.name} #{e.version} available for install"
       rescue Gem::FilePermissionError => e
         say e.message
       end

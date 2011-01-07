@@ -6,23 +6,25 @@ describe "installing gems" do
 
     fake = lambda do |env|
       request  = Rack::Request.new(env)
-      gem_path = fixtures("rake-0.8.7.gem")
 
       if request.path =~ /specs/
-        index = [["rake", Gem::Version.new("0.8.7"), "ruby"]]
+        index = [
+          ["builder", Gem::Version.new("3.0.0"), "ruby"],
+          ["rake",    Gem::Version.new("0.8.7"), "ruby"]
+        ]
         compressed = StringIO.new
         gzip = Zlib::GzipWriter.new(compressed)
         gzip.write(Marshal.dump(index))
         gzip.close
 
         [200, {"Content-Type" => "application/octet-stream"}, compressed.string]
-      elsif request.path =~ /gemspec/
-        spec  = Gem::Format.from_file_by_path(gem_path.to_s).spec
+      elsif request.path =~ /\/quick\/Marshal\.4\.8\/(.*\.gem)spec\.rz$/
+        spec  = Gem::Format.from_file_by_path(fixtures($1).to_s).spec
         value = Gem.deflate(Marshal.dump(spec))
 
         [200, {"Content-Type" => "application/octet-stream"}, value]
-      elsif request.path =~ /\.gem$/
-        [200, {"Content-Type" => "application/octet-stream"}, File.read(gem_path)]
+      elsif request.path =~ /\/gems\/(.*\.gem)$/
+        [200, {"Content-Type" => "application/octet-stream"}, File.read(fixtures($1))]
       else
         [200, {"Content-Type" => "text/plain"}, "fake gem server"]
       end
@@ -37,6 +39,29 @@ describe "installing gems" do
     spade "install", "rake"
 
     stdout.read.should include("Successfully installed rake-0.8.7")
+    File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_true
+    File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_true
+  end
+
+  it "installs a multiple gems" do
+    spade "install", "rake", "builder"
+
+    output = stdout.read
+
+    %w[builder-3.0.0 rake-0.8.7].each do |pkg|
+      output.should include("Successfully installed #{pkg}")
+      output.should include("Successfully installed #{pkg}")
+      File.directory?(home(".spade", "gems", pkg)).should be_true
+      File.exist?(home(".spade", "cache", "#{pkg}.gem")).should be_true
+    end
+  end
+
+  it "installs valid gems while ignoring invalid ones" do
+    spade "install", "rake", "fake"
+
+    output = stdout.read
+    output.should include("Can't find package fake")
+    output.should include("Successfully installed rake-0.8.7")
     File.directory?(home(".spade", "gems", "rake-0.8.7")).should be_true
     File.exist?(home(".spade", "cache", "rake-0.8.7.gem")).should be_true
   end
