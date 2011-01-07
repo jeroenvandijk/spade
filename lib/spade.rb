@@ -5,8 +5,10 @@
 # ==========================================================================
 
 require 'rubygems'
+require 'rubygems/user_interaction'
 require 'rubygems/dependency_installer'
 require 'rubygems/gemcutter_utilities'
+require 'rubygems/validator'
 
 require 'fileutils'
 require 'net/http'

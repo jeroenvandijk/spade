@@ -42,6 +42,18 @@ describe "pushing a gem" do
 
       stdout.read.should include("No such file")
     end
+
+    it "must push a valid gem" do
+      spade "push", "../../spec/fixtures/badrake-0.8.7.gem"
+
+      stdout.read.should include("There was a problem opening your package.")
+    end
+
+    it "does not allow pushing of random files" do
+      spade "push", "../../Rakefile"
+
+      stdout.read.should include("There was a problem opening your package.")
+    end
   end
 
   it "shows rejection message if wrong api key is supplied" do

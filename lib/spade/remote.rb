@@ -26,8 +26,9 @@ module Spade
     def self.push(package)
       begin
         body = Gem.read_binary package
+        Gem::Format.from_file_by_path(package)
       rescue Exception => ex
-        return ex.to_s
+        return "There was a problem opening your package.\n#{ex.class}: #{ex.to_s}"
       end
 
       response = rubygems_api_request :post, "api/v1/gems" do |request|
