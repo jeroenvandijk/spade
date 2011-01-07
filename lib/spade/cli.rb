@@ -106,7 +106,7 @@ module Spade
       Bundle.update(options[:working], :verbose => options[:verbose])
     end
 
-    desc "install [PACKAGE]", "Installs one or many spade package"
+    desc "install [PACKAGE]", "Installs one or many spade packages"
     def install(*packages)
       begin
         packages.each do |package|
