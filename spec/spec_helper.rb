@@ -1,5 +1,6 @@
 require 'spade'
 
+require 'logger'
 require 'rubygems/format'
 require 'rack'
 require 'system_timer' if RUBY_VERSION < '1.9'

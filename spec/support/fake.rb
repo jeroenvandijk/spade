@@ -7,9 +7,8 @@ module SpecHelpers
 
   def start_fake(app)
     @fake_pid = Process.fork do
-      require 'thin'
-      Thin::Logging.silent = true
-      Rack::Handler::Thin.run(app, :Port => 9292)
+      logger = Logger.new(StringIO.new)
+      Rack::Handler::WEBrick.run(app, :Port => 9292, :Logger => logger, :AccessLog => logger)
     end
     ready = false
     uri   = URI.parse("http://localhost:9292/")
