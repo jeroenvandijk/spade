@@ -15,7 +15,7 @@ module SpecHelpers
     uri   = URI.parse("http://localhost:9292/")
     until ready
       begin
-        SystemTimer.timeout(1) do
+        timeout(1) do
           Net::HTTP.get_response(uri)
         end
         ready = true

@@ -1,12 +1,14 @@
 require 'spade'
 
-Dir[File.expand_path("../support/*.rb", __FILE__)].each do |file|
-  require file
-end
-
 require 'rubygems/format'
 require 'rack'
-require 'system_timer'
+require 'system_timer' if RUBY_VERSION < '1.9'
+
+require 'support/cli'
+require 'support/fake'
+require 'support/fake_gem_server'
+require 'support/matchers'
+require 'support/path'
 
 RSpec.configure do |config|
   working_dir = Dir.pwd

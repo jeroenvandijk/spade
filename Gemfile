@@ -9,6 +9,8 @@ gem "thor",         "0.14.3"
 
 group :development do
   gem "rspec"
-  gem "system_timer"
+  platforms :mri_18 do
+    gem "system_timer"
+  end
   gem "thin"
 end
