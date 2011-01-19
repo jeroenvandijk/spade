@@ -20,7 +20,7 @@ module SpecHelpers
         end
         ready = true
       rescue Exception => ex
-        print "-"
+        print "-" if ENV["VERBOSE"]
       end
     end
   end
