@@ -23,4 +23,29 @@ describe "listing gems" do
     output.should include("builder (3.0.0)")
     output.should include("rake (0.8.7, 0.8.6)")
   end
+
+  it "filters gems when given an argument" do
+    spade "list", "builder"
+
+    output = stdout.read
+    output.should include("builder (3.0.0)")
+    output.should_not include("rake")
+  end
+
+  it "filters gems when given an argument and shows all versions" do
+    spade "list", "rake", "-a"
+
+    output = stdout.read
+    output.should include("rake (0.8.7, 0.8.6)")
+    output.should_not include("builder")
+  end
+
+  it "filters multiple gems" do
+    spade "list", "rake", "rails"
+
+    output = stdout.read
+    output.should include("rake (0.8.7)")
+    output.should include("rails (4.0.0)")
+    output.should_not include("builder")
+  end
 end

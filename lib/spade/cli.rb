@@ -161,10 +161,10 @@ module Spade
 
     desc "list", "View available packages for download"
     method_option :all, :type => :boolean, :default => false, :aliases => ['-a'], :desc => 'List all versions available'
-    def list
+    def list(*packages)
       gems = {}
 
-      Remote.new.list(options[:all]).each do |(name, version, platform)|
+      Remote.new.list(/(#{packages.join('|')})/, options[:all]).each do |(name, version, platform)|
         gems[name] ||= []
         gems[name] << version
       end

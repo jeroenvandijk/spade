@@ -1,20 +1,26 @@
 class FakeGemServer
   include SpecHelpers
 
+  def index(name, version)
+    [name, Gem::Version.new(version), "ruby"]
+  end
+
   def call(env)
     request = Rack::Request.new(env)
 
     if request.path =~ /latest_specs/
       latest_index = [
-        ["builder", Gem::Version.new("3.0.0"), "ruby"],
-        ["rake",    Gem::Version.new("0.8.7"), "ruby"]
+        index("builder", "3.0.0"),
+        index("rails",   "4.0.0"),
+        index("rake",    "0.8.7"),
       ]
       [200, {"Content-Type" => "application/octet-stream"}, compress(latest_index)]
     elsif request.path =~ /specs/
       big_index = [
-        ["builder", Gem::Version.new("3.0.0"), "ruby"],
-        ["rake",    Gem::Version.new("0.8.7"), "ruby"],
-        ["rake",    Gem::Version.new("0.8.6"), "ruby"]
+        index("builder", "3.0.0"),
+        index("rails",   "4.0.0"),
+        index("rake",    "0.8.7"),
+        index("rake",    "0.8.6"),
       ]
       [200, {"Content-Type" => "application/octet-stream"}, compress(big_index)]
     elsif request.path =~ /\/quick\/Marshal\.4\.8\/(.*\.gem)spec\.rz$/
