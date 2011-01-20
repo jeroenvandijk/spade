@@ -1,16 +1,15 @@
 module Spade
   class Remote
     extend Gem::GemcutterUtilities
-    ENV["RUBYGEMS_HOST"] ||= "https://sproutcutter.heroku.com"
 
-    def self.spade_dir(*path)
-      base = File.join(ENV["HOME"], SPADE_DIR)
-      FileUtils.mkdir_p(base)
-      File.join(base, *path)
+    def initialize
+      ENV["RUBYGEMS_HOST"] ||= "https://sproutcutter.heroku.com"
+      Gem.sources.replace [ENV["RUBYGEMS_HOST"]]
+      Gem.use_paths(spade_dir)
     end
 
-    def self.login(email, password)
-      response = rubygems_api_request :get, "api/v1/api_key" do |request|
+    def login(email, password)
+      response = self.class.rubygems_api_request :get, "api/v1/api_key" do |request|
         request.basic_auth email, password
       end
 
@@ -23,7 +22,7 @@ module Spade
       end
     end
 
-    def self.push(package)
+    def push(package)
       begin
         body = Gem.read_binary package
         Gem::Format.from_file_by_path(package)
@@ -31,7 +30,7 @@ module Spade
         return "There was a problem opening your package.\n#{ex.class}: #{ex.to_s}"
       end
 
-      response = rubygems_api_request :post, "api/v1/gems" do |request|
+      response = self.class.rubygems_api_request :post, "api/v1/gems" do |request|
         request.body = body
         request.add_field "Content-Length", body.size
         request.add_field "Content-Type",   "application/octet-stream"
@@ -41,28 +40,37 @@ module Spade
       response.body
     end
 
-    def self.api_key=(api_key)
+
+    def list
+      fetcher = Gem::SpecFetcher.fetcher
+      fetcher.find_matching(Gem::Dependency.new(//)).map(&:first)
+    end
+
+    def install(package, options)
+      inst = Gem::DependencyInstaller.new {}
+      inst.install package, Gem::Requirement.new([options])
+      inst.installed_gems
+    end
+
+    def spade_dir(*path)
+      base = File.join(ENV["HOME"], SPADE_DIR)
+      FileUtils.mkdir_p(base)
+      File.join(base, *path)
+    end
+
+    def api_key=(api_key)
       File.open(spade_dir("credentials"), "w") do |file|
         file.write YAML.dump(:spade_api_key => api_key)
       end
     end
 
-    def self.api_key
+    def api_key
       credentials = spade_dir("credentials")
       if File.exists?(credentials)
         YAML.load_file(credentials)[:spade_api_key]
       else
         false
       end
-    end
-
-    def self.install(package, options)
-      Gem.sources.replace [ENV["RUBYGEMS_HOST"]]
-      Gem.use_paths(spade_dir)
-
-      inst = Gem::DependencyInstaller.new {}
-      inst.install package, Gem::Requirement.new([options])
-      inst.installed_gems
     end
   end
 end

@@ -111,7 +111,7 @@ module Spade
     def install(*packages)
       begin
         packages.each do |package|
-          installed = Remote.install(package, options[:version])
+          installed = Remote.new.install(package, options[:version])
           installed.each do |spec|
             say "Successfully installed #{spec.full_name}"
           end
@@ -142,7 +142,7 @@ module Spade
 
       say "\nLogging in as #{email}..."
 
-      if Remote.login(email, password)
+      if Remote.new.login(email, password)
         say "Logged in!"
       else
         say "Incorrect email or password."
@@ -151,10 +151,18 @@ module Spade
 
     desc "push", "Distribute your spade package"
     def push(package)
-      if Remote.api_key
-        say Remote.push(package)
+      remote = Remote.new
+      if remote.api_key
+        say remote.push(package)
       else
         say "Please login first with `spade login`."
+      end
+    end
+
+    desc "list", "View all available packages for download"
+    def list
+      Remote.new.list.each do |(name, version, platform)|
+        puts "#{name} (#{version})"
       end
     end
 
