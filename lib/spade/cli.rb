@@ -169,8 +169,12 @@ module Spade
         gems[name] << version
       end
 
-      gems.each do |name, versions|
-        puts "#{name} (#{versions.sort.reverse.join(", ")})"
+      if gems.size.zero?
+        abort %{No packages found matching "#{packages.join('", "')}".}
+      else
+        gems.each do |name, versions|
+          puts "#{name} (#{versions.sort.reverse.join(", ")})"
+        end
       end
     end
 

@@ -10,17 +10,17 @@ class FakeGemServer
 
     if request.path =~ /latest_specs/
       latest_index = [
-        index("builder", "3.0.0"),
-        index("rails",   "4.0.0"),
-        index("rake",    "0.8.7"),
+        index("builder",  "3.0.0"),
+        index("highline", "1.6.1"),
+        index("rake",     "0.8.7"),
       ]
       [200, {"Content-Type" => "application/octet-stream"}, compress(latest_index)]
     elsif request.path =~ /specs/
       big_index = [
-        index("builder", "3.0.0"),
-        index("rails",   "4.0.0"),
-        index("rake",    "0.8.7"),
-        index("rake",    "0.8.6"),
+        index("builder",  "3.0.0"),
+        index("highline", "1.6.1"),
+        index("rake",     "0.8.7"),
+        index("rake",     "0.8.6"),
       ]
       [200, {"Content-Type" => "application/octet-stream"}, compress(big_index)]
     elsif request.path =~ /\/quick\/Marshal\.4\.8\/(.*\.gem)spec\.rz$/

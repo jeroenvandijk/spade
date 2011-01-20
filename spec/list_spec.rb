@@ -41,11 +41,25 @@ describe "listing gems" do
   end
 
   it "filters multiple gems" do
-    spade "list", "rake", "rails"
+    spade "list", "rake", "highline"
 
     output = stdout.read
+    output.should include("highline (1.6.1)")
     output.should include("rake (0.8.7)")
-    output.should include("rails (4.0.0)")
     output.should_not include("builder")
+  end
+
+  it "says it couldn't find any if none found" do
+    spade "list", "rails", :track_stderr => true
+
+    stderr.read.strip.should == 'No packages found matching "rails".'
+    exit_status.should_not be_success
+  end
+
+  it "says it couldn't find any if none found matching multiple packages" do
+    spade "list", "rails", "bake", :track_stderr => true
+
+    stderr.read.strip.should == 'No packages found matching "rails", "bake".'
+    exit_status.should_not be_success
   end
 end
