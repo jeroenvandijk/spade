@@ -15,4 +15,12 @@ describe "listing gems" do
     output.should include("builder (3.0.0)")
     output.should include("rake (0.8.7)")
   end
+
+  it "lists all gems when given the all argument" do
+    spade "list", "-a"
+
+    output = stdout.read
+    output.should include("builder (3.0.0)")
+    output.should include("rake (0.8.7, 0.8.6)")
+  end
 end

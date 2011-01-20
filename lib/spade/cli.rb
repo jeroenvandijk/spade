@@ -159,10 +159,18 @@ module Spade
       end
     end
 
-    desc "list", "View all available packages for download"
+    desc "list", "View available packages for download"
+    method_option :all, :type => :boolean, :default => false, :aliases => ['-a'], :desc => 'List all versions available'
     def list
-      Remote.new.list.each do |(name, version, platform)|
-        puts "#{name} (#{version})"
+      gems = {}
+
+      Remote.new.list(options[:all]).each do |(name, version, platform)|
+        gems[name] ||= []
+        gems[name] << version
+      end
+
+      gems.each do |name, versions|
+        puts "#{name} (#{versions.sort.reverse.join(", ")})"
       end
     end
 
