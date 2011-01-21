@@ -4,4 +4,4 @@ $:.unshift(lib) if File.exists?(lib)
 
 require 'spade'
 
-Spade::CLI.start
+Spade::CLI::Base.start

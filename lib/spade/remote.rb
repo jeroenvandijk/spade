@@ -40,6 +40,14 @@ module Spade
       response.body
     end
 
+    def add_owner(package, email)
+      response = self.class.rubygems_api_request :post, "api/v1/gems/#{package}/owners" do |request|
+        request.set_form_data 'email' => email
+        request.add_field "Authorization",  api_key
+      end
+
+      response.body
+    end
 
     def list(matcher, all)
       fetcher    = Gem::SpecFetcher.fetcher

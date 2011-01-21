@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "logging in" do
+describe "spade login" do
   let(:email)    { "email@example.com" }
   let(:password) { "secrets" }
   let(:url)      { "http://#{email}:#{password}@sproutcutter.heroku.com/api/v1/api_key" }

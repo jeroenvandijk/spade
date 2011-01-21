@@ -29,7 +29,7 @@ module SpecHelpers
         ENV[key] = val
       end
 
-      Spade::CLI.start(argv)
+      Spade::CLI::Base.start(argv)
     end
 
     @stdout_child.close

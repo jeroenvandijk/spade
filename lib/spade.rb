@@ -37,7 +37,11 @@ module Spade
 end
 
 require 'spade/bundle'
+
 require 'spade/cli'
+require 'spade/cli/owner'
+require 'spade/cli/base'
+
 require 'spade/context'
 require 'spade/exports'
 require 'spade/remote'

@@ -1,22 +1,23 @@
 require "spec_helper"
 
-describe "pushing a gem" do
-  let(:url)      { "http://#{email}:#{password}@sproutcutter.heroku.com/api/v1/api_key" }
-  let(:api_key)  { "deadbeef" }
-  let(:creds)    { home(".spade", "credentials") }
+describe "spade push" do
+  let(:api_key) { "deadbeef" }
+  let(:creds)   { home(".spade", "credentials") }
 
   before do
     cd(home)
 
-    fake = lambda { |env|
+    fake = lambda do |env|
       request = Rack::Request.new(env)
 
-      if request.env["HTTP_AUTHORIZATION"] == api_key
-        [200, {"Content-Type" => "text/plain"}, "Successfully registered rake (0.8.7)"]
-      else
-        [401, {"Content-Type" => "text/plain"}, "One cannot simply walk into Mordor!"]
+      if request.path == "/api/v1/gems"
+        if request.env["HTTP_AUTHORIZATION"] == api_key
+          [200, {"Content-Type" => "text/plain"}, "Successfully registered rake (0.8.7)"]
+        else
+          [401, {"Content-Type" => "text/plain"}, "One cannot simply walk into Mordor!"]
+        end
       end
-    }
+    end
 
     env["HOME"] = home.to_s
     env["RUBYGEMS_HOST"] = "http://localhost:9292"

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "installing gems" do
+describe "spade install" do
   before do
     cd(home)
     env["HOME"] = home.to_s
