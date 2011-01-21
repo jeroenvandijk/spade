@@ -30,32 +30,26 @@ module Spade
         return "There was a problem opening your package.\n#{ex.class}: #{ex.to_s}"
       end
 
-      response = self.class.rubygems_api_request :post, "api/v1/gems" do |request|
-        request.body = body
-        request.add_field "Content-Length", body.size
-        request.add_field "Content-Type",   "application/octet-stream"
-        request.add_field "Authorization",  api_key
+      request :post, "api/v1/gems" do |req|
+        req.body = body
+        req.add_field "Content-Length", body.size
+        req.add_field "Content-Type",   "application/octet-stream"
+        req.add_field "Authorization",  api_key
       end
-
-      response.body
     end
 
     def add_owner(package, email)
-      response = self.class.rubygems_api_request :post, "api/v1/gems/#{package}/owners" do |request|
-        request.set_form_data 'email' => email
-        request.add_field "Authorization",  api_key
+      request :post, "api/v1/gems/#{package}/owners" do |req|
+        req.set_form_data 'email' => email
+        req.add_field "Authorization",  api_key
       end
-
-      response.body
     end
 
     def remove_owner(package, email)
-      response = self.class.rubygems_api_request :delete, "api/v1/gems/#{package}/owners" do |request|
-        request.set_form_data 'email' => email
-        request.add_field "Authorization",  api_key
+      request :delete, "api/v1/gems/#{package}/owners" do |req|
+        req.set_form_data 'email' => email
+        req.add_field "Authorization",  api_key
       end
-
-      response.body
     end
 
     def list(matcher, all)
@@ -89,6 +83,15 @@ module Spade
       else
         false
       end
+    end
+
+    private
+
+    def request(method, path)
+      response = self.class.rubygems_api_request method, path do |req|
+        yield req
+      end
+      response.body
     end
   end
 end
