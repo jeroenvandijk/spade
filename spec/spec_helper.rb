@@ -2,8 +2,8 @@ require 'spade'
 
 require 'logger'
 require 'rubygems/format'
-require 'rack'
-require 'system_timer' if RUBY_VERSION < '1.9'
+
+Bundler.require :default, :development
 
 require 'support/cli'
 require 'support/fake'
