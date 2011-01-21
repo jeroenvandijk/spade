@@ -52,6 +52,12 @@ module Spade
       end
     end
 
+    def list_owners(package)
+      request :get, "api/v1/gems/#{package}/owners.yaml" do |req|
+        req.add_field "Authorization",  api_key
+      end
+    end
+
     def list(matcher, all)
       fetcher    = Gem::SpecFetcher.fetcher
       dependency = Gem::Dependency.new(matcher, Gem::Requirement.default)

@@ -173,19 +173,6 @@ module Spade::CLI
       end
     end
 
-    protected
-
-    # Replace start such that if you don't pass an original task, we try to 
-    # treat the command as exec
-    def self.dispatch(meth, given_args, given_opts, config) #:nodoc:
-      saved_args = given_args.dup
-      begin
-        super(meth, given_args, given_opts, config)
-      rescue Thor::UndefinedTaskError => e
-        super('exec', saved_args, given_opts, config)
-      end
-    end
-
     private
 
     def repl(ctx)

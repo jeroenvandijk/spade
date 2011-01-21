@@ -20,6 +20,14 @@ describe "spade owner" do
         else
           [401, {"Content-Type" => "text/plain"}, "One cannot simply walk into Mordor!"]
         end
+      elsif request.path == "/api/v1/gems/rake/owners.yaml" &&
+        request.get? &&
+        request.env["HTTP_AUTHORIZATION"] == api_key
+
+        yaml = YAML.dump([{'email' => 'geddy@example.com'}, {'email' => 'lerxst@example.com'}])
+        [200, {"Content-Type" => "text/plain"}, yaml]
+      else
+        [401, {"Content-Type" => "text/plain"}, "One cannot simply walk into Mordor!"]
       end
     end
 
@@ -44,6 +52,16 @@ describe "spade owner" do
 
       stdout.read.should include("Owner removed successfully.")
     end
+
+    it "lists owners for a gem" do
+      spade "owner", "list", "rake"
+
+      stdout.read.should == <<EOF
+Owners for package: rake
+- geddy@example.com
+- lerxst@example.com
+EOF
+    end
   end
 
   context "with wrong api key" do
@@ -51,14 +69,20 @@ describe "spade owner" do
       write_api_key("beefbeef")
     end
 
-    it "shows rejection message if wrong api key is supplied" do
+    it "shows rejection message for add if wrong api key is supplied" do
       spade "owner", "add", "rake", "geddy@example.com"
 
       stdout.read.should include("One cannot simply walk into Mordor!")
     end
 
-    it "shows rejection message if wrong api key is supplied" do
+    it "shows rejection message for remove if wrong api key is supplied" do
       spade "owner", "remove", "rake", "geddy@example.com"
+
+      stdout.read.should include("One cannot simply walk into Mordor!")
+    end
+
+    it "shows rejection message for list if wrong api key is supplied" do
+      spade "owner", "list", "rake"
 
       stdout.read.should include("One cannot simply walk into Mordor!")
     end
@@ -84,14 +108,32 @@ describe "spade owner with wrong arguments" do
     stdout.read.should include("Please login first with `spade login`")
   end
 
-  it "requires a package name" do
+  it "asks for login first if api key does not exist" do
+    spade "owner", "list", "rake"
+
+    stdout.read.should include("Please login first with `spade login`")
+  end
+
+  it "requires a package name for add" do
     spade "owner", "add", :track_stderr => true
 
     stderr.read.should include("called incorrectly")
   end
 
-  it "requires a package name" do
+  it "requires a package name for remove" do
     spade "owner", "remove", :track_stderr => true
+
+    stderr.read.should include("called incorrectly")
+  end
+
+  it "requires a package name for list" do
+    spade "owner", "list", :track_stderr => true
+
+    stderr.read.should include("called incorrectly")
+  end
+
+  it "requires a package name for list with default command" do
+    spade "owner", :track_stderr => true
 
     stderr.read.should include("called incorrectly")
   end
