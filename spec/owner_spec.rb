@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "spade owner" do
   let(:api_key) { "deadbeef" }
-  let(:creds)   { home(".spade", "credentials") }
+  let(:creds)   { spade_dir("credentials") }
 
   before do
     cd(home)
@@ -26,10 +26,7 @@ describe "spade owner" do
 
   context "with a good api key" do
     before do
-      FileUtils.mkdir_p(home(".spade"))
-      File.open(home(".spade", "credentials"), "w") do |file|
-        file.write YAML.dump(:spade_api_key => api_key)
-      end
+      write_api_key(api_key)
     end
 
     it "registers new owners if gem is owned" do
@@ -41,10 +38,7 @@ describe "spade owner" do
 
   context "with wrong api key" do
     before do
-      FileUtils.mkdir_p(home(".spade"))
-      File.open(home(".spade", "credentials"), "w") do |file|
-        file.write YAML.dump(:spade_api_key => "beefbeef")
-      end
+      write_api_key("beefbeef")
     end
 
     it "shows rejection message if wrong api key is supplied" do

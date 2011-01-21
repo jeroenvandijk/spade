@@ -53,8 +53,8 @@ describe "spade install" do
   end
 
   it "fails if spade can't write to the spade directory" do
-    FileUtils.mkdir_p home(".spade")
-    FileUtils.chmod 0555, home(".spade")
+    FileUtils.mkdir_p spade_dir
+    FileUtils.chmod 0555, spade_dir
 
     spade "install", "rake"
 

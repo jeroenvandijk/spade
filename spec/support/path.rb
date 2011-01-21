@@ -46,5 +46,9 @@ module SpecHelpers
     tmp.join("local", *path)
   end
 
+  def spade_dir(*path)
+    home(Spade::SPADE_DIR, *path)
+  end
+
   module_function :root, :tmp, :home, :local
 end

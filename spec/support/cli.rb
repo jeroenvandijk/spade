@@ -80,4 +80,11 @@ module SpecHelpers
     @stdin_child, @stdin   = IO.pipe
     @stderr, @stderr_child = IO.pipe
   end
+
+  def write_api_key(api_key)
+    FileUtils.mkdir_p(spade_dir)
+    File.open(spade_dir("credentials"), "w") do |file|
+      file.write YAML.dump(:spade_api_key => api_key)
+    end
+  end
 end

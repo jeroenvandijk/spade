@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "spade push" do
   let(:api_key) { "deadbeef" }
-  let(:creds)   { home(".spade", "credentials") }
+  let(:creds)   { spade_dir("credentials") }
 
   before do
     cd(home)
@@ -26,10 +26,7 @@ describe "spade push" do
 
   context "with a good api key" do
     before do
-      FileUtils.mkdir_p(home(".spade"))
-      File.open(home(".spade", "credentials"), "w") do |file|
-        file.write YAML.dump(:spade_api_key => api_key)
-      end
+      write_api_key(api_key)
     end
 
     it "registers a gem when sent with the right api key" do
@@ -58,10 +55,7 @@ describe "spade push" do
   end
 
   it "shows rejection message if wrong api key is supplied" do
-    FileUtils.mkdir_p(home(".spade"))
-    File.open(home(".spade", "credentials"), "w") do |file|
-      file.write YAML.dump(:spade_api_key => "beefbeef")
-    end
+    write_api_key("beefbeef")
 
     spade "push", "../../spec/fixtures/rake-0.8.7.gem"
 

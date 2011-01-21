@@ -3,9 +3,8 @@ require "spec_helper"
 describe "spade login" do
   let(:email)    { "email@example.com" }
   let(:password) { "secrets" }
-  let(:url)      { "http://#{email}:#{password}@sproutcutter.heroku.com/api/v1/api_key" }
   let(:api_key)  { "deadbeef" }
-  let(:creds)    { home(".spade", "credentials") }
+  let(:creds)    { spade_dir("credentials") }
 
   before do
     cd(home)
@@ -32,7 +31,7 @@ describe "spade login" do
     output.should include("Logging in as #{email}...")
   end
 
-  it "makes a request out for the api key and stores it in ~/.spade/credentials" do
+  it "makes a request out for the api key and stores it in SPADE_DIR/credentials" do
     spade "login"
     input email
     input password
