@@ -49,6 +49,15 @@ module Spade
       response.body
     end
 
+    def remove_owner(package, email)
+      response = self.class.rubygems_api_request :delete, "api/v1/gems/#{package}/owners" do |request|
+        request.set_form_data 'email' => email
+        request.add_field "Authorization",  api_key
+      end
+
+      response.body
+    end
+
     def list(matcher, all)
       fetcher    = Gem::SpecFetcher.fetcher
       dependency = Gem::Dependency.new(matcher, Gem::Requirement.default)

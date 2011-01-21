@@ -10,9 +10,13 @@ describe "spade owner" do
     fake = lambda do |env|
       request = Rack::Request.new(env)
 
-      if request.path == "/api/v1/gems/rake/owners" && request.post?
+      if request.path == "/api/v1/gems/rake/owners"
         if request.env["HTTP_AUTHORIZATION"] == api_key
-          [200, {"Content-Type" => "text/plain"}, "Owner added successfully."]
+          if request.post?
+            [200, {"Content-Type" => "text/plain"}, "Owner added successfully."]
+          elsif request.delete?
+            [200, {"Content-Type" => "text/plain"}, "Owner removed successfully."]
+          end
         else
           [401, {"Content-Type" => "text/plain"}, "One cannot simply walk into Mordor!"]
         end
@@ -29,10 +33,16 @@ describe "spade owner" do
       write_api_key(api_key)
     end
 
-    it "registers new owners if gem is owned" do
+    it "registers new owners if package is owned" do
       spade "owner", "add", "rake", "geddy@example.com"
 
       stdout.read.should include("Owner added successfully.")
+    end
+
+    it "removes owners if package is owned" do
+      spade "owner", "remove", "rake", "geddy@example.com"
+
+      stdout.read.should include("Owner removed successfully.")
     end
   end
 
@@ -43,6 +53,12 @@ describe "spade owner" do
 
     it "shows rejection message if wrong api key is supplied" do
       spade "owner", "add", "rake", "geddy@example.com"
+
+      stdout.read.should include("One cannot simply walk into Mordor!")
+    end
+
+    it "shows rejection message if wrong api key is supplied" do
+      spade "owner", "remove", "rake", "geddy@example.com"
 
       stdout.read.should include("One cannot simply walk into Mordor!")
     end
@@ -62,8 +78,20 @@ describe "spade owner with wrong arguments" do
     stdout.read.should include("Please login first with `spade login`")
   end
 
+  it "asks for login first if api key does not exist" do
+    spade "owner", "remove", "rake", "geddy@example.com"
+
+    stdout.read.should include("Please login first with `spade login`")
+  end
+
   it "requires a package name" do
     spade "owner", "add", :track_stderr => true
+
+    stderr.read.should include("called incorrectly")
+  end
+
+  it "requires a package name" do
+    spade "owner", "remove", :track_stderr => true
 
     stderr.read.should include("called incorrectly")
   end
