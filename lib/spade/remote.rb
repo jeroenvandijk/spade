@@ -58,10 +58,10 @@ module Spade
       end
     end
 
-    def list_packages(matcher, all)
+    def list_packages(matcher, all, prerelease)
       fetcher    = Gem::SpecFetcher.fetcher
       dependency = Gem::Dependency.new(matcher, Gem::Requirement.default)
-      fetcher.find_matching(dependency, all, false, false).map(&:first)
+      fetcher.find_matching(dependency, all, false, prerelease).map(&:first)
     end
 
     def install(package, options)

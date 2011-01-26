@@ -155,11 +155,14 @@ module Spade::CLI
     end
 
     desc "list", "View available packages for download"
-    method_option :all, :type => :boolean, :default => false, :aliases => ['-a'], :desc => 'List all versions available'
+    method_option :all,        :type => :boolean, :default => false, :aliases => ['-a'],    :desc => 'List all versions available'
+    method_option :prerelease, :type => :boolean, :default => false, :aliases => ['--pre'], :desc => 'List prerelease versions available'
     def list(*packages)
-      gems = {}
+      remote = Spade::Remote.new
+      gems   = {}
+      index  = remote.list_packages(/(#{packages.join('|')})/, options[:all], options[:prerelease])
 
-      Spade::Remote.new.list_packages(/(#{packages.join('|')})/, options[:all]).each do |(name, version, platform)|
+      index.each do |(name, version, platform)|
         gems[name] ||= []
         gems[name] << version
       end

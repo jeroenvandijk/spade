@@ -15,6 +15,11 @@ class FakeGemServer
         index("rake",     "0.8.7"),
       ]
       [200, {"Content-Type" => "application/octet-stream"}, compress(latest_index)]
+    elsif request.path =~ /prerelease_specs/
+      prerelease_index = [
+        index("bundler",  "1.1.pre")
+      ]
+      [200, {"Content-Type" => "application/octet-stream"}, compress(prerelease_index)]
     elsif request.path =~ /specs/
       big_index = [
         index("builder",  "3.0.0"),

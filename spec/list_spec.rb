@@ -49,6 +49,16 @@ describe "spade list" do
     output.should_not include("builder")
   end
 
+  it "shows prerelease gems" do
+    spade "list", "--prerelease"
+
+    output = stdout.read
+    output.should include("bundler (1.1.pre)")
+    output.should_not include("highline")
+    output.should_not include("rake")
+    output.should_not include("builder")
+  end
+
   it "says it couldn't find any if none found" do
     spade "list", "rails", :track_stderr => true
 
