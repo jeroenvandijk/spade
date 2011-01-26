@@ -7,6 +7,7 @@ Bundler.require :default, :development
 
 require 'support/cli'
 require 'support/fake'
+require 'support/fake_gemcutter'
 require 'support/fake_gem_server'
 require 'support/matchers'
 require 'support/path'

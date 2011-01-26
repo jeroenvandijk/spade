@@ -159,7 +159,7 @@ module Spade::CLI
     def list(*packages)
       gems = {}
 
-      Spade::Remote.new.list(/(#{packages.join('|')})/, options[:all]).each do |(name, version, platform)|
+      Spade::Remote.new.list_packages(/(#{packages.join('|')})/, options[:all]).each do |(name, version, platform)|
         gems[name] ||= []
         gems[name] << version
       end

@@ -6,34 +6,9 @@ describe "spade owner" do
 
   before do
     cd(home)
-
-    fake = lambda do |env|
-      request = Rack::Request.new(env)
-
-      if request.path == "/api/v1/gems/rake/owners"
-        if request.env["HTTP_AUTHORIZATION"] == api_key
-          if request.post?
-            [200, {"Content-Type" => "text/plain"}, "Owner added successfully."]
-          elsif request.delete?
-            [200, {"Content-Type" => "text/plain"}, "Owner removed successfully."]
-          end
-        else
-          [401, {"Content-Type" => "text/plain"}, "One cannot simply walk into Mordor!"]
-        end
-      elsif request.path == "/api/v1/gems/rake/owners.yaml" &&
-        request.get? &&
-        request.env["HTTP_AUTHORIZATION"] == api_key
-
-        yaml = YAML.dump([{'email' => 'geddy@example.com'}, {'email' => 'lerxst@example.com'}])
-        [200, {"Content-Type" => "text/plain"}, yaml]
-      else
-        [401, {"Content-Type" => "text/plain"}, "One cannot simply walk into Mordor!"]
-      end
-    end
-
     env["HOME"] = home.to_s
     env["RUBYGEMS_HOST"] = "http://localhost:9292"
-    start_fake(fake)
+    start_fake(FakeGemcutter.new(api_key))
   end
 
   context "with a good api key" do

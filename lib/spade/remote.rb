@@ -58,7 +58,7 @@ module Spade
       end
     end
 
-    def list(matcher, all)
+    def list_packages(matcher, all)
       fetcher    = Gem::SpecFetcher.fetcher
       dependency = Gem::Dependency.new(matcher, Gem::Requirement.default)
       fetcher.find_matching(dependency, all, false, false).map(&:first)
