@@ -64,9 +64,9 @@ module Spade
       fetcher.find_matching(dependency, all, false, prerelease).map(&:first)
     end
 
-    def install(package, options)
-      inst = Gem::DependencyInstaller.new {}
-      inst.install package, Gem::Requirement.new([options])
+    def install(package, version, prerelease)
+      inst = Gem::DependencyInstaller.new(:prerelease => prerelease)
+      inst.install package, Gem::Requirement.new([version])
       inst.installed_gems
     end
 

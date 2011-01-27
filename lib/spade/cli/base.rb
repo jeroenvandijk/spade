@@ -102,11 +102,12 @@ module Spade::CLI
     end
 
     desc "install [PACKAGE]", "Installs one or many spade packages"
-    method_option :version, :default => ">= 0", :type => :string, :aliases => ['-v'], :desc => 'Port number'
+    method_option :version,    :type => :string,  :default => ">= 0", :aliases => ['-v'],    :desc => 'Specify a version to install'
+    method_option :prerelease, :type => :boolean, :default => false,  :aliases => ['--pre'], :desc => 'Install a prerelease version'
     def install(*packages)
       begin
         packages.each do |package|
-          installed = Spade::Remote.new.install(package, options[:version])
+          installed = Spade::Remote.new.install(package, options[:version], options[:prerelease])
           installed.each do |spec|
             say "Successfully installed #{spec.full_name}"
           end

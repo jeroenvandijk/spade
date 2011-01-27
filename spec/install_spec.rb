@@ -74,4 +74,24 @@ describe "spade install" do
     "rake-0.8.6".should be_fetched
     "rake-0.8.6".should be_unpacked
   end
+
+  it "installs a valid prerelease package" do
+    spade "install", "bundler", "--pre"
+
+    stdout.read.should include("Successfully installed bundler-1.1.pre")
+
+    "bundler-1.1.pre".should be_fetched
+    "bundler-1.1.pre".should be_unpacked
+  end
+
+  it "does not install the normal package when asking for a prerelease" do
+    spade "install", "rake", "--pre"
+
+    stdout.read.should include("Can't find package rake")
+
+    "rake-0.8.7".should_not be_fetched
+    "rake-0.8.7".should_not be_unpacked
+    "rake-0.8.6".should_not be_fetched
+    "rake-0.8.6".should_not be_unpacked
+  end
 end
