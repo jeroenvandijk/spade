@@ -115,11 +115,11 @@ module Spade::CLI
           end
         end
       rescue Gem::InstallError => e
-        say "Install error: #{e}"
+        abort "Install error: #{e}"
       rescue Gem::GemNotFoundException => e
-        say "Can't find package #{e.name} #{e.version} available for install"
-      rescue Gem::FilePermissionError => e
-        say e.message
+        abort "Can't find package #{e.name} #{e.version} available for install"
+      rescue Errno::EACCES, Gem::FilePermissionError => e
+        abort e.message
       end
     end
 
