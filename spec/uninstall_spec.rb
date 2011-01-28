@@ -25,4 +25,25 @@ describe "spade uninstall" do
     "rake-0.8.7".should_not be_fetched
     "rake-0.8.7".should_not be_unpacked
   end
+
+  it "uninstalls multiple packages" do
+    spade "install", "rake", "highline"
+    output = stdout.read
+
+    "rake-0.8.7".should be_fetched
+    "rake-0.8.7".should be_unpacked
+    "highline-1.6.1".should be_fetched
+    "highline-1.6.1".should be_unpacked
+
+    spade "uninstall", "rake", "highline"
+
+    output = stdout.read
+    output.should include("Successfully uninstalled rake-0.8.7")
+    output.should include("Successfully uninstalled highline-1.6.1")
+
+    "rake-0.8.7".should_not be_fetched
+    "rake-0.8.7".should_not be_unpacked
+    "highline-1.6.1".should_not be_fetched
+    "highline-1.6.1".should_not be_unpacked
+  end
 end
