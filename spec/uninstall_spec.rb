@@ -46,4 +46,9 @@ describe "spade uninstall" do
     "highline-1.6.1".should_not be_fetched
     "highline-1.6.1".should_not be_unpacked
   end
+
+  it "requires at least one package to uninstall" do
+    spade "uninstall", :track_stderr => true
+    stderr.read.should include("called incorrectly")
+  end
 end

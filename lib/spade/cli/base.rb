@@ -105,6 +105,8 @@ module Spade::CLI
     method_option :version,    :type => :string,  :default => ">= 0", :aliases => ['-v'],    :desc => 'Specify a version to install'
     method_option :prerelease, :type => :boolean, :default => false,  :aliases => ['--pre'], :desc => 'Install a prerelease version'
     def install(*packages)
+      report_arity_error("install") and return if packages.size.zero?
+
       begin
         packages.each do |package|
           installed = Spade::Remote.new.install(package, options[:version], options[:prerelease])
@@ -123,8 +125,12 @@ module Spade::CLI
 
     desc "uninstall [PACKAGE]", "Uninstalls one or many packages"
     def uninstall(*packages)
-      packages.each do |package|
-        Spade::Local.new.uninstall(package)
+      if packages.size > 0
+        packages.each do |package|
+          Spade::Local.new.uninstall(package)
+        end
+      else
+        report_arity_error('uninstall')
       end
     end
 
@@ -185,6 +191,10 @@ module Spade::CLI
     end
 
     private
+
+    def report_arity_error(name)
+      self.class.handle_argument_error(self.class.tasks[name], nil)
+    end
 
     def repl(ctx)
       ctx.reactor.next_tick do

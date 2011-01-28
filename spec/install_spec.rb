@@ -94,4 +94,9 @@ describe "spade install" do
     "rake-0.8.6".should_not be_fetched
     "rake-0.8.6".should_not be_unpacked
   end
+
+  it "requires at least one package to install" do
+    spade "install", :track_stderr => true
+    stderr.read.should include("called incorrectly")
+  end
 end
