@@ -9,8 +9,13 @@ module Spade
       index.refresh!
       specs = index.find_name package
 
-      uninstaller = Gem::Uninstaller.new(package, :ignore => true)
-      uninstaller.uninstall_gem(specs.first, specs)
+      if specs.first
+        uninstaller = Gem::Uninstaller.new(package, :ignore => true)
+        uninstaller.uninstall_gem(specs.first, specs)
+        true
+      else
+        false
+      end
     end
   end
 end

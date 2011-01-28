@@ -125,9 +125,12 @@ module Spade::CLI
 
     desc "uninstall [PACKAGE]", "Uninstalls one or many packages"
     def uninstall(*packages)
+      local = Spade::Local.new
       if packages.size > 0
         packages.each do |package|
-          Spade::Local.new.uninstall(package)
+          if !local.uninstall(package)
+            abort %{No packages installed named "#{package}"}
+          end
         end
       else
         report_arity_error('uninstall')
