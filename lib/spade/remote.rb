@@ -3,9 +3,7 @@ module Spade
     extend Gem::GemcutterUtilities
 
     def initialize
-      ENV["RUBYGEMS_HOST"] ||= "https://sproutcutter.heroku.com"
-      Gem.sources.replace [ENV["RUBYGEMS_HOST"]]
-      Gem.use_paths(spade_dir)
+      @env = Environment.new
     end
 
     def login(email, password)
@@ -70,20 +68,14 @@ module Spade
       inst.installed_gems
     end
 
-    def spade_dir(*path)
-      base = File.join(ENV["HOME"], SPADE_DIR)
-      FileUtils.mkdir_p(base)
-      File.join(base, *path)
-    end
-
     def api_key=(api_key)
-      File.open(spade_dir("credentials"), "w") do |file|
+      File.open(@env.spade_dir("credentials"), "w") do |file|
         file.write YAML.dump(:spade_api_key => api_key)
       end
     end
 
     def api_key
-      credentials = spade_dir("credentials")
+      credentials = @env.spade_dir("credentials")
       if File.exists?(credentials)
         YAML.load_file(credentials)[:spade_api_key]
       else
