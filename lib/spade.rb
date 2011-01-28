@@ -6,6 +6,7 @@
 
 require 'rubygems'
 require 'rubygems/user_interaction'
+require 'rubygems/uninstaller'
 require 'rubygems/dependency_installer'
 require 'rubygems/gemcutter_utilities'
 require 'rubygems/validator'
@@ -44,6 +45,7 @@ require 'spade/cli/base'
 
 require 'spade/context'
 require 'spade/exports'
+require 'spade/local'
 require 'spade/remote'
 require 'spade/shell'
 require 'spade/version'

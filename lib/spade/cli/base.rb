@@ -121,6 +121,13 @@ module Spade::CLI
       end
     end
 
+    desc "uninstall [PACKAGE]", "Uninstalls one or many packages"
+    def uninstall(*packages)
+      packages.each do |package|
+        Spade::Local.new.uninstall(package)
+      end
+    end
+
     desc "login", "Log in with your Spade credentials"
     def login
       highline = HighLine.new
