@@ -198,7 +198,7 @@ module Spade::CLI
 
     def repl(ctx)
       ctx.reactor.next_tick do
-        line = Readline.readline("#{EXENAME}> ", true)
+        line = Readline.readline("spade> ", true)
         begin
           result = ctx.eval(line, '<console>')
           puts result unless result.nil?
