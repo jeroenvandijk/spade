@@ -6,5 +6,7 @@
 
 module Spade
   module CLI
+    require 'spade/cli/owner'
+    require 'spade/cli/base'
   end
 end

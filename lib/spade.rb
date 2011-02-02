@@ -40,13 +40,11 @@ end
 require 'spade/bundle'
 
 require 'spade/cli'
-require 'spade/cli/owner'
-require 'spade/cli/base'
-
 require 'spade/context'
 require 'spade/environment'
 require 'spade/exports'
 require 'spade/local'
+require 'spade/packer'
 require 'spade/remote'
 require 'spade/shell'
 require 'spade/version'
