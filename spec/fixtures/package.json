@@ -3,6 +3,7 @@
     "description":  "Unfancy JavaScript",
     "keywords":     ["javascript", "language", "coffeescript", "compiler"],
     "author":       "Jeremy Ashkenas",
+    "homepage":     "http://github.com/jashkenas/coffee-script",
     "version":      "1.0.1.pre",
     "licenses":     [{
       "type":       "MIT",
