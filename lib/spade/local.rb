@@ -17,5 +17,22 @@ module Spade
         false
       end
     end
+
+    def pack(path)
+      package = Spade::Package.new(path, "user@example.com")
+      spec    = package.to_spec
+      silence do
+        Gem::Builder.new(spec).build
+      end
+    end
+
+    private
+
+    def silence
+      Gem.configuration.verbose = false
+      result = yield
+      Gem.configuration.verbose = true
+      result
+    end
   end
 end

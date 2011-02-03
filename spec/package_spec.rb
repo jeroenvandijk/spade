@@ -13,7 +13,7 @@ describe Spade::Package, "transforming" do
   end
 
   it "transforms the name" do
-    subject.name.should == "coffee-script"
+    subject.name.should == "coffee"
   end
 
   it "transforms the version" do
@@ -62,5 +62,9 @@ describe Spade::Package, "transforming" do
 
     expand_sort(subject.files).should == expand_sort(files + test_files)
     expand_sort(subject.test_files).should == expand_sort(test_files)
+  end
+
+  it "hacks the file name to return .spd" do
+    subject.file_name.should == "coffee-1.0.1.pre.spd"
   end
 end

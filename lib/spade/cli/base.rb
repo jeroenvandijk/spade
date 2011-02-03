@@ -193,6 +193,13 @@ module Spade::CLI
       end
     end
 
+    desc "build", "Build a spade package from a package.json"
+    def build
+      local = Spade::Local.new
+      file_name = local.pack("package.json")
+      puts "Successfully built package: #{file_name}"
+    end
+
     private
 
     def report_arity_error(name)

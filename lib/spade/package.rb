@@ -29,6 +29,9 @@ module Spade
         spec.requirements = [metadata.to_json]
         spec.files        = glob_javascript(lib_path) + bin_files
         spec.test_files   = glob_javascript(test_path)
+        def spec.file_name
+          full_name + ".spd"
+        end
       end
     end
 
