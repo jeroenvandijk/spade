@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Spade::Package, "transforming" do
+describe Spade::Package, "#to_spec" do
   let(:email) { "user@example.com" }
 
   before do
@@ -8,8 +8,9 @@ describe Spade::Package, "transforming" do
   end
 
   subject do
-    packer = Spade::Package.new(fixtures("package.json"), email)
-    packer.to_spec
+    package = Spade::Package.new(email)
+    package.json = fixtures("package.json")
+    package.to_spec
   end
 
   it "transforms the name" do
@@ -53,7 +54,7 @@ describe Spade::Package, "transforming" do
   end
 
   def expand_sort(files)
-    files.sort.map { |f| File.expand_path(f) }
+    files.map { |f| File.expand_path(f) }.sort
   end
 
   it "expands paths from the directories" do
@@ -70,5 +71,23 @@ describe Spade::Package, "transforming" do
 
   it "hacks the file name to return .spd" do
     subject.file_name.should == "coffee-1.0.1.pre.spd"
+  end
+end
+
+describe Spade::Package, "converting" do
+  let(:email) { "user@example.com" }
+
+  before do
+    cd(home)
+  end
+
+  subject do
+    package = Spade::Package.new(email)
+    package.spade = fixtures("coffee-1.0.1.pre.spd")
+    package.as_json
+  end
+
+  it "can recreate the same package.json from the package" do
+    subject.should == JSON.parse(File.read(fixtures("package.json")))
   end
 end

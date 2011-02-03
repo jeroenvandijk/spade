@@ -19,10 +19,10 @@ module Spade
     end
 
     def pack(path)
-      package = Spade::Package.new(path, "user@example.com")
-      spec    = package.to_spec
+      package = Spade::Package.new("user@example.com")
+      package.json = path
       silence do
-        Gem::Builder.new(spec).build
+        Gem::Builder.new(package.to_spec).build
       end
     end
 
