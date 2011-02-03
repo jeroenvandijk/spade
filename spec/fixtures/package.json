@@ -13,7 +13,8 @@
       "node":       ">=0.2.5"
     },
     "directories" : {
-      "lib" : "./lib"
+      "lib"  : "./lib",
+      "test" : "./qunit"
     },
     "main" : "./lib/coffee-script",
     "bin":          {
