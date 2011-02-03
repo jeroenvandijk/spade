@@ -1,7 +1,7 @@
 module Spade
   class Package
     METADATA = %w[keywords licenses engines main bin]
-    FIELDS   = %w[name version description author homepage description directories bin]
+    FIELDS   = %w[name version description author homepage description directories bin summary]
     attr_accessor :metadata
     attr_accessor *FIELDS
 
@@ -24,7 +24,7 @@ module Spade
         spec.authors      = [author]
         spec.email        = @email
         spec.homepage     = homepage
-        spec.summary      = description
+        spec.summary      = summary
         spec.description  = description
         spec.requirements = [metadata.to_json]
         spec.files        = glob_javascript(lib_path) + bin_files

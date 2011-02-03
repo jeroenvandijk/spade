@@ -1,6 +1,7 @@
 {
     "name":         "coffee",
-    "description":  "Unfancy JavaScript",
+    "description":  "CoffeeScript is a little language that compiles into JavaScript",
+    "summary":      "Unfancy JavaScript",
     "keywords":     ["javascript", "language", "coffeescript", "compiler"],
     "author":       "Jeremy Ashkenas",
     "homepage":     "http://github.com/jashkenas/coffee-script",

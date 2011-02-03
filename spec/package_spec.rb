@@ -33,7 +33,11 @@ describe Spade::Package, "transforming" do
   end
 
   it "transforms the description" do
-    subject.description.should == "Unfancy JavaScript"
+    subject.description.should include("little language")
+  end
+
+  it "transforms the description" do
+    subject.summary.should == "Unfancy JavaScript"
   end
 
   it "packs metadata into requirements" do
