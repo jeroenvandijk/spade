@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Spade::Packer, "transforming" do
+describe Spade::Package, "transforming" do
   let(:email) { "user@example.com" }
 
   before do
@@ -8,8 +8,8 @@ describe Spade::Packer, "transforming" do
   end
 
   subject do
-    packer = Spade::Packer.new(fixtures("package.json"), email)
-    packer.transform
+    packer = Spade::Package.new(fixtures("package.json"), email)
+    packer.to_spec
   end
 
   it "transforms the name" do
