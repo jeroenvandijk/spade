@@ -9,7 +9,7 @@ describe Spade::Package, "#to_spec" do
 
   subject do
     package = Spade::Package.new(email)
-    package.json = fixtures("package.json")
+    package.json_path = fixtures("package.json")
     package.to_spec
   end
 
@@ -79,7 +79,8 @@ describe Spade::Package, "#to_s" do
 
   subject do
     package = Spade::Package.new
-    package.json = fixtures("package.json")
+    package.json_path = fixtures("package.json")
+    package.parse
     package
   end
 
@@ -101,5 +102,43 @@ describe Spade::Package, "converting" do
 
   it "can recreate the same package.json from the package" do
     subject.should == JSON.parse(File.read(fixtures("package.json")))
+  end
+end
+
+describe Spade::Package, "validating" do
+  before do
+    cd(home)
+  end
+
+  subject { Spade::Package.new }
+
+  it "is invalid when a blank file" do
+    FileUtils.touch("package.json")
+    subject.json_path = "package.json"
+
+    subject.should_not be_valid
+    subject.errors.size.should == 1
+    subject.errors.first.should include("There was a problem parsing package.json")
+  end
+
+  it "is invalid with bad json" do
+    File.open("package.json", "w") do |f|
+      f.write "---bad json---"
+    end
+    subject.json_path = "package.json"
+
+    subject.should_not be_valid
+    subject.errors.size.should == 1
+    subject.errors.first.should include("There was a problem parsing package.json")
+  end
+
+  it "is invalid if json can't be read" do
+    FileUtils.cp fixtures("package.json"), "."
+    FileUtils.chmod 0000, "package.json"
+    subject.json_path = "package.json"
+
+    subject.should_not be_valid
+    subject.errors.size.should == 1
+    subject.errors.first.should include("There was an error reading package.json")
   end
 end

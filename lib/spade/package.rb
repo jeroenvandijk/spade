@@ -3,15 +3,11 @@ module Spade
     EXT      = "spd"
     METADATA = %w[keywords licenses engines main bin directories]
     FIELDS   = %w[name version description author homepage description summary]
-    attr_accessor :metadata, :bin_files, :lib_path, :test_path
+    attr_accessor :metadata, :bin_files, :lib_path, :test_path, :errors, :json_path
     attr_accessor *FIELDS
 
     def initialize(email = "")
       @email = email
-    end
-
-    def json=(path)
-      self.attributes = JSON.parse(File.read(path))
     end
 
     def spade=(path)
@@ -19,17 +15,8 @@ module Spade
       fill_from_gemspec(format.spec)
     end
 
-    def attributes=(attrs)
-      FIELDS.each do |field|
-        send("#{field}=", attrs[field])
-      end
-      self.bin_files = attrs["bin"].values
-      self.lib_path  = attrs["directories"]["lib"]
-      self.test_path = attrs["directories"]["test"]
-      self.metadata  = Hash[*attrs.select { |k, v| METADATA.include?(k) }.flatten(1)]
-    end
-
     def to_spec
+      validate
       Gem::Specification.new do |spec|
         spec.name         = name
         spec.version      = version
@@ -60,6 +47,38 @@ module Spade
 
     def to_ext
       "#{self}.#{EXT}"
+    end
+
+    def errors
+      @errors ||= []
+    end
+
+    def parse
+      attrs = JSON.parse(File.read(@json_path))
+      FIELDS.each do |field|
+        send("#{field}=", attrs[field])
+      end
+      self.bin_files = attrs["bin"].values
+      self.lib_path  = attrs["directories"]["lib"]
+      self.test_path = attrs["directories"]["test"]
+      self.metadata  = Hash[*attrs.select { |k, v| METADATA.include?(k) }.flatten(1)]
+    end
+
+    def validate
+      begin
+        parse
+        true
+      rescue JSON::ParserError => ex
+        self.errors << "There was a problem parsing package.json: #{ex.message}"
+        false
+      rescue Errno::EACCES => ex
+        self.errors << "There was an error reading package.json: #{ex.message}"
+        false
+      end
+    end
+
+    def valid?
+      validate == true
     end
 
     private

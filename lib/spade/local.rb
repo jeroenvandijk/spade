@@ -26,7 +26,7 @@ module Spade
     def pack(path)
       package = Spade::Package.new(@creds.email)
       if File.exist?(path)
-        package.json = path
+        package.json_path = path
         silence do
           Gem::Builder.new(package.to_spec).build
         end
