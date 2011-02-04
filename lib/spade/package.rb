@@ -30,7 +30,7 @@ module Spade
         spec.test_files        = glob_javascript(test_path)
         spec.rubyforge_project = "spade"
         def spec.file_name
-          full_name + ".spd"
+          "#{full_name}.#{EXT}"
         end
       end
     end
