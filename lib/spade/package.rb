@@ -18,16 +18,17 @@ module Spade
     def to_spec
       validate
       Gem::Specification.new do |spec|
-        spec.name         = name
-        spec.version      = version
-        spec.authors      = [author]
-        spec.email        = @email
-        spec.homepage     = homepage
-        spec.summary      = summary
-        spec.description  = description
-        spec.requirements = [metadata.to_json]
-        spec.files        = glob_javascript(lib_path) + bin_files
-        spec.test_files   = glob_javascript(test_path)
+        spec.name              = name
+        spec.version           = version
+        spec.authors           = [author]
+        spec.email             = @email
+        spec.homepage          = homepage
+        spec.summary           = summary
+        spec.description       = description
+        spec.requirements      = [metadata.to_json]
+        spec.files             = glob_javascript(lib_path) + bin_files
+        spec.test_files        = glob_javascript(test_path)
+        spec.rubyforge_project = "spade"
         def spec.file_name
           full_name + ".spd"
         end

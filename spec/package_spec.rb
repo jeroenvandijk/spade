@@ -72,6 +72,10 @@ describe Spade::Package, "#to_spec" do
   it "hacks the file name to return .spd" do
     subject.file_name.should == "coffee-1.0.1.pre.spd"
   end
+
+  it "sets the rubyforge_project to appease older versions of rubygems" do
+    subject.rubyforge_project.should == "spade"
+  end
 end
 
 describe Spade::Package, "#to_s" do
