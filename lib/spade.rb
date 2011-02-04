@@ -41,6 +41,7 @@ require 'spade/bundle'
 
 require 'spade/cli'
 require 'spade/context'
+require 'spade/credentials'
 require 'spade/environment'
 require 'spade/exports'
 require 'spade/local'

@@ -164,7 +164,7 @@ module Spade::CLI
     desc "push", "Distribute your spade package"
     def push(package)
       remote = Spade::Remote.new
-      if remote.api_key
+      if remote.logged_in?
         say remote.push(package)
       else
         say "Please login first with `spade login`."

@@ -39,6 +39,7 @@ describe "spade login" do
     stdout.read.should include("Logged in!")
     File.exist?(creds).should be_true
     YAML.load_file(creds)[:spade_api_key].should == api_key
+    YAML.load_file(creds)[:spade_email].should == email
   end
 
   it "notifies user if bad creds given" do

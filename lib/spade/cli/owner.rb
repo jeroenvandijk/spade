@@ -5,7 +5,7 @@ module Spade::CLI
     desc "owner list [PACKAGE]", "Display owners of a package"
     def list(package)
       remote = Spade::Remote.new
-      if remote.api_key
+      if remote.logged_in?
         yaml   = remote.list_owners(package)
         owners = YAML.load(yaml)
 
@@ -25,7 +25,7 @@ module Spade::CLI
     desc "owner add [PACKAGE] [EMAIL]", "Allow another user to push new versions of your spade package"
     def add(package, email)
       remote = Spade::Remote.new
-      if remote.api_key
+      if remote.logged_in?
         say remote.add_owner(package, email)
       else
         say "Please login first with `spade login`."
@@ -35,7 +35,7 @@ module Spade::CLI
     desc "owner remove [PACKAGE] [EMAIL]", "Allow another user to push new versions of your spade package"
     def remove(package, email)
       remote = Spade::Remote.new
-      if remote.api_key
+      if remote.logged_in?
         say remote.remove_owner(package, email)
       else
         say "Please login first with `spade login`."
