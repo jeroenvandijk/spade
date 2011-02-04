@@ -1,5 +1,6 @@
 module Spade
   class Package
+    EXT      = "spd"
     METADATA = %w[keywords licenses engines main bin directories]
     FIELDS   = %w[name version description author homepage description summary]
     attr_accessor :metadata, :bin_files, :lib_path, :test_path
@@ -55,6 +56,10 @@ module Spade
 
     def to_s
       "#{name}-#{version}"
+    end
+
+    def to_ext
+      "#{self}.#{EXT}"
     end
 
     private
