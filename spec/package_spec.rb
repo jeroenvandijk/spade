@@ -112,33 +112,45 @@ describe Spade::Package, "validating" do
 
   subject { Spade::Package.new }
 
-  it "is invalid when a blank file" do
-    FileUtils.touch("package.json")
-    subject.json_path = "package.json"
-
-    subject.should_not be_valid
-    subject.errors.size.should == 1
-    subject.errors.first.should include("There was a problem parsing package.json")
-  end
-
-  it "is invalid with bad json" do
-    File.open("package.json", "w") do |f|
-      f.write "---bad json---"
+  shared_examples_for "a good parser" do
+    it "had a problem parsing package.json" do
+      subject.should_not be_valid
+      subject.errors.size.should == 1
+      subject.errors.first.should include("There was a problem parsing package.json")
     end
-    subject.json_path = "package.json"
-
-    subject.should_not be_valid
-    subject.errors.size.should == 1
-    subject.errors.first.should include("There was a problem parsing package.json")
   end
 
-  it "is invalid if json can't be read" do
-    FileUtils.cp fixtures("package.json"), "."
-    FileUtils.chmod 0000, "package.json"
-    subject.json_path = "package.json"
+  context "with a blank file" do
+    before do
+      FileUtils.touch("package.json")
+      subject.json_path = "package.json"
+    end
+    it_should_behave_like "a good parser"
+  end
 
-    subject.should_not be_valid
-    subject.errors.size.should == 1
-    subject.errors.first.should include("There was an error reading package.json")
+  context "with bad json" do
+    before do
+      File.open("package.json", "w") do |f|
+        f.write "---bad json---"
+      end
+      subject.json_path = "package.json"
+    end
+    it_should_behave_like "a good parser"
+  end
+
+  context "json can't be read" do
+    before do
+      FileUtils.cp fixtures("package.json"), "."
+      FileUtils.chmod 0000, "package.json"
+      subject.json_path = "package.json"
+    end
+    it_should_behave_like "a good parser"
+  end
+
+  context "json can't be found" do
+    before do
+      subject.json_path = "package.json"
+    end
+    it_should_behave_like "a good parser"
   end
 end

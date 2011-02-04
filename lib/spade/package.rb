@@ -68,11 +68,8 @@ module Spade
       begin
         parse
         true
-      rescue JSON::ParserError => ex
+      rescue *[JSON::ParserError, Errno::EACCES, Errno::ENOENT] => ex
         self.errors << "There was a problem parsing package.json: #{ex.message}"
-        false
-      rescue Errno::EACCES => ex
-        self.errors << "There was an error reading package.json: #{ex.message}"
         false
       end
     end

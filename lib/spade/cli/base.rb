@@ -197,10 +197,15 @@ module Spade::CLI
     def build
       local = Spade::Local.new
       if local.logged_in?
-        if package = local.pack("package.json")
+        package = local.pack("package.json")
+        if package.errors.empty?
           puts "Successfully built package: #{package.to_ext}"
         else
-          abort "Could not find a package.json in this directory."
+          failure_message = "Spade encountered the following problems building your package:"
+          package.errors.each do |error|
+            failure_message << "\n* #{error}"
+          end
+          abort failure_message
         end
       else
         abort LOGIN_MESSAGE
