@@ -196,8 +196,15 @@ module Spade::CLI
     desc "build", "Build a spade package from a package.json"
     def build
       local = Spade::Local.new
-      file_name = local.pack("package.json")
-      puts "Successfully built package: #{file_name}"
+      path  = local.pack("package.json")
+      puts "Successfully built package: #{path}"
+    end
+
+    desc "unpack [PACKAGE]", "Unpack files from a .spd"
+    def unpack(path)
+      local   = Spade::Local.new
+      package = local.unpack(path)
+      puts "Unpacked spade into: #{Dir.pwd}/#{package}"
     end
 
     private

@@ -11,6 +11,12 @@ RSpec::Matchers.define :be_unpacked do
   end
 end
 
+RSpec::Matchers.define :exist do
+  match do |name|
+    File.exist?(name) == true
+  end
+end
+
 # Make sure matchers can get to the path helpers
 class RSpec::Matchers::Matcher
   include SpecHelpers

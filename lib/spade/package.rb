@@ -5,7 +5,7 @@ module Spade
     attr_accessor :metadata, :bin_files, :lib_path, :test_path
     attr_accessor *FIELDS
 
-    def initialize(email)
+    def initialize(email = "")
       @email = email
     end
 
@@ -51,6 +51,10 @@ module Spade
         json[key] = send(key)
         json
       end
+    end
+
+    def to_s
+      "#{name}-#{version}"
     end
 
     private

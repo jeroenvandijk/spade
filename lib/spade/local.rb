@@ -26,6 +26,13 @@ module Spade
       end
     end
 
+    def unpack(path)
+      package = Spade::Package.new
+      package.spade = path
+      Gem::Installer.new(path, :unpack => true).unpack File.expand_path(File.join(Dir.pwd, package.to_s))
+      package
+    end
+
     private
 
     def silence

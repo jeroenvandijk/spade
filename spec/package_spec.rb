@@ -74,15 +74,27 @@ describe Spade::Package, "#to_spec" do
   end
 end
 
-describe Spade::Package, "converting" do
+describe Spade::Package, "#to_s" do
   let(:email) { "user@example.com" }
 
+  subject do
+    package = Spade::Package.new
+    package.json = fixtures("package.json")
+    package
+  end
+
+  it "gives the name and version" do
+    subject.to_s.should == "coffee-1.0.1.pre"
+  end
+end
+
+describe Spade::Package, "converting" do
   before do
     cd(home)
   end
 
   subject do
-    package = Spade::Package.new(email)
+    package = Spade::Package.new
     package.spade = fixtures("coffee-1.0.1.pre.spd")
     package.as_json
   end
