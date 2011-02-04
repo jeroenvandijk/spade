@@ -20,16 +20,22 @@ module Spade
 
     def pack(path)
       package = Spade::Package.new("user@example.com")
-      package.json = path
-      silence do
-        Gem::Builder.new(package.to_spec).build
+      if File.exist?(path)
+        package.json = path
+        silence do
+          Gem::Builder.new(package.to_spec).build
+        end
+        package
+      else
+        false
       end
     end
 
     def unpack(path)
-      package = Spade::Package.new
+      package       = Spade::Package.new
       package.spade = path
-      Gem::Installer.new(path, :unpack => true).unpack File.expand_path(File.join(Dir.pwd, package.to_s))
+      unpack_dir    = File.expand_path(File.join(Dir.pwd, package.to_s))
+      Gem::Installer.new(path, :unpack => true).unpack unpack_dir
       package
     end
 

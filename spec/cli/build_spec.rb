@@ -3,7 +3,6 @@ require "spec_helper"
 describe "spade build" do
   before do
     cd(home)
-    env["HOME"] = home.to_s
   end
 
   it "builds a gem from a given package.json" do
@@ -19,5 +18,18 @@ describe "spade build" do
     package = Gem::Format.from_file_by_path("coffee-1.0.1.pre.spd")
     package.spec.name.should == "coffee"
     package.spec.version.should == Gem::Version.new("1.0.1.pre")
+  end
+end
+
+describe "spade build without a package.json" do
+  before do
+    cd(home)
+  end
+
+  it "builds a gem from a given package.json" do
+    spade "build", :track_stderr => true
+
+    exit_status.should_not be_success
+    stderr.read.should include("Could not find a package.json in this directory.")
   end
 end
