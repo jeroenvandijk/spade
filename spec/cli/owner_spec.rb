@@ -72,21 +72,21 @@ describe "spade owner with wrong arguments" do
   end
 
   it "asks for login first if api key does not exist" do
-    spade "owner", "add", "rake", "geddy@example.com"
+    spade "owner", "add", "rake", "geddy@example.com", :track_stderr => true
 
-    stdout.read.should include("Please login first with `spade login`")
+    stderr.read.should include("Please login first with `spade login`")
   end
 
   it "asks for login first if api key does not exist" do
-    spade "owner", "remove", "rake", "geddy@example.com"
+    spade "owner", "remove", "rake", "geddy@example.com", :track_stderr => true
 
-    stdout.read.should include("Please login first with `spade login`")
+    stderr.read.should include("Please login first with `spade login`")
   end
 
   it "asks for login first if api key does not exist" do
-    spade "owner", "list", "rake"
+    spade "owner", "list", "rake", :track_stderr => true
 
-    stdout.read.should include("Please login first with `spade login`")
+    stderr.read.should include("Please login first with `spade login`")
   end
 
   it "requires a package name for add" do

@@ -18,7 +18,7 @@ module Spade::CLI
           say owners
         end
       else
-        say "Please login first with `spade login`."
+        abort LOGIN_MESSAGE
       end
     end
 
@@ -28,7 +28,7 @@ module Spade::CLI
       if remote.logged_in?
         say remote.add_owner(package, email)
       else
-        say "Please login first with `spade login`."
+        abort LOGIN_MESSAGE
       end
     end
 
@@ -38,7 +38,7 @@ module Spade::CLI
       if remote.logged_in?
         say remote.remove_owner(package, email)
       else
-        say "Please login first with `spade login`."
+        abort LOGIN_MESSAGE
       end
     end
   end

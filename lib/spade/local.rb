@@ -1,7 +1,12 @@
 module Spade
   class Local
     def initialize
-      @env = Environment.new
+      @env   = Environment.new
+      @creds = Credentials.new(@env)
+    end
+
+    def logged_in?
+      !@creds.api_key.nil?
     end
 
     def uninstall(package)
@@ -19,7 +24,7 @@ module Spade
     end
 
     def pack(path)
-      package = Spade::Package.new("user@example.com")
+      package = Spade::Package.new(@creds.email)
       if File.exist?(path)
         package.json = path
         silence do

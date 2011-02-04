@@ -167,7 +167,7 @@ module Spade::CLI
       if remote.logged_in?
         say remote.push(package)
       else
-        say "Please login first with `spade login`."
+        say LOGIN_MESSAGE
       end
     end
 
@@ -196,10 +196,14 @@ module Spade::CLI
     desc "build", "Build a spade package from a package.json"
     def build
       local = Spade::Local.new
-      if package = local.pack("package.json")
-        puts "Successfully built package: #{package.to_ext}"
+      if local.logged_in?
+        if package = local.pack("package.json")
+          puts "Successfully built package: #{package.to_ext}"
+        else
+          abort "Could not find a package.json in this directory."
+        end
       else
-        abort "Could not find a package.json in this directory."
+        abort LOGIN_MESSAGE
       end
     end
 

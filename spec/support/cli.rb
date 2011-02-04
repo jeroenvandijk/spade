@@ -82,9 +82,13 @@ module SpecHelpers
   end
 
   def write_api_key(api_key)
+    write_creds("user@example.com", api_key)
+  end
+
+  def write_creds(email, api_key)
     FileUtils.mkdir_p(spade_dir)
     File.open(spade_dir("credentials"), "w") do |file|
-      file.write YAML.dump(:spade_api_key => api_key)
+      file.write YAML.dump(:spade_api_key => api_key, :spade_email => email)
     end
   end
 end

@@ -8,5 +8,7 @@ module Spade
   module CLI
     require 'spade/cli/owner'
     require 'spade/cli/base'
+
+    LOGIN_MESSAGE = "Please login first with `spade login`."
   end
 end
