@@ -84,7 +84,7 @@ describe Spade::Package, "#to_s" do
   subject do
     package = Spade::Package.new
     package.json_path = fixtures("package.json")
-    package.parse
+    package.validate
     package
   end
 
@@ -179,7 +179,7 @@ describe Spade::Package, "validation errors" do
     subject.json_path = path
   end
 
-  %w[name description summary homepage author].each do |field|
+  %w[name description summary homepage author version].each do |field|
     it "is invalid without a #{field} field" do
       write_package do |package|
         package.delete(field)
@@ -195,5 +195,13 @@ describe Spade::Package, "validation errors" do
 
       subject.should have_error("Package requires a '#{field}' field.")
     end
+  end
+
+  it "is invalid without a proper version number" do
+    write_package do |package|
+      package["version"] = "bad"
+    end
+
+    subject.should have_error("Malformed version number string bad")
   end
 end

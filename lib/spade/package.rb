@@ -3,7 +3,7 @@ module Spade
     EXT      = "spd"
     METADATA = %w[keywords licenses engines main bin directories]
     FIELDS   = %w[name version description author homepage summary]
-    attr_accessor :metadata, :bin_files, :lib_path, :test_path, :errors, :json_path
+    attr_accessor :metadata, :bin_files, :lib_path, :test_path, :errors, :json_path, :attributes
     attr_accessor *FIELDS
 
     def initialize(email = "")
@@ -54,23 +54,8 @@ module Spade
       @errors ||= []
     end
 
-    def parse
-      attrs = JSON.parse(File.read(@json_path))
-      FIELDS.each do |field|
-        send("#{field}=", attrs[field])
-      end
-      self.bin_files = attrs["bin"].values
-      self.lib_path  = attrs["directories"]["lib"]
-      self.test_path = attrs["directories"]["test"]
-      self.metadata  = Hash[*attrs.select { |k, v| METADATA.include?(k) }.flatten(1)]
-    end
-
     def validate
-      begin
-        parse && validate_fields
-      rescue *[JSON::ParserError, Errno::EACCES, Errno::ENOENT] => ex
-        add_error "There was a problem parsing package.json: #{ex.message}"
-      end
+      read && parse && validate_fields && validate_version
     end
 
     def valid?
@@ -79,8 +64,30 @@ module Spade
 
     private
 
+    def parse
+      FIELDS.each do |field|
+        send("#{field}=", @attributes[field])
+      end
+      self.bin_files = @attributes["bin"].values
+      self.lib_path  = @attributes["directories"]["lib"]
+      self.test_path = @attributes["directories"]["test"]
+      self.metadata  = Hash[*@attributes.select { |k, v| METADATA.include?(k) }.flatten(1)]
+    end
+
+    def read
+      @attributes = JSON.parse(File.read(@json_path))
+    rescue *[JSON::ParserError, Errno::EACCES, Errno::ENOENT] => ex
+      add_error "There was a problem parsing package.json: #{ex.message}"
+    end
+
+    def validate_version
+      Gem::Version.new(version)
+    rescue ArgumentError => ex
+      add_error ex.to_s
+    end
+
     def validate_fields
-      %w[name description summary homepage author].all? do |field|
+      %w[name description summary homepage author version].all? do |field|
         value = send(field)
         if value.nil? || value == ""
           add_error "Package requires a '#{field}' field."
