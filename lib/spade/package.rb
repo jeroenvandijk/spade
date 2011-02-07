@@ -67,11 +67,9 @@ module Spade
 
     def validate
       begin
-        parse
-        true
+        parse && validate_fields
       rescue *[JSON::ParserError, Errno::EACCES, Errno::ENOENT] => ex
-        self.errors << "There was a problem parsing package.json: #{ex.message}"
-        false
+        add_error "There was a problem parsing package.json: #{ex.message}"
       end
     end
 
@@ -81,6 +79,18 @@ module Spade
 
     private
 
+    def add_error(message)
+      self.errors << message
+      false
+    end
+
+    def validate_fields
+      if self.name.nil?
+        add_error "Package requires a 'name' field as a string."
+      else
+        true
+      end
+    end
     def glob_javascript(path)
       Dir[File.join(path, "**", "*.js")]
     end

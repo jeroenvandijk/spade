@@ -157,4 +157,22 @@ describe Spade::Package, "validating" do
     end
     it_should_behave_like "a good parser"
   end
+
+  context "json does not have all of the required fields" do
+    before do
+      path    = home("package.json")
+      package = JSON.parse(File.read(fixtures("package.json")))
+      package.delete("name")
+      File.open(path, "w") do |file|
+        file.write package.to_json
+      end
+      subject.json_path = path
+    end
+
+    it "contains errors for name" do
+      subject.should_not be_valid
+      subject.errors.size.should == 1
+      subject.errors.first.should include("Package requires a 'name' field as a string.")
+    end
+  end
 end
