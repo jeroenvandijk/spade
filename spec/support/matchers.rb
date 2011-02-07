@@ -17,6 +17,14 @@ RSpec::Matchers.define :exist do
   end
 end
 
+RSpec::Matchers.define :have_error do |error|
+  match do |package|
+    package.valid? == false &&
+      package.errors.size.should == 1 &&
+      package.errors.first.include?(error) == true
+  end
+end
+
 # Make sure matchers can get to the path helpers
 class RSpec::Matchers::Matcher
   include SpecHelpers

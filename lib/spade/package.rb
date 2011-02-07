@@ -42,12 +42,12 @@ module Spade
       end
     end
 
-    def to_s
+    def to_full_name
       "#{name}-#{version}"
     end
 
     def to_ext
-      "#{self}.#{EXT}"
+      "#{self.to_full_name}.#{EXT}"
     end
 
     def errors
@@ -79,18 +79,19 @@ module Spade
 
     private
 
-    def add_error(message)
-      self.errors << message
-      false
-    end
-
     def validate_fields
-      if self.name.nil?
+      if self.name.nil? || self.name == ""
         add_error "Package requires a 'name' field as a string."
       else
         true
       end
     end
+
+    def add_error(message)
+      self.errors << message
+      false
+    end
+
     def glob_javascript(path)
       Dir[File.join(path, "**", "*.js")]
     end

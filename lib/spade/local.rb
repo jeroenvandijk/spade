@@ -37,7 +37,7 @@ module Spade
     def unpack(path)
       package       = Spade::Package.new
       package.spade = path
-      unpack_dir    = File.expand_path(File.join(Dir.pwd, package.to_s))
+      unpack_dir    = File.expand_path(File.join(Dir.pwd, package.to_full_name))
       Gem::Installer.new(path, :unpack => true).unpack unpack_dir
       package
     end

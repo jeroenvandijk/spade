@@ -216,7 +216,7 @@ module Spade::CLI
     def unpack(path)
       local   = Spade::Local.new
       package = local.unpack(path)
-      puts "Unpacked spade into: #{Dir.pwd}/#{package}"
+      puts "Unpacked spade into: #{Dir.pwd}/#{package.to_full_name}"
     end
 
     private

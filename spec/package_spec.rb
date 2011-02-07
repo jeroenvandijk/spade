@@ -89,7 +89,7 @@ describe Spade::Package, "#to_s" do
   end
 
   it "gives the name and version" do
-    subject.to_s.should == "coffee-1.0.1.pre"
+    subject.to_full_name.should == "coffee-1.0.1.pre"
   end
 end
 
@@ -118,9 +118,7 @@ describe Spade::Package, "validating" do
 
   shared_examples_for "a good parser" do
     it "had a problem parsing package.json" do
-      subject.should_not be_valid
-      subject.errors.size.should == 1
-      subject.errors.first.should include("There was a problem parsing package.json")
+      subject.should have_error("There was a problem parsing package.json")
     end
   end
 
@@ -158,21 +156,42 @@ describe Spade::Package, "validating" do
     it_should_behave_like "a good parser"
   end
 
-  context "json does not have all of the required fields" do
-    before do
-      path    = home("package.json")
-      package = JSON.parse(File.read(fixtures("package.json")))
+end
+
+describe Spade::Package, "validation errors" do
+  let(:email) { "user@example.com" }
+
+  before do
+    cd(home)
+  end
+
+  subject do
+    Spade::Package.new(email)
+  end
+
+  def write_package
+    path    = home("package.json")
+    package = JSON.parse(File.read(fixtures("package.json")))
+    yield package
+    File.open(path, "w") do |file|
+      file.write package.to_json
+    end
+    subject.json_path = path
+  end
+
+  it "without a name field" do
+    write_package do |package|
       package.delete("name")
-      File.open(path, "w") do |file|
-        file.write package.to_json
-      end
-      subject.json_path = path
     end
 
-    it "contains errors for name" do
-      subject.should_not be_valid
-      subject.errors.size.should == 1
-      subject.errors.first.should include("Package requires a 'name' field as a string.")
+    subject.should have_error("Package requires a 'name' field as a string.")
+  end
+
+  it "with a blank name field" do
+    write_package do |package|
+      package["name"] = ""
     end
+
+    subject.should have_error("Package requires a 'name' field as a string.")
   end
 end
