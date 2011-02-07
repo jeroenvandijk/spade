@@ -5,6 +5,7 @@ describe Spade::Package, "#to_spec" do
 
   before do
     cd(home)
+    FileUtils.mkdir_p(home("lib"))
   end
 
   subject do
@@ -84,7 +85,7 @@ describe Spade::Package, "#to_s" do
   subject do
     package = Spade::Package.new
     package.json_path = fixtures("package.json")
-    package.validate
+    package.valid?
     package
   end
 

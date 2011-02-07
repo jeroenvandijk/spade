@@ -16,7 +16,7 @@ module Spade
     end
 
     def to_spec
-      validate
+      return unless valid?
       Gem::Specification.new do |spec|
         spec.name              = name
         spec.version           = version
@@ -55,15 +55,11 @@ module Spade
     end
 
     def validate
-      read &&
-        parse &&
-        validate_fields &&
-        validate_version &&
-        validate_paths
+      validate_fields && validate_version && validate_paths
     end
 
     def valid?
-      validate == true
+      read && parse && validate
     end
 
     private
