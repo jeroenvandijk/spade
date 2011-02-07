@@ -6,6 +6,7 @@ describe Spade::Package, "#to_spec" do
   before do
     cd(home)
     FileUtils.mkdir_p(home("lib"))
+    FileUtils.mkdir_p(home("qunit"))
   end
 
   subject do
@@ -164,6 +165,8 @@ describe Spade::Package, "validation errors" do
 
   before do
     cd(home)
+    FileUtils.mkdir_p(home("lib"))
+    FileUtils.mkdir_p(home("qunit"))
   end
 
   subject do
@@ -206,29 +209,31 @@ describe Spade::Package, "validation errors" do
     subject.should have_error("Malformed version number string bad")
   end
 
-  it "is invalid without a lib directory that exists" do
-    write_package do |package|
-      package["directories"]["lib"] = "nope"
+  %w[lib test].each do |dir|
+    it "is invalid without a #{dir} directory that exists" do
+      write_package do |package|
+        package["directories"][dir] = "nope"
+      end
+
+      subject.should have_error("'nope' specified for #{dir} directory, is not a directory")
     end
 
-    subject.should have_error("'nope' specified for lib directory, is not a directory")
-  end
+    it "is valid with a #{dir} directory that exists" do
+      FileUtils.mkdir_p(home("somewhere", "else"))
+      write_package do |package|
+        package["directories"][dir] = "./somewhere/else"
+      end
 
-  it "is valid with a lib directory that exists" do
-    FileUtils.mkdir_p(home("somewhere", "else"))
-    write_package do |package|
-      package["directories"]["lib"] = "./somewhere/else"
+      subject.should be_valid
     end
 
-    subject.should be_valid
-  end
+    it "is invalid if #{dir} points to a file" do
+      FileUtils.touch(home("somefile"))
+      write_package do |package|
+        package["directories"][dir] = "./somefile"
+      end
 
-  it "is invalid if pointing to a file" do
-    FileUtils.touch(home("somefile"))
-    write_package do |package|
-      package["directories"]["lib"] = "./somefile"
+      subject.should have_error("'./somefile' specified for #{dir} directory, is not a directory")
     end
-
-    subject.should have_error("'./somefile' specified for lib directory, is not a directory")
   end
 end

@@ -92,10 +92,13 @@ module Spade
     end
 
     def validate_paths
-      if File.directory?(File.join(Dir.pwd, lib_path))
-        true
-      else
-        add_error "'#{lib_path}' specified for lib directory, is not a directory"
+      %w[lib test].all? do |directory|
+        path = send("#{directory}_path")
+        if File.directory?(File.join(Dir.pwd, path))
+          true
+        else
+          add_error "'#{path}' specified for #{directory} directory, is not a directory"
+        end
       end
     end
 
