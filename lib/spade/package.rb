@@ -2,7 +2,7 @@ module Spade
   class Package
     EXT      = "spd"
     METADATA = %w[keywords licenses engines main bin directories]
-    FIELDS   = %w[name version description author homepage description summary]
+    FIELDS   = %w[name version description author homepage summary]
     attr_accessor :metadata, :bin_files, :lib_path, :test_path, :errors, :json_path
     attr_accessor *FIELDS
 
@@ -80,10 +80,13 @@ module Spade
     private
 
     def validate_fields
-      if self.name.nil? || self.name == ""
-        add_error "Package requires a 'name' field as a string."
-      else
-        true
+      %w[name description summary homepage author].all? do |field|
+        value = send(field)
+        if value.nil? || value == ""
+          add_error "Package requires a '#{field}' field."
+        else
+          true
+        end
       end
     end
 

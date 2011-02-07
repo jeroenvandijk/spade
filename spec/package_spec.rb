@@ -179,19 +179,21 @@ describe Spade::Package, "validation errors" do
     subject.json_path = path
   end
 
-  it "without a name field" do
-    write_package do |package|
-      package.delete("name")
+  %w[name description summary homepage author].each do |field|
+    it "is invalid without a #{field} field" do
+      write_package do |package|
+        package.delete(field)
+      end
+
+      subject.should have_error("Package requires a '#{field}' field.")
     end
 
-    subject.should have_error("Package requires a 'name' field as a string.")
-  end
+    it "is invalid with a blank #{field} field" do
+      write_package do |package|
+        package[field] = ""
+      end
 
-  it "with a blank name field" do
-    write_package do |package|
-      package["name"] = ""
+      subject.should have_error("Package requires a '#{field}' field.")
     end
-
-    subject.should have_error("Package requires a 'name' field as a string.")
   end
 end
