@@ -213,10 +213,12 @@ module Spade::CLI
     end
 
     desc "unpack [PACKAGE]", "Extract files from a spade package"
+    method_option :target, :type => :string, :default => ".", :aliases => ['-t'], :desc => 'Unpack to given directory'
     def unpack(path)
-      local   = Spade::Local.new
-      package = local.unpack(path)
-      puts "Unpacked spade into: #{Dir.pwd}/#{package.to_full_name}"
+      local       = Spade::Local.new
+      package     = local.unpack(path, options[:target])
+      unpack_path = File.expand_path(File.join(Dir.pwd, options[:target], package.to_full_name))
+      puts "Unpacked spade into: #{unpack_path}"
     end
 
     private
