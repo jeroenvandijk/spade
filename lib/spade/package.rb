@@ -3,7 +3,7 @@ module Spade
     EXT      = "spd"
     METADATA = %w[keywords licenses engines main bin directories]
     FIELDS   = %w[name version description author homepage summary]
-    attr_accessor :metadata, :bin_files, :lib_path, :test_path, :errors, :json_path, :attributes
+    attr_accessor :metadata, :lib_path, :test_path, :errors, :json_path, :attributes, :directories
     attr_accessor *FIELDS
 
     def initialize(email = "")
@@ -55,7 +55,11 @@ module Spade
     end
 
     def validate
-      read && parse && validate_fields && validate_version
+      read &&
+        parse &&
+        validate_fields &&
+        validate_version &&
+        validate_paths
     end
 
     def valid?
@@ -64,20 +68,39 @@ module Spade
 
     private
 
+    def bin_files
+      @attributes["bin"].values
+    end
+
+    def lib_path
+      @directories["lib"]
+    end
+
+    def test_path
+      @directories["test"]
+    end
+
     def parse
       FIELDS.each do |field|
         send("#{field}=", @attributes[field])
       end
-      self.bin_files = @attributes["bin"].values
-      self.lib_path  = @attributes["directories"]["lib"]
-      self.test_path = @attributes["directories"]["test"]
-      self.metadata  = Hash[*@attributes.select { |k, v| METADATA.include?(k) }.flatten(1)]
+
+      self.directories = @attributes["directories"]
+      self.metadata    = Hash[*@attributes.select { |k, v| METADATA.include?(k) }.flatten(1)]
     end
 
     def read
       @attributes = JSON.parse(File.read(@json_path))
     rescue *[JSON::ParserError, Errno::EACCES, Errno::ENOENT] => ex
       add_error "There was a problem parsing package.json: #{ex.message}"
+    end
+
+    def validate_paths
+      if File.directory?(File.join(Dir.pwd, lib_path))
+        true
+      else
+        add_error "'#{lib_path}' specified for lib directory, is not a directory"
+      end
     end
 
     def validate_version
@@ -88,10 +111,10 @@ module Spade
     end
 
     def validate_fields
-      %w[name description summary homepage author version].all? do |field|
+      %w[name description summary homepage author version directories].all? do |field|
         value = send(field)
-        if value.nil? || value == ""
-          add_error "Package requires a '#{field}' field."
+        if value.nil? || value.size.zero?
+          add_error "Package requires a '#{field}' field"
         else
           true
         end

@@ -179,13 +179,13 @@ describe Spade::Package, "validation errors" do
     subject.json_path = path
   end
 
-  %w[name description summary homepage author version].each do |field|
+  %w[name description summary homepage author version directories].each do |field|
     it "is invalid without a #{field} field" do
       write_package do |package|
         package.delete(field)
       end
 
-      subject.should have_error("Package requires a '#{field}' field.")
+      subject.should have_error("Package requires a '#{field}' field")
     end
 
     it "is invalid with a blank #{field} field" do
@@ -193,7 +193,7 @@ describe Spade::Package, "validation errors" do
         package[field] = ""
       end
 
-      subject.should have_error("Package requires a '#{field}' field.")
+      subject.should have_error("Package requires a '#{field}' field")
     end
   end
 
@@ -203,5 +203,31 @@ describe Spade::Package, "validation errors" do
     end
 
     subject.should have_error("Malformed version number string bad")
+  end
+
+  it "is invalid without a lib directory that exists" do
+    write_package do |package|
+      package["directories"]["lib"] = "nope"
+    end
+
+    subject.should have_error("'nope' specified for lib directory, is not a directory")
+  end
+
+  it "is valid with a lib directory that exists" do
+    FileUtils.mkdir_p(home("somewhere", "else"))
+    write_package do |package|
+      package["directories"]["lib"] = "./somewhere/else"
+    end
+
+    subject.should be_valid
+  end
+
+  it "is invalid if pointing to a file" do
+    FileUtils.touch(home("somefile"))
+    write_package do |package|
+      package["directories"]["lib"] = "./somefile"
+    end
+
+    subject.should have_error("'./somefile' specified for lib directory, is not a directory")
   end
 end
