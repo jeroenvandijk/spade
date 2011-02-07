@@ -82,6 +82,7 @@ module Spade
 
     def validate_version
       Gem::Version.new(version)
+      true
     rescue ArgumentError => ex
       add_error ex.to_s
     end
