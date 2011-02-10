@@ -142,14 +142,18 @@ module Spade::CLI
       highline = HighLine.new
       say "Enter your Spade credentials."
 
-      email = highline.ask "\nEmail:" do |q|
-        next unless STDIN.tty?
-        q.readline = true
-      end
+      begin
+        email = highline.ask "\nEmail:" do |q|
+          next unless STDIN.tty?
+          q.readline = true
+        end
 
-      password = highline.ask "\nPassword:" do |q|
-        next unless STDIN.tty?
-        q.echo = "*"
+        password = highline.ask "\nPassword:" do |q|
+          next unless STDIN.tty?
+          q.echo = "*"
+        end
+      rescue Interrupt => ex
+        abort "Cancelled login."
       end
 
       say "\nLogging in as #{email}..."
@@ -158,6 +162,7 @@ module Spade::CLI
         say "Logged in!"
       else
         say "Incorrect email or password."
+        login
       end
     end
 

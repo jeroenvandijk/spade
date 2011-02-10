@@ -43,11 +43,34 @@ describe "spade login" do
   end
 
   it "notifies user if bad creds given" do
-    spade "login"
+    spade "login", :track_stderr => true
     input email
     input "badpassword"
+    sleep 1
+    kill!
 
     stdout.read.should include("Incorrect email or password.")
     File.exist?(creds).should be_false
+  end
+
+  it "allows the user to retry if bad creds given" do
+    spade "login"
+    input "bademail@example.com"
+    input "badpassword"
+
+    input email
+    input password
+
+    output = stdout.read.split("\n").select { |line| line.size > 0 }
+    output[0].should include("Enter your Spade credentials.")
+    output[3].should include("Logging in as bademail@example.com...")
+    output[4].should include("Incorrect email or password.")
+    output[5].should include("Enter your Spade credentials.")
+    output[8].should include("Logging in as #{email}...")
+    output[9].should include("Logged in!")
+
+    File.exist?(creds).should be_true
+    YAML.load_file(creds)[:spade_api_key].should == api_key
+    YAML.load_file(creds)[:spade_email].should == email
   end
 end
