@@ -9,3 +9,4 @@ examples/web-app/.spade
 tests/ct-runner.js
 *.swp
 .DS_Store
+*.spd
