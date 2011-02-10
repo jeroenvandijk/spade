@@ -9,7 +9,7 @@ describe "spade build when logged in" do
     write_creds(email, "deadbeef")
   end
 
-  it "builds a gem from a given package.json" do
+  it "builds a spade from a given package.json" do
     FileUtils.cp_r fixtures("coffee"), "."
     FileUtils.cp fixtures("package.json"), "coffee"
     cd "coffee"

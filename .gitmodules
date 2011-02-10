@@ -1,6 +1,6 @@
 [submodule "packages/optparse"]
 	path = packages/optparse
-	url = https://github.com/jfd/optparse-js.git
+	url = https://github.com/qrush/optparse-js.git
 [submodule "packages/core-test"]
 	path = packages/core-test
 	url = https://github.com/charlesjolley/core_test.git
