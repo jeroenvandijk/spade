@@ -27,7 +27,7 @@ module Spade
         spec.description       = description
         spec.requirements      = [metadata.to_json]
         spec.files             = glob_javascript(lib_path) + bin_files
-        spec.test_files        = glob_javascript(test_path)
+        spec.test_files        = glob_javascript(test_path) if test_path
         spec.rubyforge_project = "spade"
         def spec.file_name
           "#{full_name}.#{EXT}"
@@ -65,7 +65,11 @@ module Spade
     private
 
     def bin_files
-      @attributes["bin"].values
+      if @attributes["bin"]
+        @attributes["bin"].values
+      else
+        []
+      end
     end
 
     def lib_path
@@ -94,7 +98,7 @@ module Spade
     def validate_paths
       %w[lib test].all? do |directory|
         path = send("#{directory}_path")
-        if File.directory?(File.join(Dir.pwd, path))
+        if path.nil? || File.directory?(File.join(Dir.pwd, path))
           true
         else
           add_error "'#{path}' specified for #{directory} directory, is not a directory"

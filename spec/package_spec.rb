@@ -209,6 +209,24 @@ describe Spade::Package, "validation errors" do
     subject.should have_error("Malformed version number string bad")
   end
 
+  it "is valid without specifying a test directory" do
+    write_package do |package|
+      package["directories"].delete("test")
+    end
+
+    subject.should be_valid
+    subject.to_spec.test_files.should == []
+  end
+
+  it "is valid and has files without specifying bin" do
+    write_package do |package|
+      package.delete("bin")
+    end
+
+    subject.should be_valid
+    subject.to_spec.files.should == []
+  end
+
   %w[lib test].each do |dir|
     it "is invalid without a #{dir} directory that exists" do
       write_package do |package|
@@ -218,8 +236,8 @@ describe Spade::Package, "validation errors" do
       subject.should have_error("'nope' specified for #{dir} directory, is not a directory")
     end
 
-    it "is valid with a #{dir} directory that exists" do
-      FileUtils.mkdir_p(home("somewhere", "else"))
+    it "is valid without a #{dir} directory that exists" do
+    FileUtils.mkdir_p(home("somewhere", "else"))
       write_package do |package|
         package["directories"][dir] = "./somewhere/else"
       end
