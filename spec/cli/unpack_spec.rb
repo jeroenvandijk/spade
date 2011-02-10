@@ -59,4 +59,15 @@ describe "spade unpack" do
     output.should include("There was a problem unpacking jquery-1.4.3.spd:")
     output.should include("Permission denied")
   end
+
+  it "shows a friendly error message if spade can't read the package" do
+    FileUtils.cp fixtures("jquery-1.4.3.spd"), "."
+    FileUtils.chmod 0000, "jquery-1.4.3.spd"
+    spade "unpack", "jquery-1.4.3.spd", :track_stderr => true
+
+    exit_status.should_not be_success
+    output = stderr.read
+    output.should include("There was a problem unpacking jquery-1.4.3.spd:")
+    output.should include("Permission denied")
+  end
 end
