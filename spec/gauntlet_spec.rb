@@ -13,6 +13,7 @@ describe "spade build the gauntlet" do
     "optparse"           => "1.0.1",
     "sproutcore-runtime" => "1.5",
     "web-file"           => "0.0.1",
+    "web-typed-array"    => "0.0.1",
   }.each do |package, version|
     it "builds a spade from #{package}" do
       FileUtils.cp_r root.join("packages/#{package}"), package
