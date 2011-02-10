@@ -7,13 +7,18 @@ describe "spade build the gauntlet" do
     write_creds("user@example.com", "deadbeef")
   end
 
-  it "builds a spade from optparse" do
-    FileUtils.cp_r root.join("packages/optparse"), "optparse"
-    cd "optparse"
-    spade "build"
+  {
+    "ivory"    => "0.0.1",
+    "optparse" => "1.0.1",
+  }.each do |package, version|
+    it "builds a spade from #{package}" do
+      FileUtils.cp_r root.join("packages/#{package}"), package
+      cd package
+      spade "build"
 
-    exit_status.should be_success
-    stdout.read.should include("Successfully built package: optparse-1.0.1.spd")
-    File.exist?(tmp.join("optparse", "optparse-1.0.1.spd"))
+      exit_status.should be_success
+      stdout.read.should include("Successfully built package: #{package}-#{version}.spd")
+      File.exist?(tmp.join(package, "#{package}-#{version}.spd"))
+    end
   end
 end
