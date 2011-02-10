@@ -46,4 +46,17 @@ describe "spade unpack" do
     home("coffee-1.0.1.pre/bin/coffee").should exist
     home("jquery-1.4.3/main.js").should exist
   end
+
+  it "shows a friendly error message if spade can't write to the given directory" do
+    FileUtils.mkdir_p(home("bad"))
+    cd(home("bad"))
+    FileUtils.cp fixtures("jquery-1.4.3.spd"), "."
+    FileUtils.chmod 0555, "."
+    spade "unpack", "jquery-1.4.3.spd", :track_stderr => true
+
+    exit_status.should_not be_success
+    output = stderr.read
+    output.should include("There was a problem unpacking jquery-1.4.3.spd:")
+    output.should include("Permission denied")
+  end
 end

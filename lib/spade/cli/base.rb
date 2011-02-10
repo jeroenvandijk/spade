@@ -218,9 +218,13 @@ module Spade::CLI
       local = Spade::Local.new
 
       paths.each do |path|
-        package     = local.unpack(path, options[:target])
-        unpack_path = File.expand_path(File.join(Dir.pwd, options[:target], package.to_full_name))
-        puts "Unpacked spade into: #{unpack_path}"
+        begin
+          package     = local.unpack(path, options[:target])
+          unpack_path = File.expand_path(File.join(Dir.pwd, options[:target], package.to_full_name))
+          puts "Unpacked spade into: #{unpack_path}"
+        rescue Errno::EACCES, Gem::FilePermissionError => ex
+          abort "There was a problem unpacking #{path}:\n#{ex.message}"
+        end
       end
     end
 
