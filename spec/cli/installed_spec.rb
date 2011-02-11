@@ -45,4 +45,11 @@ describe "spade installed" do
     output.should_not include("rake")
     output.should include("builder (3.0.0)")
   end
+
+  it "says it couldn't find any if none found" do
+    spade "installed", "rails", :track_stderr => true
+
+    stderr.read.strip.should == 'No packages found matching "rails".'
+    exit_status.should_not be_success
+  end
 end
