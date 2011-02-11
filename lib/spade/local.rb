@@ -42,6 +42,14 @@ module Spade
       package
     end
 
+    def installed
+      dependency = Gem::Dependency.new(//, Gem::Requirement.default)
+      specs = Gem.source_index.search dependency
+      specs.map do |spec|
+        [spec.name, spec.version, spec.original_platform]
+      end
+    end
+
     private
 
     def silence

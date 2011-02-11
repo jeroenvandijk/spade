@@ -123,6 +123,13 @@ module Spade::CLI
       end
     end
 
+    desc "installed [PACKAGE]", "Shows what spade packages are installed"
+    def installed
+      local = Spade::Local.new
+      index = local.installed
+      print_specs(nil, index)
+    end
+
     desc "uninstall [PACKAGE]", "Uninstalls one or many packages"
     def uninstall(*packages)
       local = Spade::Local.new
@@ -181,21 +188,8 @@ module Spade::CLI
     method_option :prerelease, :type => :boolean, :default => false, :aliases => ['--pre'], :desc => 'List prerelease versions available'
     def list(*packages)
       remote = Spade::Remote.new
-      gems   = {}
       index  = remote.list_packages(/(#{packages.join('|')})/, options[:all], options[:prerelease])
-
-      index.each do |(name, version, platform)|
-        gems[name] ||= []
-        gems[name] << version
-      end
-
-      if gems.size.zero?
-        abort %{No packages found matching "#{packages.join('", "')}".}
-      else
-        gems.each do |name, versions|
-          puts "#{name} (#{versions.sort.reverse.join(", ")})"
-        end
-      end
+      print_specs(packages, index)
     end
 
     desc "build", "Build a spade package from a package.json"
@@ -281,6 +275,23 @@ module Spade::CLI
         requires.each { |r| load(ctx, r) } if requires
 
         yield(ctx) if block_given?
+      end
+    end
+
+    def print_specs(packages, index)
+      gems = {}
+
+      index.each do |(name, version, platform)|
+        gems[name] ||= []
+        gems[name] << version
+      end
+
+      if gems.size.zero?
+        abort %{No packages found matching "#{packages.join('", "')}".}
+      else
+        gems.each do |name, versions|
+          puts "#{name} (#{versions.sort.reverse.join(", ")})"
+        end
       end
     end
   end

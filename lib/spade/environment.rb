@@ -15,6 +15,7 @@ module Spade
       ENV["RUBYGEMS_HOST"] ||= "https://sproutcutter.heroku.com"
       Gem.sources.replace [ENV["RUBYGEMS_HOST"]]
       Gem.use_paths(spade_dir)
+      Gem.source_index.refresh!
 
       spade_fetcher = Gem::SpecFetcher.new
       def spade_fetcher.cache_dir(uri)
