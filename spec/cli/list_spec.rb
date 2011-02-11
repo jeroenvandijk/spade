@@ -8,7 +8,7 @@ describe "spade list" do
     start_fake(FakeGemServer.new)
   end
 
-  it "lists latest gems by default" do
+  it "lists latest spades by default" do
     spade "list"
 
     output = stdout.read
@@ -16,7 +16,7 @@ describe "spade list" do
     output.should include("rake (0.8.7)")
   end
 
-  it "lists all gems when given the all argument" do
+  it "lists all spades when given the all argument" do
     spade "list", "-a"
 
     output = stdout.read
@@ -24,7 +24,7 @@ describe "spade list" do
     output.should include("rake (0.8.7, 0.8.6)")
   end
 
-  it "filters gems when given an argument" do
+  it "filters spades when given an argument" do
     spade "list", "builder"
 
     output = stdout.read
@@ -32,7 +32,7 @@ describe "spade list" do
     output.should_not include("rake")
   end
 
-  it "filters gems when given an argument and shows all versions" do
+  it "filters spades when given an argument and shows all versions" do
     spade "list", "rake", "-a"
 
     output = stdout.read
@@ -40,7 +40,7 @@ describe "spade list" do
     output.should_not include("builder")
   end
 
-  it "filters multiple gems" do
+  it "filters multiple spades" do
     spade "list", "rake", "highline"
 
     output = stdout.read
@@ -49,7 +49,7 @@ describe "spade list" do
     output.should_not include("builder")
   end
 
-  it "shows prerelease gems" do
+  it "shows prerelease spades" do
     spade "list", "--prerelease"
 
     output = stdout.read

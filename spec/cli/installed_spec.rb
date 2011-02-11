@@ -10,7 +10,7 @@ describe "spade installed" do
     start_fake(FakeGemServer.new)
   end
 
-  it "lists installed gems" do
+  it "lists installed spades" do
     spade "install", "rake"
     wait
     spade "installed"
@@ -21,5 +21,28 @@ describe "spade installed" do
     output.should_not include("builder")
     output.should_not include("bundler")
     output.should_not include("highline")
+  end
+
+  it "lists all installed spades from different versions" do
+    spade "install", "rake"
+    wait
+    spade "install", "rake", "-v", "0.8.6"
+    wait
+    spade "installed"
+
+    output = stdout.read
+    output.should include("rake (0.8.7, 0.8.6)")
+  end
+
+  it "filters spades when given an argument" do
+    spade "install", "rake"
+    wait
+    spade "install", "builder"
+    wait
+    spade "installed", "builder"
+
+    output = stdout.read
+    output.should_not include("rake")
+    output.should include("builder (3.0.0)")
   end
 end

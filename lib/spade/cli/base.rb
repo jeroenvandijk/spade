@@ -124,10 +124,10 @@ module Spade::CLI
     end
 
     desc "installed [PACKAGE]", "Shows what spade packages are installed"
-    def installed
+    def installed(*packages)
       local = Spade::Local.new
-      index = local.installed
-      print_specs(nil, index)
+      index = local.installed(packages)
+      print_specs(packages, index)
     end
 
     desc "uninstall [PACKAGE]", "Uninstalls one or many packages"
@@ -188,7 +188,7 @@ module Spade::CLI
     method_option :prerelease, :type => :boolean, :default => false, :aliases => ['--pre'], :desc => 'List prerelease versions available'
     def list(*packages)
       remote = Spade::Remote.new
-      index  = remote.list_packages(/(#{packages.join('|')})/, options[:all], options[:prerelease])
+      index  = remote.list_packages(packages, options[:all], options[:prerelease])
       print_specs(packages, index)
     end
 
@@ -279,17 +279,17 @@ module Spade::CLI
     end
 
     def print_specs(packages, index)
-      gems = {}
+      spades = {}
 
       index.each do |(name, version, platform)|
-        gems[name] ||= []
-        gems[name] << version
+        spades[name] ||= []
+        spades[name] << version
       end
 
-      if gems.size.zero?
+      if spades.size.zero?
         abort %{No packages found matching "#{packages.join('", "')}".}
       else
-        gems.each do |name, versions|
+        spades.each do |name, versions|
           puts "#{name} (#{versions.sort.reverse.join(", ")})"
         end
       end

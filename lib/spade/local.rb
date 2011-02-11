@@ -1,16 +1,7 @@
 module Spade
-  class Local
-    def initialize
-      @env   = Environment.new
-      @creds = Credentials.new(@env)
-    end
-
-    def logged_in?
-      !@creds.api_key.nil?
-    end
-
+  class Local < Repository
     def uninstall(package)
-      index = Gem::SourceIndex.from_gems_in(@env.spade_dir("specifications"))
+      index = Gem::SourceIndex.from_gems_in(env.spade_dir("specifications"))
       index.refresh!
       specs = index.find_name package
 
@@ -24,7 +15,7 @@ module Spade
     end
 
     def pack(path)
-      package = Spade::Package.new(@creds.email)
+      package = Spade::Package.new(creds.email)
       package.json_path = path
       if package.valid?
         silence do
@@ -42,9 +33,9 @@ module Spade
       package
     end
 
-    def installed
-      dependency = Gem::Dependency.new(//, Gem::Requirement.default)
-      specs = Gem.source_index.search dependency
+    def installed(packages)
+      specs = Gem.source_index.search dependency_for(packages)
+
       specs.map do |spec|
         [spec.name, spec.version, spec.original_platform]
       end

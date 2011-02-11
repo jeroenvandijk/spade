@@ -38,6 +38,7 @@ module Spade
 end
 
 require 'spade/bundle'
+require 'spade/repository'
 
 require 'spade/cli'
 require 'spade/context'

@@ -1,15 +1,6 @@
 module Spade
-  class Remote
+  class Remote < Repository
     extend Gem::GemcutterUtilities
-
-    def initialize
-      @env   = Environment.new
-      @creds = Credentials.new(@env)
-    end
-
-    def logged_in?
-      !@creds.api_key.nil?
-    end
 
     def login(email, password)
       response = self.class.rubygems_api_request :get, "api/v1/api_key" do |request|
@@ -18,7 +9,7 @@ module Spade
 
       case response
       when Net::HTTPSuccess
-        @creds.save(email, response.body)
+        creds.save(email, response.body)
         true
       else
         false
@@ -37,34 +28,33 @@ module Spade
         req.body = body
         req.add_field "Content-Length", body.size
         req.add_field "Content-Type",   "application/octet-stream"
-        req.add_field "Authorization",  @creds.api_key
+        req.add_field "Authorization",  creds.api_key
       end
     end
 
     def add_owner(package, email)
       request :post, "api/v1/gems/#{package}/owners" do |req|
         req.set_form_data 'email' => email
-        req.add_field "Authorization", @creds.api_key
+        req.add_field "Authorization", creds.api_key
       end
     end
 
     def remove_owner(package, email)
       request :delete, "api/v1/gems/#{package}/owners" do |req|
         req.set_form_data 'email' => email
-        req.add_field "Authorization", @creds.api_key
+        req.add_field "Authorization", creds.api_key
       end
     end
 
     def list_owners(package)
       request :get, "api/v1/gems/#{package}/owners.yaml" do |req|
-        req.add_field "Authorization", @creds.api_key
+        req.add_field "Authorization", creds.api_key
       end
     end
 
-    def list_packages(matcher, all, prerelease)
-      fetcher    = Gem::SpecFetcher.fetcher
-      dependency = Gem::Dependency.new(matcher, Gem::Requirement.default)
-      fetcher.find_matching(dependency, all, false, prerelease).map(&:first)
+    def list_packages(packages, all, prerelease)
+      fetcher = Gem::SpecFetcher.fetcher
+      fetcher.find_matching(dependency_for(packages), all, false, prerelease).map(&:first)
     end
 
     def install(package, version, prerelease)
