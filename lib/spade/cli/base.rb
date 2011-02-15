@@ -1,6 +1,5 @@
 module Spade::CLI
   class Base < Thor
-    default_task :exec
 
     desc "owner", "Manage users for a package"
     subcommand "owner", Owner
@@ -37,24 +36,31 @@ module Spade::CLI
 
     map  "-e" => "exec"
     desc "exec [FILENAME]", "Executes filename or stdin"
-    def exec(*exec_args)
-      filename = exec_args.shift
+    def exec(*)
       exec_args = ARGV.dup
-      exec_args.shift if exec_args.first == 'exec' # drop exec name
-      exec_args.shift # drop exec name
+      arg = exec_args.shift while arg != "exec" && !exec_args.empty?
+
+      filename = exec_args.shift
+      puts "Filename: #{filename}" if options[:verbose]
 
       if filename
-        puts options[:working]
+        puts "Working: #{options[:working]}" if options[:verbose]
         filename = File.expand_path filename, Dir.pwd
         throw "#{filename} not found" unless File.exists?(filename)
         fp      = File.open filename
         source  = File.basename filename
         rootdir = Spade.discover_root filename
 
-        # peek at first line.  If it is poundhash, skip. else reopen file
+        # peek at first line.  If it is poundhash, skip. else rewind file
         unless fp.readline =~ /^\#\!/
-          fp.close
-          fp = File.open filename
+          fp.rewind
+        end
+
+        # Can't set pos on STDIN so we can only do this for files
+        if options[:verbose]
+          pos = fp.pos
+          puts fp.read
+          fp.pos = pos
         end
       else
         fp = $stdin
@@ -294,5 +300,15 @@ module Spade::CLI
         end
       end
     end
+
+    def method_missing(meth)
+      if File.exist?(meth.to_s)
+        ARGV.unshift("exec")
+        invoke :exec
+      else
+        super
+      end
+    end
+
   end
 end
