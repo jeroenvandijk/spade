@@ -275,6 +275,7 @@ module Spade::CLI
     # autorequires
     def context(opts={})
       opts[:rootdir] ||= options[:working]
+      opts[:verbose] = options[:verbose]
       Spade::MainContext.new(opts) do |ctx|
 
         requires = opts[:require]

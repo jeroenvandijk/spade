@@ -20,7 +20,8 @@ module Spade
   # that provides some general information about the context.
   class Context < V8::Context
 
-    attr_reader :reactor 
+    attr_reader :reactor
+    attr_reader :verbose
     
     def require(mod_name)
       self.eval("require('#{mod_name}');");
@@ -29,6 +30,7 @@ module Spade
     # Load the spade and racer-loader.
     def initialize(opts={})      
       @reactor = opts[:reactor]
+      @verbose = opts[:verbose]
       super(opts) do |ctx|
         ctx['reactor'] = @reactor
         ctx['console'] = Console.new
