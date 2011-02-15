@@ -104,7 +104,7 @@ module Spade::CLI
 
     desc "update", "Update package info in the current project"
     def update
-      Bundle.update(options[:working], :verbose => options[:verbose])
+      Spade::Bundle.update(options[:working], :verbose => options[:verbose])
     end
 
     desc "install [PACKAGE]", "Installs one or many spade packages"
