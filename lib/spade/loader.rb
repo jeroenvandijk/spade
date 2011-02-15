@@ -86,8 +86,8 @@ module Spade
         package_info[:registered] = true
         @ctx.eval "spade.register('#{package_name}', #{package_info[:json].to_json});"
         
-        deps = package_info[:json]['dependencies'];
-        (deps||[]).each do |dep_name, ignored|
+        deps = package_info[:json]['dependencies'] || [];
+        deps.each do |dep_name, ignored|
           dep_package_info = packages[dep_name]
           next unless dep_package_info && !dep_package_info[:registered]
           dep_package_info[:registered] = true
