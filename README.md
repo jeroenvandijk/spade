@@ -1,6 +1,6 @@
 `===========================================================================
  Project:   Spade - CommonJS Microkernel
- Copyright: ©2010 Strobe Inc.
+ Copyright: ©2011 Strobe Inc.
  ===========================================================================`
 
 Spade makes it easy to share and run JavaScript in both the browser and on the
@@ -11,7 +11,7 @@ command line.
 The following commands will get you started on spade with an initial set of
 packages:
 
-    git clone git://github.com/charlesjolley/spade.git
+    git clone git://github.com/strobecorp/spade.git
     cd spade
     git submodule update --init
     bundle
