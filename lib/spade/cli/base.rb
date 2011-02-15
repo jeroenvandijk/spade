@@ -51,6 +51,12 @@ module Spade::CLI
         source  = File.basename filename
         rootdir = Spade.discover_root filename
 
+        caller_id = nil
+        if rootdir
+          package_json = JSON.parse(File.read(File.join(rootdir, 'package.json')))
+          caller_id = "#{package_json['name']}/main"
+        end
+
         # peek at first line.  If it is poundhash, skip. else rewind file
         unless fp.readline =~ /^\#\!/
           fp.rewind
@@ -66,11 +72,18 @@ module Spade::CLI
         fp = $stdin
         source = '<stdin>'
         rootdir = options[:working]
+        caller_id = nil
+      end
+
+      if options[:verbose]
+        puts "source: #{source}"
+        puts "rootdir: #{rootdir}"
+        puts "caller_id: #{caller_id}"
       end
 
       begin
         # allow for poundhash
-        context(:argv => exec_args, :rootdir => rootdir) do |ctx|
+        context(:argv => exec_args, :rootdir => rootdir, :caller_id => caller_id) do |ctx|
           ctx.eval(fp, source) # eval the rest
         end
       rescue Interrupt => e

@@ -66,11 +66,13 @@ module Spade
   class MainContext < Context
 
     attr_accessor :rootdir
+    attr_accessor :caller_id
     
     # Load the spade and racer-loader.
     def initialize(opts={})      
       env = opts[:env] || ENV
       @rootdir = opts[:rootdir] || opts['rootdir']
+      @caller_id = opts[:caller_id] || opts['caller_id']
       @reactor = opts[:reactor] ||= Reactor.new(self)
       lang = opts[:language] ||= (env['LANG']||'en_US').gsub(/\..*/, '')
       lang = lang.gsub '_', '-'
@@ -94,6 +96,8 @@ module Spade
           spade.defaultSandbox.rootdir = #{@rootdir.to_json};
           spade.globalize();
         ]
+
+        ctx.eval("spade.defaultSandbox.callerId = #{@caller_id.to_json};") if @caller_id
 
         ctx['rubyLoader'] = ctx['rubyCompiler'] = nil
         
