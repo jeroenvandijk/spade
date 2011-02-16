@@ -315,7 +315,7 @@ module Spade::CLI
       end
     end
 
-    def method_missing(meth)
+    def method_missing(meth, *)
       if File.exist?(meth.to_s)
         ARGV.unshift("exec")
         invoke :exec
