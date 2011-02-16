@@ -55,7 +55,8 @@ module Spade
 
     # exposed to JS.  Find the JS file on disk and register the module
     def loadFactory(spade, id, formats, done=nil)
-      
+      formats = formats.to_a # We may get a V8::Array, we want a normal one
+
       # load individual files
       if id =~ /^file:\//
         js_path = id[5..-1]
@@ -92,6 +93,10 @@ module Spade
           next unless dep_package_info && !dep_package_info[:registered]
           dep_package_info[:registered] = true
           @ctx.eval "spade.register('#{dep_name}', #{dep_package_info[:json].to_json});"
+
+          # Add new formats if they are specified in our dependencies
+          dep_formats = dep_package_info[:json]['plugin:formats']
+          formats.unshift(*dep_formats.keys).uniq! if dep_formats
         end
               
       end
@@ -99,7 +104,7 @@ module Spade
       unless skip_module
         filename = parts.pop
         base_path = package_info[:path]
-        formats = ['js'] if formats.nil?
+        formats << ['js'] if formats.empty?
         formats.each do |fmt|
           cur_path = File.join(base_path, dirname, parts, filename+'.'+fmt)
           if File.exist? cur_path
