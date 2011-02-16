@@ -29,7 +29,7 @@ Ct.setup(function(t, done) {
     
     requests: 0, 
     
-    loadFactory: function(spade, id, done) {
+    loadFactory: function(spade, id, formats, done) {
       this.requests++;
       if (id === 'foo/bar') {
         setTimeout(function() {
