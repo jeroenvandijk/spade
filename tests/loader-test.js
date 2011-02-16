@@ -24,7 +24,7 @@ Ct.setup(function(t) {
     
     requests: 0, 
     
-    loadFactory: function(spade, id, done) {
+    loadFactory: function(spade, id, formats, done) {
       this.requests++;
       if (id === 'foo/bar') {
         spade.register(id, function(r,e) { e.id='foo/bar'; });
