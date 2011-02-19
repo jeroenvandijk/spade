@@ -1,8 +1,0 @@
-{
-  "name": "sproutcore-datastore",
-  "version": "1.5",
-  
-  "dependencies": {
-    "sproutcore-runtime": "1.5"
-  }
-}
