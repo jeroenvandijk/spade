@@ -10,3 +10,6 @@
 [submodule "packages/coffee-script"]
 	path = packages/coffee-script
 	url = https://github.com/charlesjolley/coffee-script.git
+[submodule "sproutcore"]
+	path = sproutcore
+	url = git://github.com/sproutcore/sproutcore.git

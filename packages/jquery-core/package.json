@@ -1,0 +1,9 @@
+{
+  "name": "jquery-core",
+  "version": "1.4.4",
+  "summary": "write less, do more",
+  "author": "The jQuery Team",
+  "homepage": "http://jquery.com",
+  "description": "jQuery library for easy DOM manipulation"
+}
+
