@@ -21,3 +21,11 @@ sc_require('system/object');
 sc_require('system/range_observer');
 sc_require('system/run_loop');
 sc_require('system/set');
+
+// Hack to allow tests to run
+CoreTest.Suite = SC.Object.extend({
+  define: function(){},
+  generate: function(){
+    if (window.test) { test("CoreTest.Suite.generate is not implemented"); }
+  }
+});
