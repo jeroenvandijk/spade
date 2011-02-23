@@ -1,0 +1,10 @@
+{
+  "name": "sproutcore-datetime",
+  "description": "SproutCore DateTime",
+  "version": "1.5",
+  "dependencies": {
+    "sproutcore-runtime": "1.5"
+  }
+}
+
+

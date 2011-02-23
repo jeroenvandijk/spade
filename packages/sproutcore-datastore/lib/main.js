@@ -1,4 +1,5 @@
 require('sproutcore-runtime');
+require('sproutcore-datetime');
 
 sc_require = function(path){
   require('sproutcore-datastore/~framework/'+path);

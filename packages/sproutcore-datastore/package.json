@@ -3,7 +3,8 @@
   "description": "SproutCore Datastore",
   "version": "1.5",
   "dependencies": {
-    "sproutcore-runtime": "1.5"
+    "sproutcore-runtime": "1.5",
+    "sproutcore-datetime": "1.5"
   }
 }
 
