@@ -19,3 +19,5 @@ sc_require('system/record_array');
 sc_require('data_sources/data_source');
 sc_require('data_sources/cascade');
 sc_require('data_sources/fixtures');
+
+return SC;
