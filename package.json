@@ -1,17 +1,27 @@
 {
   "name": "spade",
-  "version": "2.0.0alpha",
+  "version": "0.0.1",
   "description": "CommonJS Microkernel for Browser and Command Line",
-  "author": "Charles Jolley <charles@sproutcore.com>",
-  
-  "repositories": [
-    { "type": "git", "url": "git://github.com/sproutcore/spade" }
+
+  "maintainers": [
+    {
+      "name": "Charles Jolley",
+      "email": "charles@sproutcore.com",
+      "web": "http://sproutcore.com"
+    },
+    {
+      "name": "Peter Wagenet",
+      "email": "peterw@sproutcore.com",
+      "web": "http://sproutcore.com"
+    }
   ],
-  
+
+  "repositories": [
+    { "type": "git", "url": "git://github.com/strobecorp/spade" }
+  ],
+
   "dependencies": {},
-  
-  "directories": {
-    "lib": "lib"
-  }
-  
+
+  "main": "./lib/index"
+
 }
