@@ -66,21 +66,23 @@ module Spade
         return nil
       end
 
-
       parts = id.split '/'
       package_name = parts.shift
       package_info = packages[package_name]
       skip_module  = false
-      
+
       return nil if package_info.nil?
 
       if parts.size==1 && parts[0] == '~package'
         skip_module = true
-      
+      elsif parts.size==1 && parts[0] == 'main'
+        parts = (package_info[:json]['main'] || 'lib/main').split('/')
+        dirname = parts[0...-1]
+        parts   = [parts[-1]]
       else
         dirname = extract_dirname(parts, package_info)
       end
-      
+
       # register the package first - also make sure dependencies are 
       # registered since they are needed for loading plugins
       unless package_info[:registered]
