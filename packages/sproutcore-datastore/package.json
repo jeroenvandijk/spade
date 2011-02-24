@@ -1,10 +1,16 @@
 {
   "name": "sproutcore-datastore",
-  "description": "SproutCore Datastore",
+  "summary": "SproutCore Datastore",
+  "description": "A data store framework for use with SproutCore",
+  "homepage": "http://sproutcore.com",
+  "author": "Charles Jolley",
   "version": "1.5",
   "dependencies": {
     "sproutcore-runtime": "1.5",
     "sproutcore-datetime": "1.5"
+  },
+  "directories": {
+    "lib"  : "./lib"
   }
 }
 

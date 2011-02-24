@@ -1,9 +1,15 @@
 {
   "name": "sproutcore-datetime",
-  "description": "SproutCore DateTime",
+  "summary": "SproutCore DateTime",
+  "description": "Date and time support for SproutCore",
+  "homepage": "http://sproutcore.com",
+  "author": "Charles Jolley",
   "version": "1.5",
   "dependencies": {
     "sproutcore-runtime": "1.5"
+  },
+  "directories": {
+    "lib"  : "./lib"
   }
 }
 

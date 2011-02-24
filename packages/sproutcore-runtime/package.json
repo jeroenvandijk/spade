@@ -1,11 +1,17 @@
 {
   "name": "sproutcore-runtime",
-  "description": "SproutCore Runtime",
+  "summary": "SproutCore Runtime",
+  "description": "The base SproutCore runtime. Essential for all SproutCore apps.",
+  "homepage": "http://sproutcore.com",
+  "author": "Charles Jolley",
   "version": "1.5",
   "dependencies": {
     "jquery-core": "1.4.4"
   },
   "plugin:preprocessors": [
     "sproutcore-runtime/preprocessor"
-  ]
+  ],
+  "directories": {
+    "lib"  : "./lib"
+  }
 }
