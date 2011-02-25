@@ -99,7 +99,8 @@ module Spade
 
     // find the main module to run
     var main = null;
-    var scripts = document.scripts, len = scripts.length;
+    var scripts = document.scripts || document.getElementsByTagName("script"),
+        len = scripts.length;
     for(var idx=0;!main && idx<len;idx++) {
       main = scripts[idx].getAttribute('data-require');
     }
