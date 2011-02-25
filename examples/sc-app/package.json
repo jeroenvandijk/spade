@@ -1,0 +1,8 @@
+{
+  "name": "sc-app",
+  "dependencies": {
+    "jquery": "1.4.3",
+    "sproutcore-runtime": "1.5"
+  }
+}
+
