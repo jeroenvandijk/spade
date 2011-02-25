@@ -6,6 +6,7 @@ require 'rubygems/format'
 Bundler.require :default, :development
 
 require 'support/cli'
+require 'support/core_test'
 require 'support/fake'
 require 'support/fake_gemcutter'
 require 'support/fake_gem_server'
