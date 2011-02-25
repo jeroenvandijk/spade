@@ -1,0 +1,14 @@
+{
+  "name": "sproutcore-handlebars",
+  "summary": "SproutCore Handlebars",
+  "description": "Handlebars.js support for SproutCore",
+  "homepage": "http://github.com/wycats/handlebars.js",
+  "author": "Yehuda Katz",
+  "version": "1.5", // SC Version
+  "directories": {
+    "lib"  : "./lib"
+  }
+}
+
+
+

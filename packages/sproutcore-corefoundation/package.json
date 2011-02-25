@@ -1,0 +1,19 @@
+{
+  "name": "sproutcore-corefoundation",
+  "summary": "SproutCore CoreFoundation",
+  "description": "The Core MVC of SproutCore",
+  "homepage": "http://sproutcore.com",
+  "author": "Charles Jolley",
+  "version": "1.5",
+  "dependencies": {
+    "sproutcore-runtime": "1.5",
+    "sproutcore-bootstrap": "1.5",
+    "sproutcore-handlebars": "1.5",
+    "jquery": "1.4.3"
+  },
+  "directories": {
+    "lib"  : "./lib"
+  }
+}
+
+

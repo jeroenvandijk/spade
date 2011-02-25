@@ -1,0 +1,15 @@
+{
+  "name": "sproutcore-bootstrap",
+  "summary": "SproutCore Bootstrap",
+  "description": "Bootstrap your SC app for the browser.",
+  "homepage": "http://sproutcore.com",
+  "author": "Charles Jolley",
+  "version": "1.5",
+  "dependencies": {
+    "sproutcore-runtime": "1.4.4"
+  },
+  "directories": {
+    "lib"  : "./lib"
+  }
+}
+
