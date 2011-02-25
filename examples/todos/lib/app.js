@@ -9,7 +9,7 @@ Todos.Todo = SC.Object.extend({
   init: function() {
     if (!this.get('title')) { this.set('title', "empty todo..."); }
 
-    return arguments.callee.base.apply(this, arguments);
+    return sc_super();
   },
 
   title: null,

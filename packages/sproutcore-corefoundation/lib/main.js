@@ -44,6 +44,7 @@ sc_require('system/sparse_array');
 sc_require('system/theme');
 sc_require('system/timer');
 sc_require('system/utils');
+sc_require('system/utils/rect');
 sc_require('views/view/base');
 sc_require('views/template');
 sc_require('views/template/checkbox_support');

@@ -11,6 +11,9 @@
     "sproutcore-handlebars": "1.5",
     "jquery": "1.4.3"
   },
+  "plugin:preprocessors": [
+    "sproutcore-preprocessor/preprocessor"
+  ],
   "directories": {
     "lib"  : "./lib"
   }

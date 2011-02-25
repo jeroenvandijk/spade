@@ -1,0 +1,15 @@
+{
+  "name": "sproutcore-preprocessor",
+  "summary": "SproutCore Preprocessor",
+  "description": "Pre-processor to handle sc_super",
+  "homepage": "http://sproutcore.com",
+  "author": "Charles Jolley",
+  "version": "1.5",
+  "plugin:preprocessors": [
+    "sproutcore-preprocessor/preprocessor"
+  ],
+  "directories": {
+    "lib"  : "./lib"
+  }
+}
+
