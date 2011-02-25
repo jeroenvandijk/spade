@@ -33,10 +33,11 @@ Ct.teardown(function(t) {
 
 Ct.test('require absolute', function(t) {
   var spade = t.spade;
-  spade.register('blah', function(require, e) { 
-    e.found = require('foo/bar').id; 
+
+  spade.register('blah/main', function(require, e) {
+    e.found = require('foo/bar').id;
   });
-  
+
   t.equal(spade.require('blah').found, 'foo/bar');
 });
 
