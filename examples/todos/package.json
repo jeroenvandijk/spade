@@ -1,0 +1,8 @@
+{
+  "name": "todos",
+  "dependencies": {
+    "sproutcore-corefoundation": "1.5"
+  }
+}
+
+
