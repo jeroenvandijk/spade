@@ -1,5 +1,6 @@
 require('sproutcore-corefoundation');
 
+require('./resources/todos');
 require('./app');
 
 var appTemplate =
