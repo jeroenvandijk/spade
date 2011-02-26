@@ -8,6 +8,9 @@
   "plugin:preprocessors": [
     "sproutcore-preprocessor/preprocessor"
   ],
+  "plugin:formats": {
+    "css": "sproutcore-preprocessor/css"
+  },
   "directories": {
     "lib"  : "./lib"
   }
