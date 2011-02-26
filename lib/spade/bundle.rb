@@ -9,76 +9,79 @@ module Spade
   BUILTIN_PACKAGES = File.join File.dirname(BOOT_PATH), 'packages'
 
   module Bundle
+    class << self
 
-    def self.update(rootdir, opts ={})
+      def update(rootdir, opts ={})
 
-      verbose = opts[:verbose]
-      spade_path = File.join(rootdir, SPADE_DIR)
-      FileUtils.rm_r(spade_path) if File.exists? spade_path
+        verbose = opts[:verbose]
+        spade_path = File.join(rootdir, SPADE_DIR)
+        FileUtils.rm_r(spade_path) if File.exists? spade_path
 
-      FileUtils.mkdir_p spade_path
-      FileUtils.mkdir_p File.join(spade_path, 'packages')
+        FileUtils.mkdir_p spade_path
+        FileUtils.mkdir_p File.join(spade_path, 'packages')
 
-      FileUtils.ln_s BOOT_PATH, File.join(spade_path, 'boot')
+        FileUtils.ln_s BOOT_PATH, File.join(spade_path, 'boot')
 
-      installed = []
+        installed = []
 
-      Dir.glob(File.join(BUILTIN_PACKAGES, '*')).each do |path|
-        next unless File.exists? File.join(path, 'package.json')
+        Dir.glob(File.join(BUILTIN_PACKAGES, '*')).each do |path|
+          next unless File.exists? File.join(path, 'package.json')
 
-        next if installed.include? path
-        installed << path
+          next if installed.include? path
+          installed << path
 
-        new_path = File.join(spade_path, 'packages', File.basename(path))
-        FileUtils.ln_s path, new_path, :force => true
-        puts "Installing built-in package #{File.basename(path)}" if verbose
+          new_path = File.join(spade_path, 'packages', File.basename(path))
+          FileUtils.ln_s path, new_path, :force => true
+          puts "Installing built-in package #{File.basename(path)}" if verbose
+        end
+
+        Dir.glob(File.join(rootdir, 'packages', '*')).each do |path|
+          next unless File.exists? File.join(path, 'package.json')
+
+          next if installed.include? path
+          installed << path
+
+          package_name = File.basename(path)
+          old_path = File.join('..','..','packages', package_name)
+          new_path = File.join(spade_path, 'packages', File.basename(path))
+          FileUtils.ln_s old_path, new_path, :force => true
+          puts "Installing local package #{File.basename(path)}" if verbose
+        end
+
+        File.open(File.join(rootdir, 'spade-boot.js'), 'w+') do |fp|
+          fp.write gen_spade_boot(rootdir, opts)
+        end
+        puts "Wrote spade-boot.js" if verbose
+
+
       end
 
-      Dir.glob(File.join(rootdir, 'packages', '*')).each do |path|
-        next unless File.exists? File.join(path, 'package.json')
+      def gen_spade_boot(rootdir, opts={})
+        verbose = opts[:verbose]
+        spade_path = File.join(rootdir, SPADE_DIR, 'packages', '*')
+        known_packages = Dir.glob(spade_path).map do |path|
+          package_name = File.basename path
+          info = JSON.load File.read(File.join(path, 'package.json'))
+          info["sync"] = true
+          info["root"] = "#{SPADE_DIR}/packages/#{package_name}"
+          info["files"] = package_file_list(path)
+          info
+        end
 
-        next if installed.include? path
-        installed << path
+        if File.exists? File.join(rootdir, 'package.json')
+          info = JSON.load File.read(File.join(rootdir, 'package.json'))
+        else
+          info = { 
+            "name" => File.basename(rootdir), 
+            "directories" => { "lib" => "lib" } 
+          }
+        end
 
-        package_name = File.basename(path)
-        old_path = File.join('..','..','packages', package_name)
-        new_path = File.join(spade_path, 'packages', File.basename(path))
-        FileUtils.ln_s old_path, new_path, :force => true
-        puts "Installing local package #{File.basename(path)}" if verbose
-      end
-
-      File.open(File.join(rootdir, 'spade-boot.js'), 'w+') do |fp|
-        fp.write gen_spade_boot(rootdir, opts)
-      end
-      puts "Wrote spade-boot.js" if verbose
-
-
-    end
-
-    def self.gen_spade_boot(rootdir, opts={})
-      verbose = opts[:verbose]
-      spade_path = File.join(rootdir, SPADE_DIR, 'packages', '*')
-      packages = Dir.glob(spade_path).map do |path|
-        package_name = File.basename path
-        info = JSON.load File.read(File.join(path, 'package.json'))
-        info = info.dup
+        info["root"] = '.'
         info["sync"] = true
-        info["root"] = "#{SPADE_DIR}/packages/#{package_name}"
-        %[spade.register("#{info["name"]}", #{JSON.pretty_generate(info)});\n]
-      end
+        info["files"] = package_file_list('.')
 
-      if File.exists? File.join(rootdir, 'package.json')
-        info = JSON.load File.read(File.join(rootdir, 'package.json'))
-      else
-        info = { 
-          "name" => File.basename(rootdir), 
-          "directories" => { "lib" => "lib" } 
-        }
-      end
-
-      info["root"] = '.'
-      info["sync"] = true
-      packages << %[spade.register("#{info["name"]}", #{JSON.pretty_generate(info)});\n]
+        packages = resolve_dependencies(info, known_packages)
 
 %[// GENERATED: #{Time.now.to_s}
 // This file is automatically generated by spade.  To update run 
@@ -95,7 +98,7 @@ module Spade
   script.onload = function() {
 
     // Register remaining packages with spade
-#{packages * "\n"}
+#{packages.map{|p| %[spade.register("#{p["name"]}", #{JSON.pretty_generate(p)});\n] } * "\n"}
 
     // find the main module to run
     var main = null;
@@ -115,7 +118,38 @@ module Spade
   script = head = null; // avoid memory leaks in IE
 })();
 //@ end boot
-      ]
+]
+
+      end
+
+      private
+
+        def package_file_list(path)
+          get_all_files(path).map{|p| p.sub(path+File::SEPARATOR, '') } - %w(package.json spade-boot.js)
+        end
+
+        # Supports recursive, be careful
+        def get_all_files(path)
+          Dir.glob(File.join(path, '**', '*')).
+            map{|p| File.symlink?(p) ? get_all_files(p) : p }.
+            flatten.
+            reject{|p| File.extname(p).empty? }
+        end
+
+        def resolve_dependencies(package, available)
+          # TODO: Should available be a hash to speed lookup?
+          if package["dependencies"]
+            # TODO: Check version numbers
+            dependencies = package["dependencies"].keys
+            packages = available.select{|p| dependencies.include?(p["name"]) }.
+                                 map{|p| resolve_dependencies(p, available) }.
+                                 flatten
+            (packages << package).uniq
+          else
+            [package]
+          end
+        end
+
     end
 
   end
