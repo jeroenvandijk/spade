@@ -1,5 +1,5 @@
 // Create the application namespace.
-Todos = SC.Application.create();
+var Todos = SC.Application.create();
 
 //
 // MODELS
@@ -28,7 +28,16 @@ Todos.todoListController = SC.ArrayController.create({
   createTodo: function(title) {
     var todo = Todos.Todo.create({ title: title });
     this.pushObject(todo);
-  }
+  },
+
+  allAreDone: function(key, value) {
+    if (value !== undefined) {
+      this.setEach('isDone', value);
+      return value;
+    } else {
+      return this.get('length') && this.everyProperty('isDone', true);
+    }
+  }.property('@each.isDone')
 });
 
 //
@@ -60,19 +69,18 @@ Todos.todoListView = SC.TemplateCollectionView.create({
 });
 
 Todos.CheckboxView = SC.TemplateView.extend(SC.CheckboxSupport, {
-
-  // Observe the value property
-  valueDidChange: function() {
-    // Get the Todo object and change its isDone property
-    this.setPath('parentView.content.isDone', this.get('value'));
-  }.observes('value')
+  classNames: 'check-todo',
+  valueBinding: '.parentView.content.isDone'
 });
 
 jQuery(document).ready(function() {
-  $(document.body).html(''); // Clear loading message
   Todos.mainPane = SC.TemplatePane.append({
     layerId: "todoapp",
     templateName: "app"
   });
+});
+
+Todos.markAllDoneView = SC.TemplateView.create(SC.CheckboxSupport, {
+  valueBinding: 'Todos.todoListController.allAreDone'
 });
 
