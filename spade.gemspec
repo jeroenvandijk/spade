@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Charles Jolley"]
   s.email       = ["charles@sproutcore.com"]
-  s.homepage    = "http://github.com/sproutcore/spade"
+  s.homepage    = "http://github.com/strobecorp/spade"
   s.summary = s.description = "Unified JavaScript runner for browser and command line"
 
   s.required_rubygems_version = ">= 1.3.6"
