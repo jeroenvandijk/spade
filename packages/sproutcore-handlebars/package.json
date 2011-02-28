@@ -7,6 +7,9 @@
   "version": "1.5", // SC Version
   "directories": {
     "lib"  : "./lib"
+  },
+  "plugin:formats": {
+    "handlebars": "sproutcore-handlebars/handlebars"
   }
 }
 

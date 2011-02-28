@@ -15,7 +15,8 @@
     "sproutcore-preprocessor/preprocessor"
   ],
   "plugin:formats": {
-    "css": "sproutcore-preprocessor/css"
+    "css": "sproutcore-preprocessor/css",
+    "handlebars": "sproutcore-handlebars/handlebars"
   },
   "directories": {
     "lib"  : "./lib"
