@@ -1,5 +1,5 @@
 // Create the application namespace.
-var Todos = SC.Application.create();
+Todos = SC.Application.create();
 
 //
 // MODELS
@@ -76,7 +76,7 @@ Todos.CheckboxView = SC.TemplateView.extend(SC.CheckboxSupport, {
 jQuery(document).ready(function() {
   Todos.mainPane = SC.TemplatePane.append({
     layerId: "todoapp",
-    templateName: "app"
+    templateName: "resources/templates/app"
   });
 });
 

@@ -1,5 +1,6 @@
 require('sproutcore-corefoundation');
 
+// Remove loading text
 jQuery(document).ready(function() {
   $(document.body).html('');
 });
