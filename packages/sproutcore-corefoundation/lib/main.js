@@ -61,3 +61,6 @@ sc_require('views/view/manipulation');
 sc_require('views/view/theming');
 sc_require('views/view/touch');
 sc_require('views/view/visibility');
+
+sc_require('resources/core');
+sc_require('resources/view');
