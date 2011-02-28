@@ -27,6 +27,11 @@ Run an individual test:
 
     bundle exec rspec spec/login_spec.rb
 
+To install the gem for global use of the spade command:
+
+    gem build spade.gemspec
+    gem install spade-0.0.1.gem
+
 # Quick Start Guide
 
 ## From the Command Line
@@ -62,7 +67,7 @@ Your index.html should contain the following:
 
     <html>
       <head>
-        <script src="spade-boot.js" spade-require="hello-world"></script>
+        <script src="spade-boot.js" data-require="hello-world"></script>
       </head>
       <body>
       </body>
