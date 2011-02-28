@@ -6,19 +6,18 @@ module SpecHelpers
   end
 
   def start_fake(app)
+    uri   = URI.parse("http://localhost:9292/")
+    raise "Server already running on 9292" if uri_active?(uri)
+
     @fake_pid = Process.fork do
       logger = Logger.new(StringIO.new)
       Rack::Handler::WEBrick.run(app, :Port => 9292, :Logger => logger, :AccessLog => logger)
     end
     ready = false
-    uri   = URI.parse("http://localhost:9292/")
     until ready
-      begin
-        timeout(1) do
-          Net::HTTP.get_response(uri)
-        end
+      if uri_active?(uri)
         ready = true
-      rescue Exception => ex
+      else
         print "-" if ENV["VERBOSE"]
       end
     end
@@ -27,4 +26,17 @@ module SpecHelpers
   def stop_fake
     Process.kill(9, @fake_pid) if @fake_pid
   end
+
+  private
+
+    def uri_active?(uri)
+      begin
+        timeout(1) do
+          Net::HTTP.get_response(uri)
+        end
+        true
+      rescue Exception => ex
+        false
+      end
+    end
 end
