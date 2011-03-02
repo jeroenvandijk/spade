@@ -6,5 +6,5 @@ jQuery(document).ready(function() {
 });
 
 require('./app');
-require('./resources/templates/app');
-require('./resources/stylesheets/todos');
+require('./~resources/templates/app');
+require('./~resources/stylesheets/todos');
