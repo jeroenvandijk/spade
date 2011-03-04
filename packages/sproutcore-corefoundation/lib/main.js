@@ -1,7 +1,7 @@
 require('sproutcore-runtime');
 require('sproutcore-bootstrap');
 require('sproutcore-handlebars');
-require('jquery');
+require('sproutcore-jquery');
 
 sc_require = function(path){
   require('sproutcore-corefoundation/~framework/'+path);

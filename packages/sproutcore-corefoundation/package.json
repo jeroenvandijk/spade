@@ -9,7 +9,7 @@
     "sproutcore-runtime": "1.5",
     "sproutcore-bootstrap": "1.5",
     "sproutcore-handlebars": "1.5",
-    "jquery": "1.4.3"
+    "sproutcore-jquery": "1.5"
   },
   "plugin:preprocessors": [
     "sproutcore-preprocessor/preprocessor"
