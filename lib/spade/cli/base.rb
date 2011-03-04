@@ -53,8 +53,11 @@ module Spade::CLI
 
         caller_id = nil
         if rootdir
-          package_json = JSON.parse(File.read(File.join(rootdir, 'package.json')))
-          caller_id = "#{package_json['name']}/main"
+          json_path = File.join(rootdir, 'package.json')
+          if File.exist?(json_path)
+            package_json = JSON.parse(File.read(json_path))
+            caller_id = "#{package_json['name']}/main"
+          end
         end
 
         # peek at first line.  If it is poundhash, skip. else rewind file
