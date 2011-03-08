@@ -31,4 +31,7 @@ CoreTest.Suite = SC.Object.extend({
   }
 });
 
+// Normally we wouldn't want to do this globally
+sc_require('debug/test_suites/array');
+
 return SC;

@@ -1,13 +1,33 @@
 require('sproutcore-corefoundation');
 
 /* BEGIN HACKS */
-require('sproutcore-runtime/~framework/debug/test_suites/array/base');
+Q$ = jQuery;
 
-htmlbody = function(html){
-  $(document.body).html(html);
+clearHtmlbody = function(){
+  var body = Q$('body')[0];
+  
+  // first, find the first element with id 'htmlbody-begin'  if exists,
+  // remove everything after that to reset...
+  var begin = Q$('body #htmlbody-begin')[0];
+  if (!begin) {
+    begin = Q$('<div id="htmlbody-begin"></div>')[0];
+    body.appendChild(begin);
+  } else {
+    while(begin.nextSibling) body.removeChild(begin.nextSibling);
+  }
+  begin = null; 
 };
 
-Q$ = jQuery;
+htmlbody = function(string) {
+  var html = Q$(string) ;
+  var body = Q$('body')[0];
+
+  clearHtmlbody();
+
+  // now append new content
+  html.each(function() { body.appendChild(this); });
+};
+
 /* END HACKS */
 
 var Ct = require('core-test');
@@ -38,4 +58,7 @@ for (i=0; i<len; i++) {
   }
 }
 
-$().ready(function(){ Ct.run(); });
+$().ready(function(){
+  $('h1').remove();
+  Ct.run();
+});

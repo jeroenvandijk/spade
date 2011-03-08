@@ -4,7 +4,8 @@ sc_require = function(path){
 
 window.SC = window.SC || {};
 
-sc_require('handlebars');
+window.Handlebars = require('sproutcore-handlebars/~framework/handlebars');
+
 sc_require('extensions');
 
 return SC;
