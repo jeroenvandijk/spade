@@ -15,7 +15,13 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.3.6"
 
-  s.files      = `git ls-files`.split("\n")
+  paths = `git submodule`.split("\n").map do |line|
+    path = line.gsub(/^ \w+ ([^\s]+) .+$/,'\1')
+    `cd #{path}; git ls-files`.split("\n").map { |p| File.join(path, p) }
+  end
+  paths << `git ls-files`.split("\n")
+  puts paths.flatten
+  s.files      = paths.flatten
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
 
   s.executables        = ['spade']
