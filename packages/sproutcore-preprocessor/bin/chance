@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "optparse"
+require "tempfile"
+require "chance"
+
+options = {}
+
+optparse = OptionParser.new do|opts|
+  # Set a banner, displayed at the top
+  # of the help screen.
+   opts.banner = "Usage: chance [options] file1 file2 ..."
+
+  # Define the options, and what they do
+  options[:verbose] = false
+  opts.on( '-v', '--verbose', 'Output more information' ) do
+    options[:verbose] = true
+  end
+
+  options[:theme] = nil
+  opts.on( '-t', '--theme', 'Theme name' ) do |theme|
+    options[:theme] = theme
+  end
+
+  options[:output] = "chance.css"
+  opts.on( '-o', '--output', 'Output file, defaults to chance.css' ) do |output|
+    options[:output] = output
+  end
+end
+
+optparse.parse!
+
+
+class ExtTempfile < Tempfile
+  # overwrite so tempfiles use the extension of the basename.
+  def make_tmpname(basename, n)
+    basename, ext = basename.split('.', 2)
+    super(basename, n) + ".#{ext}"
+  end
+end
+
+chance = Chance::Instance.new(:theme => options[:theme])
+
+files = ARGV
+if files.empty?
+  data = ARGF.read
+  unless data.empty?
+    file = ExtTempfile.new('chance.css')
+    file.write(data)
+    file.close
+    files << file.path
+  end
+end
+
+files.each do |file|
+  Chance.add_file file
+  chance.map_file(file, file)
+end
+
+chance.update
+
+puts chance.files[options[:output]]
+

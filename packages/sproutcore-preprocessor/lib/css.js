@@ -2,6 +2,8 @@ exports.compileFormat = function(code, sandbox, filename, format, pkg){
   // Handle sc_static|static_url
   code = require('./sc_static').replace(code, sandbox, pkg, "url('{url}')");
 
+  code = require.runCommand('bin/chance', { code: code });
+
   // escape
   code = code.replace(/"/g,'\\"').replace(/\n/g, '\\n');
 
