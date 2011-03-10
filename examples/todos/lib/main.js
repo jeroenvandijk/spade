@@ -5,6 +5,6 @@ jQuery(document).ready(function() {
   $(document.body).html('');
 });
 
-require('./app');
-require('./~resources/templates/app');
+require('./todos');
+require('./~resources/templates/todos');
 require('./~resources/stylesheets/todos');
