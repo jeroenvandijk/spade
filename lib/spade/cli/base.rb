@@ -107,15 +107,9 @@ module Spade::CLI
       :aliases => ['-p'],
       :desc => 'Port number'
     def preview
-      require 'rack'
-      require 'rack/static'
-
-      rootdir = Spade.discover_root options[:working]
-      static = Rack::Static.new(nil, :urls => ['/'], :root => rootdir)
-      static = Rack::ShowStatus.new(Rack::ShowExceptions.new(static))
-
-      trap("SIGINT") { Rack::Handler::WEBrick.shutdown }
-      Rack::Handler::WEBrick.run static, :Port => options[:port].to_i
+      require 'spade/server'
+      trap("SIGINT") { Spade::Server.shutdown }
+      Spade::Server.run(options[:working], options[:port]);
     end
 
     desc "update", "Update package info in the current project"
