@@ -51,3 +51,9 @@ Ct.test('normalize package', function(t) {
   t.equal(spade.normalize('sproutcore'), 'sproutcore/main');
   t.equal(spade.normalize('foo/sproutcore'), 'foo/sproutcore');
 });
+
+Ct.test('normalize relative require from main', function(t) {
+  // I think this is a valid test, but not certain
+  t.spade.register('sproutcore', { main: './lib/sproutcore/main' });
+  t.equal(spade.normalize('./sproutcore/core', 'sproutcore/main'), 'sproutcore/sproutcore/core');
+});
