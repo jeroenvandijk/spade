@@ -46,7 +46,7 @@ Ct.test('require a non-existant module will throw an exception', function(t) {
   var spade = t.spade;
   t.throws(function() {
     spade.require('imaginary/foo');
-  }, spade.NotFoundError);
+  }, 'Module imaginary/foo not found');
 });
 
 Ct.test('require a module that was just registered symbolically.  This is for compatibility with non-module items', function(t) {
