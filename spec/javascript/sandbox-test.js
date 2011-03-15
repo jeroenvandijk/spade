@@ -6,7 +6,8 @@
 
 var Ct = require('core-test/sync'),
     Spade = require('spade').Spade,
-    Sandbox = require('spade').Sandbox;
+    Sandbox = require('spade').Sandbox,
+    pending = function(t){ console.log("PENDING: "+t.toString()); };
 
 // ..........................................................
 // BASIC REQUIRE
@@ -21,7 +22,6 @@ Ct.setup(function(t) {
 Ct.teardown(function(t) { 
   delete t.spade;
 });
-
 
 Ct.test('basic sandbox', function(t) {
   var spade = t.spade,
@@ -83,3 +83,72 @@ Ct.test('destroyed', function(t){
   t.sandbox.destroy();
   t.throws(function(){ t.sandbox.compile('4 * 4'); }, Error, "Sandbox destroyed");
 });
+
+Ct.module('spade: Sandbox format compilation');
+
+Ct.setup(function(t) {
+  t.sandbox = new Sandbox(new Spade()); 
+});
+
+Ct.teardown(function(t) { 
+  delete t.sandbox;
+});
+
+Ct.test('normal', function(t){
+  var sandbox = t.sandbox, pkg;
+  sandbox.spade.register('text', {
+    'name': 'text',
+    'plugin:formats': {
+      'txt': 'text/format'
+    }
+  });
+  sandbox.spade.register('text/format',
+    "exports.compileFormat = function(code, _, filename){ "+
+      "return '// From '+filename+'\\nreturn \"'+code+'\";'; "+
+    "};");
+  pkg = sandbox.spade.package('text');
+
+  t.equal(sandbox.compileFormat('Testing', 'test_file.txt', 'txt', pkg), '// From test_file.txt\nreturn "Testing";');
+});
+
+Ct.test("checks dependencies", pending);
+
+Ct.test("only checks immediate dependencies", pending);
+
+Ct.test("self takes priority", pending);
+
+
+Ct.module('spade: Sandbox preprocessor compilation');
+
+Ct.setup(function(t) {
+  t.sandbox = new Sandbox(new Spade()); 
+});
+
+Ct.teardown(function(t) { 
+  delete t.sandbox;
+});
+
+Ct.test('normal', function(t){
+  var sandbox = t.sandbox, pkg;
+  sandbox.spade.register('sc-super', {
+    'name': 'sc-super',
+    'plugin:preprocessors': ['sc-super/preprocessor']
+  });
+  sandbox.spade.register('sc-super/preprocessor',
+    "exports.compilePreprocessor = function(code, _, filename){ "+
+      "return '// From '+filename+'\\n'+code.replace(/sc_super\\(\\s*\\)/g, 'arguments.callee.base.apply(this, arguments)')+';'; "+
+    "};");
+  pkg = sandbox.spade.package('sc-super');
+
+  t.equal(sandbox.compilePreprocessors('function(){ return sc_super()*2; }', 'test_file.js', pkg), '// From test_file.js\nfunction(){ return arguments.callee.base.apply(this, arguments)*2; };');
+});
+
+Ct.test('multiple', pending);
+
+Ct.test("don't preprocess self", pending);
+
+Ct.test("checks dependencies", pending);
+
+Ct.test("only checks immediate dependencies", pending);
+
+Ct.test("proper order?", pending);
