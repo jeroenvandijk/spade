@@ -23,7 +23,7 @@ module RSpecCoreTest
       context = Spade::MainContext.new(:rootdir => rootdir) do |ctx|
         ctx['checkRSpec'] = lambda do |status, test_info, message|
           it "#{test_info.module.name}: #{test_info.name}" do
-            [status, message].should be_ct_success
+            [status.to_s, message.to_s].should be_ct_success
           end
         end
 
