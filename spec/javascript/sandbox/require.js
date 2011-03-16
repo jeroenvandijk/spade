@@ -20,11 +20,17 @@ Ct.teardown(function(t) {
   delete t.sandbox;
 });
 
-Ct.test("require new", pending);
+Ct.test("require new", function(t){
+  t.sandbox.spade.register('testing', { name: 'testing' });
+  t.sandbox.spade.register('testing/main', "exports.hello = 'hi';");
+  t.equal(t.sandbox.require('testing').hello, 'hi');
+});
 
 Ct.test("require existing", pending);
 
 Ct.test("require circular", pending);
 
-Ct.test("throw if doesn't exist", pending);
+Ct.test("throw if doesn't exist", function(t){
+  t.throws(function(){ t.sandbox.require('missing'); }, "Module missing not found");
+});
 
