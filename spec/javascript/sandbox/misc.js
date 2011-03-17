@@ -6,8 +6,7 @@
 
 var Ct = require('core-test/sync'),
     Spade = require('spade').Spade,
-    Sandbox = require('spade').Sandbox,
-    pending = function(t){ console.log("PENDING: "+t.toString()); };
+    Sandbox = require('spade').Sandbox;
 
 Ct.module('spade: Sandbox Miscellaneous');
 
