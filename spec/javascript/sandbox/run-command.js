@@ -11,10 +11,12 @@ var Ct = require('core-test/sync'),
 
 Ct.module('spade: Sandbox runCommand');
 
+// TODO: Add the next 3 tests when adding Ruby and node.js support
 Ct.test('success', pending);
 
 Ct.test('failure', pending);
 
 Ct.test('not supported', pending);
 
+// Not really sure how to test this, other than a bunch of stubbing
 Ct.test('browser', pending);
