@@ -13,7 +13,16 @@ var Ct = require('core-test/sync'),
 Ct.module('spade: Sandbox preprocessor compilation');
 
 Ct.setup(function(t) {
-  t.sandbox = new Sandbox(new Spade()); 
+  t.sandbox = new Sandbox(new Spade());
+
+  t.sandbox.spade.register('commenter', {
+    'name': 'commenter',
+    'plugin:preprocessors': ['commenter/preprocessor']
+  });
+  t.sandbox.spade.register('commenter/preprocessor',
+    "exports.compilePreprocessor = function(code, _, filename){ "+
+      "return '// From '+filename+'\\n'+code; "+
+    "};");
 });
 
 Ct.teardown(function(t) { 
@@ -21,21 +30,26 @@ Ct.teardown(function(t) {
 });
 
 Ct.test('normal', function(t){
-  var sandbox = t.sandbox, pkg;
-  sandbox.spade.register('sc-super', {
-    'name': 'sc-super',
-    'plugin:preprocessors': ['sc-super/preprocessor']
-  });
-  sandbox.spade.register('sc-super/preprocessor',
-    "exports.compilePreprocessor = function(code, _, filename){ "+
-      "return '// From '+filename+'\\n'+code.replace(/sc_super\\(\\s*\\)/g, 'arguments.callee.base.apply(this, arguments)')+';'; "+
-    "};");
-  pkg = sandbox.spade.package('sc-super');
+  var pkg = t.sandbox.spade.package('commenter');
 
-  t.equal(sandbox.compilePreprocessors('function(){ return sc_super()*2; }', 'test_file.js', pkg), '// From test_file.js\nfunction(){ return arguments.callee.base.apply(this, arguments)*2; };');
+  t.equal(t.sandbox.compilePreprocessors('var hello = "hi";', 'test_file.js', pkg), '// From test_file.js\nvar hello = "hi";');
 });
 
-Ct.test('multiple', pending);
+Ct.test('multiple', function(t){
+  t.sandbox.spade.register('functionizer', {
+    'name': 'functionizer',
+    'dependencies': { 'commenter': '1.0' },
+    'plugin:preprocessors': ['functionizer/preprocessor', 'commenter/preprocessor']
+  });
+  t.sandbox.spade.register('functionizer/preprocessor',
+    "exports.compilePreprocessor = function(code){ "+
+      "return 'function(){ '+code+' };'; "+
+    "};");
+
+  var pkg = t.sandbox.spade.package('functionizer');
+
+  t.equal(t.sandbox.compilePreprocessors('var hello = "hi";', 'test_file.js', pkg), '// From test_file.js\nfunction(){ var hello = "hi"; };');
+});
 
 Ct.test("don't preprocess self", pending);
 
