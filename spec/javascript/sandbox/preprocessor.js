@@ -51,11 +51,33 @@ Ct.test('multiple', function(t){
   t.equal(t.sandbox.compilePreprocessors('var hello = "hi";', 'test_file.js', pkg), '// From test_file.js\nfunction(){ var hello = "hi"; };');
 });
 
-Ct.test("don't preprocess self", pending);
+Ct.test("checks dependencies", function(t){
+  t.sandbox.spade.register('test', {
+    'name': 'test',
+    'dependencies': { 'commenter': '1.0' }
+  });
 
-Ct.test("checks dependencies", pending);
+  var pkg = t.sandbox.spade.package('test');
 
-Ct.test("only checks immediate dependencies", pending);
+  t.equal(t.sandbox.compilePreprocessors('var hello = "hi";', 'test_file.js', pkg), '// From test_file.js\nvar hello = "hi";');
+});
+
+Ct.test("only checks immediate dependencies", function(t){
+  t.sandbox.spade.register('intermediate', {
+    'name': 'intermediate',
+    'dependencies': { 'commenter': '1.0' }
+  });
+  t.sandbox.spade.register('test', {
+    'name': 'test',
+    'dependencies': { 'intermediate': '1.0' }
+  });
+
+  var pkg = t.sandbox.spade.package('test');
+
+  t.equal(t.sandbox.compilePreprocessors('var hello = "hi";', 'test_file.js', pkg), 'var hello = "hi";');
+});
+
+Ct.test("handles preprocessor loop", pending);
 
 Ct.test("proper order?", pending);
 
