@@ -12,10 +12,10 @@ var Ct = require('core-test/sync'),
 Ct.module('spade: Sandbox compilation');
 
 Ct.setup(function(t) {
-  t.sandbox = new Sandbox(new Spade()); 
+  t.sandbox = new Sandbox(new Spade());
 });
 
-Ct.teardown(function(t) { 
+Ct.teardown(function(t) {
   delete t.sandbox;
 });
 
