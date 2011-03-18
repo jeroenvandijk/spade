@@ -9,4 +9,4 @@ var Ct = require('core-test/sync');
 
 Ct.module('spade: Spade ready');
 
-Ct.test('works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('works');

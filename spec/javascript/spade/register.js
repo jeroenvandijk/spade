@@ -9,5 +9,5 @@ var Ct = require('core-test/sync');
 
 Ct.module('spade: Spade miscellaneous');
 
-Ct.test('register works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('register works');
 

@@ -9,7 +9,7 @@ var Ct = require('core-test/sync');
 
 Ct.module('spade: Spade loadFactory');
 
-Ct.test('works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('works');
 
 
 

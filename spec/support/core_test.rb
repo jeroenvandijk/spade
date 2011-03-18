@@ -23,7 +23,11 @@ module RSpecCoreTest
       context = Spade::MainContext.new(:rootdir => rootdir) do |ctx|
         ctx['checkRSpec'] = lambda do |status, test_info, message|
           it "#{test_info.module.name}: #{test_info.name}" do
-            [status.to_s, message.to_s].should be_ct_success
+            if status == 'warnings' && message == "Not Yet Implemented"
+              pending
+            else
+              [status.to_s, message.to_s].should be_ct_success
+            end
           end
         end
 

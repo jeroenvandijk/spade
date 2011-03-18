@@ -6,17 +6,16 @@
 
 var Ct = require('core-test/sync'),
     Spade = require('spade').Spade,
-    Sandbox = require('spade').Sandbox,
-    pending = function(t){ console.log("PENDING: "+t.toString()); };
+    Sandbox = require('spade').Sandbox;
 
 Ct.module('spade: Sandbox runCommand');
 
 // TODO: Add the next 3 tests when adding Ruby and node.js support
-Ct.test('success', pending);
+Ct.test('success');
 
-Ct.test('failure', pending);
+Ct.test('failure');
 
-Ct.test('not supported', pending);
+Ct.test('not supported');
 
 // Not really sure how to test this, other than a bunch of stubbing
-Ct.test('browser', pending);
+Ct.test('browser');

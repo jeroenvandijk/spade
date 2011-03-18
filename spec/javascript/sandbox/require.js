@@ -6,9 +6,7 @@
 
 var Ct = require('core-test/sync'),
     Spade = require('spade').Spade,
-    Sandbox = require('spade').Sandbox,
-    pending = function(t){ console.log("PENDING: "+t.toString()); };
-
+    Sandbox = require('spade').Sandbox;
 
 Ct.module('spade: Sandbox require');
 
@@ -35,7 +33,7 @@ Ct.test("require existing", function(t){
 });
 
 // TODO: I'm not actually sure how this should work - PW
-Ct.test("require circular", pending);
+Ct.test("require circular");
 /*
 Ct.test("require circular", function(t){
   t.sandbox.spade.register('testing/file1', "exports.value = require('testing/file2').value * 2;");

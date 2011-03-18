@@ -6,9 +6,7 @@
 
 var Ct = require('core-test/sync'),
     Spade = require('spade').Spade,
-    Sandbox = require('spade').Sandbox,
-    pending = function(t){ console.log("PENDING: "+t.toString()); };
-
+    Sandbox = require('spade').Sandbox;
 
 Ct.module('spade: Sandbox preprocessor compilation');
 
@@ -77,7 +75,7 @@ Ct.test("only checks immediate dependencies", function(t){
   t.equal(t.sandbox.compilePreprocessors('var hello = "hi";', 'test_file.js', pkg), 'var hello = "hi";');
 });
 
-Ct.test("handles preprocessor loop", pending);
+Ct.test("handles preprocessor loop");
 
-Ct.test("proper order?", pending);
+Ct.test("proper order?");
 

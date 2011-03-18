@@ -9,15 +9,15 @@ var Ct = require('core-test/sync');
 
 Ct.module('spade: Spade miscellaneous');
 
-Ct.test('globalize works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('globalize works');
 
-Ct.test('noConflict works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('noConflict works');
 
-Ct.test('sandbox works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('sandbox works');
 
-Ct.test('factoryExists works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('factoryExists works');
 
-Ct.test('package works', function(t){ console.log("PENDING: "+t.toString()); });
+Ct.test('package works');
 
 
 
