@@ -49,16 +49,26 @@ if (match = window.location.href.match(/\?(.+)$/)) {
   }
 }
 
-var len = pkg.files.length, i, file;
+$('h1').remove();
+
+var len = pkg.files.length, i, file, tests = [];
 for (i=0; i<len; i++) {
   file = pkg.files[i];
   if (file.substring(0,16) === 'framework/tests/' && (!params.file || file.indexOf(params.file) === 16)) {
     file = file.replace(/\.[^\.]+$/,''); // Remove ext
-    require('sproutcore-corefoundation/~'+file);
+    tests.push('sproutcore-corefoundation/~'+file);
   }
 }
 
-$().ready(function(){
-  $('h1').remove();
-  Ct.run();
-});
+// Using this setup with setTimeout allows for rending to happen on WebKit
+var curTestIndex = -1, test;
+function runNextTest(){
+  curTestIndex++;
+  if (test = tests[curTestIndex]) {
+    require(test);
+    Ct.run();
+    setTimeout(runNextTest, 100);
+  }
+}
+
+SC.ready(runNextTest);
