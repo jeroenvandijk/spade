@@ -26,7 +26,7 @@ module Spade
         spec.summary           = summary
         spec.description       = description
         spec.requirements      = [metadata.to_json]
-        spec.files             = glob_javascript(lib_path) + bin_files
+        spec.files             = glob_javascript(lib_path) + bin_files + ["package.json"]
         spec.test_files        = glob_javascript(test_path) if test_path
         spec.rubyforge_project = "spade"
         def spec.file_name
