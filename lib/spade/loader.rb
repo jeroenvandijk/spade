@@ -183,6 +183,12 @@ module Spade
       # package_paths = Dir.glob File.join(globals,'*')
       # package_paths.each { |path| add_package(path) }      
 
+      # Do this to get the Gem.dir right
+      env = Spade::Environment.new
+
+      package_paths = Dir.glob(File.join(env.spade_dir, 'gems', '*'))
+      package_paths.each{|path| add_package(path) }
+
       # in reverse order of precedence
       %w[.spade/packages vendor/cache vendor/packages packages].each do |p|
         package_paths = Dir.glob File.join(@ctx.rootdir, p.split('/'), '*')
