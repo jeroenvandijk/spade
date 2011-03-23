@@ -61,7 +61,7 @@ describe Spade::Package, "#to_spec" do
 
   it "expands paths from the directories" do
     others     = ["lib/coffee.png", "qunit/test.log"]
-    files      = ["bin/coffee", "bin/cake", "lib/coffee.js", "lib/coffee/base.js", "lib/coffee/mocha/chai.js"]
+    files      = ["bin/coffee", "bin/cake", "lib/coffee.js", "lib/coffee/base.js", "lib/coffee/mocha/chai.js", "package.json"]
     test_files = ["qunit/test.js", "qunit/coffee/test.js"]
 
     FileUtils.mkdir_p(["bin/", "lib/coffee/", "lib/coffee/mocha", "qunit/", "qunit/coffee"])
@@ -224,7 +224,7 @@ describe Spade::Package, "validation errors" do
     end
 
     subject.should be_valid
-    subject.to_spec.files.should == []
+    subject.to_spec.files.should == ["package.json"]
   end
 
   %w[lib test].each do |dir|
