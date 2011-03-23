@@ -21,6 +21,10 @@ module Spade
       def spade_fetcher.cache_dir(uri)
         Spade::Environment.spade_dir("#{uri.host}%#{uri.port}", File.dirname(uri.path))
       end
+
+      # Do it again, since it got overridden
+      Gem.sources.replace [ENV["RUBYGEMS_HOST"]]
+
       Gem::SpecFetcher.fetcher = spade_fetcher
     end
 
