@@ -17,11 +17,11 @@ describe "spade build when logged in" do
 
     exit_status.should be_success
     output = stdout.read
-    output.should include("Successfully built package: core-test-0.4.1.spd")
+    output.should include("Successfully built package: core-test-0.4.3.spd")
 
-    package = Gem::Format.from_file_by_path("core-test-0.4.1.spd")
+    package = Gem::Format.from_file_by_path("core-test-0.4.3.spd")
     package.spec.name.should == "core-test"
-    package.spec.version.should == Gem::Version.new("0.4.1")
+    package.spec.version.should == Gem::Version.new("0.4.3")
     package.spec.email.should == email
   end
 end

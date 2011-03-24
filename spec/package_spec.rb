@@ -25,7 +25,7 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "transforms the version" do
-    subject.version.should == Gem::Version.new("0.4.1")
+    subject.version.should == Gem::Version.new("0.4.3")
   end
 
   it "transforms the author" do
@@ -49,7 +49,7 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "transforms the dependencies" do
-    subject.dependencies.map{|d| [d.name, d.requirement]}.should == [["ivory", "= 0.1.0"], ["optparse", "= 1.0.1"]]
+    subject.dependencies.map{|d| [d.name, d.requirement]}.should == [["ivory", "= 0.0.1"], ["optparse", "= 1.0.1"]]
   end
 
   it "packs metadata into requirements" do
@@ -81,7 +81,7 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "hacks the file name to return .spd" do
-    subject.file_name.should == "core-test-0.4.1.spd"
+    subject.file_name.should == "core-test-0.4.3.spd"
   end
 
   it "sets the rubyforge_project to appease older versions of rubygems" do
@@ -100,7 +100,7 @@ describe Spade::Package, "#to_s" do
   end
 
   it "gives the name and version" do
-    subject.to_full_name.should == "core-test-0.4.1"
+    subject.to_full_name.should == "core-test-0.4.3"
   end
 end
 
@@ -111,7 +111,7 @@ describe Spade::Package, "converting" do
 
   subject do
     package = Spade::Package.new
-    package.spade = fixtures("core-test-0.4.1.spd")
+    package.spade = fixtures("core-test-0.4.3.spd")
     package.as_json
   end
 

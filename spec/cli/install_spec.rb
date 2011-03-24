@@ -103,4 +103,18 @@ describe "spade install" do
     wait
     home(".gem").exist?.should be_false
   end
+
+  it "installs gem dependencies" do
+    spade "install", "core-test"
+
+    output = stdout.read
+
+    %w(ivory-0.0.1 optparse-1.0.1 core-test-0.4.3).each do |name|
+      output.should include("Successfully installed #{name}")
+
+      name.should be_fetched
+      name.should be_unpacked
+    end
+  end
+
 end
