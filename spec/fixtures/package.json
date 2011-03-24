@@ -1,25 +1,29 @@
 {
-    "name":         "coffee",
-    "description":  "CoffeeScript is a little language that compiles into JavaScript",
-    "summary":      "Unfancy JavaScript",
-    "keywords":     ["javascript", "language", "coffeescript", "compiler"],
-    "author":       "Jeremy Ashkenas",
-    "homepage":     "http://github.com/jashkenas/coffee-script",
-    "version":      "1.0.1.pre",
-    "licenses":     [{
-      "type":       "MIT",
-      "url":        "http://github.com/jashkenas/coffee-script/raw/master/LICENSE"
-    }],
-    "engines":      {
-      "node":       ">=0.2.5"
-    },
-    "directories" : {
-      "lib"  : "./lib",
-      "test" : "./qunit"
-    },
-    "main" : "./lib/coffee-script",
-    "bin":          {
-      "coffee":     "./bin/coffee",
-      "cake":       "./bin/cake"
-    }
+  "name": "core-test",
+  "description": "Flexible testing library for JavaScript.",
+  "summary": "A fully featured asynchronous testing library for JavaScript, compatible with other frameworks.",
+  "keywords": ["javascript", "testing"],
+  "author": "Charles Jolley",
+  "homepage": "https://github.com/strobecorp/core-test",
+  "version": "0.4.1",
+  "licenses":     [{
+    "type":       "MIT",
+    "url":        "https://github.com/strobecorp/core-test/raw/master/LICENSE"
+  }],
+  "engines": ["browser", "all"],
+  "directories": {
+    "lib": "./lib",
+    "test": "./tests"
+  },
+  "main": "./lib/main",
+  "bin": {
+    "cot": "./bin/cot"
+  },
+  "dependencies": {
+    "ivory": "= 0.1.0",
+    "optparse": "= 1.0.1"
+  }
 }
+
+
+

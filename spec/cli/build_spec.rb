@@ -10,18 +10,18 @@ describe "spade build when logged in" do
   end
 
   it "builds a spade from a given package.json" do
-    FileUtils.cp_r fixtures("coffee"), "."
-    FileUtils.cp fixtures("package.json"), "coffee"
-    cd "coffee"
+    FileUtils.cp_r fixtures("core-test"), "."
+    FileUtils.cp fixtures("package.json"), "core-test"
+    cd "core-test"
     spade "build"
 
     exit_status.should be_success
     output = stdout.read
-    output.should include("Successfully built package: coffee-1.0.1.pre.spd")
+    output.should include("Successfully built package: core-test-0.4.1.spd")
 
-    package = Gem::Format.from_file_by_path("coffee-1.0.1.pre.spd")
-    package.spec.name.should == "coffee"
-    package.spec.version.should == Gem::Version.new("1.0.1.pre")
+    package = Gem::Format.from_file_by_path("core-test-0.4.1.spd")
+    package.spec.name.should == "core-test"
+    package.spec.version.should == Gem::Version.new("0.4.1")
     package.spec.email.should == email
   end
 end

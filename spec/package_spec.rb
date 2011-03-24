@@ -6,25 +6,30 @@ describe Spade::Package, "#to_spec" do
   before do
     cd(home)
     FileUtils.mkdir_p(home("lib"))
-    FileUtils.mkdir_p(home("qunit"))
+    FileUtils.mkdir_p(home("tests"))
   end
 
   subject do
     package = Spade::Package.new(email)
     package.json_path = fixtures("package.json")
-    package.to_spec
+    if spec = package.to_spec
+      spec
+    else
+      puts "Errors: #{package.errors}"
+      nil
+    end
   end
 
   it "transforms the name" do
-    subject.name.should == "coffee"
+    subject.name.should == "core-test"
   end
 
   it "transforms the version" do
-    subject.version.should == Gem::Version.new("1.0.1.pre")
+    subject.version.should == Gem::Version.new("0.4.1")
   end
 
   it "transforms the author" do
-    subject.authors.should == ["Jeremy Ashkenas"]
+    subject.authors.should == ["Charles Jolley"]
   end
 
   it "transforms the email" do
@@ -32,27 +37,31 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "transforms the homepage" do
-    subject.homepage.should == "http://github.com/jashkenas/coffee-script"
+    subject.homepage.should == "https://github.com/strobecorp/core-test"
   end
 
   it "transforms the description" do
-    subject.description.should include("little language")
+    subject.description.should == "Flexible testing library for JavaScript."
   end
 
   it "transforms the description" do
-    subject.summary.should == "Unfancy JavaScript"
+    subject.summary.should == "A fully featured asynchronous testing library for JavaScript, compatible with other frameworks."
+  end
+
+  it "transforms the dependencies" do
+    subject.dependencies.map{|d| [d.name, d.requirement]}.should == [["ivory", "= 0.1.0"], ["optparse", "= 1.0.1"]]
   end
 
   it "packs metadata into requirements" do
     metadata = JSON.parse(subject.requirements.first)
-    metadata["keywords"].should == %w[javascript language coffeescript compiler]
+    metadata["keywords"].should == %w[javascript testing]
     metadata["licenses"].should == [
       {"type" => "MIT",
-       "url"  => "http://github.com/jashkenas/coffee-script/raw/master/LICENSE"}
+       "url"  => "https://github.com/strobecorp/core-test/raw/master/LICENSE"}
     ]
-    metadata["engines"].should == {"node" => ">=0.2.5"}
-    metadata["main"].should == "./lib/coffee-script"
-    metadata["bin"].should == {"coffee" => "./bin/coffee", "cake" => "./bin/cake"}
+    metadata["engines"].should == ["browser", "all"]
+    metadata["main"].should == "./lib/main"
+    metadata["bin"].should == {"cot" => "./bin/cot"}
   end
 
   def expand_sort(files)
@@ -60,11 +69,11 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "expands paths from the directories" do
-    others     = ["lib/coffee.png", "qunit/test.log"]
-    files      = ["bin/coffee", "bin/cake", "lib/coffee.js", "lib/coffee/base.js", "lib/coffee/mocha/chai.js", "package.json"]
-    test_files = ["qunit/test.js", "qunit/coffee/test.js"]
+    others     = ["resources/additions.css", "resources/runner.css"]
+    files      = ["bin/cot", "lib/main.js", "lib/core.js", "lib/test.js", "package.json"]
+    test_files = ["tests/apis/core-test.js", "tests/system/test/assert-test.js"]
 
-    FileUtils.mkdir_p(["bin/", "lib/coffee/", "lib/coffee/mocha", "qunit/", "qunit/coffee"])
+    FileUtils.mkdir_p(["bin/", "resources/", "lib/", "tests/apis", "tests/system/test"])
     FileUtils.touch(files + test_files + others)
 
     expand_sort(subject.files).should == expand_sort(files + test_files)
@@ -72,7 +81,7 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "hacks the file name to return .spd" do
-    subject.file_name.should == "coffee-1.0.1.pre.spd"
+    subject.file_name.should == "core-test-0.4.1.spd"
   end
 
   it "sets the rubyforge_project to appease older versions of rubygems" do
@@ -91,7 +100,7 @@ describe Spade::Package, "#to_s" do
   end
 
   it "gives the name and version" do
-    subject.to_full_name.should == "coffee-1.0.1.pre"
+    subject.to_full_name.should == "core-test-0.4.1"
   end
 end
 
@@ -102,7 +111,7 @@ describe Spade::Package, "converting" do
 
   subject do
     package = Spade::Package.new
-    package.spade = fixtures("coffee-1.0.1.pre.spd")
+    package.spade = fixtures("core-test-0.4.1.spd")
     package.as_json
   end
 
@@ -166,7 +175,7 @@ describe Spade::Package, "validation errors" do
   before do
     cd(home)
     FileUtils.mkdir_p(home("lib"))
-    FileUtils.mkdir_p(home("qunit"))
+    FileUtils.mkdir_p(home("tests"))
   end
 
   subject do

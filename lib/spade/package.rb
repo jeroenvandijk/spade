@@ -3,7 +3,7 @@ module Spade
     EXT      = "spd"
     METADATA = %w[keywords licenses engines main bin directories]
     FIELDS   = %w[name version description author homepage summary]
-    attr_accessor :metadata, :lib_path, :test_path, :errors, :json_path, :attributes, :directories
+    attr_accessor :metadata, :lib_path, :test_path, :errors, :json_path, :attributes, :directories, :dependencies
     attr_accessor *FIELDS
 
     def initialize(email = "")
@@ -32,14 +32,15 @@ module Spade
         def spec.file_name
           "#{full_name}.#{EXT}"
         end
+        dependencies.each{|d,v| spec.add_dependency(d, v) } if dependencies
       end
     end
 
     def as_json(options = {})
-      FIELDS.inject(self.metadata) do |json, key|
-        json[key] = send(key)
-        json
-      end
+      json = self.metadata.clone
+      FIELDS.each{|key| json[key] = send(key)}
+      json["dependencies"] = self.dependencies
+      json
     end
 
     def to_full_name
@@ -85,7 +86,8 @@ module Spade
         send("#{field}=", @attributes[field])
       end
 
-      self.directories = @attributes["directories"]
+      self.dependencies = @attributes["dependencies"] || {}
+      self.directories = @attributes["directories"] || {}
       self.metadata    = Hash[*@attributes.select { |k, v| METADATA.include?(k) }.flatten(1)]
     end
 
@@ -134,9 +136,11 @@ module Spade
     end
 
     def fill_from_gemspec(spec)
-      FIELDS.each do |field|
-        send("#{field}=", spec.send(field).to_s)
-      end
+      FIELDS.each{|field| send("#{field}=", spec.send(field).to_s) }
+
+      self.dependencies = {}
+      spec.dependencies.each{|d| self.dependencies[d.name] = d.requirement.to_s }
+
       self.metadata = JSON.parse(spec.requirements.first)
     end
   end
