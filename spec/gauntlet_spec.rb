@@ -11,9 +11,6 @@ describe "spade build the gauntlet" do
     "ivory"                => "0.0.1",
     "jquery"               => "1.4.3",
     "optparse"             => "1.0.1",
-    "sproutcore-runtime"   => "1.5",
-    "sproutcore-datetime"  => "1.5",
-    "sproutcore-datastore" => "1.5",
     "web-file"             => "0.0.1",
     "web-typed-array"      => "0.0.1",
   }.each do |package, version|
