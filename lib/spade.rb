@@ -10,6 +10,7 @@ require 'rubygems/uninstaller'
 require 'rubygems/dependency_installer'
 require 'rubygems/gemcutter_utilities'
 require 'rubygems/validator'
+require 'rubygems_plugin' # Gemcutter
 
 require 'fileutils'
 require 'net/http'

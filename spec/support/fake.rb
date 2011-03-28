@@ -1,3 +1,5 @@
+require 'rack'
+
 module SpecHelpers
   class Fake
     def call(env)

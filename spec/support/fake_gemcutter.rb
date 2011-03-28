@@ -14,6 +14,12 @@ class FakeGemcutter
       respond 401, "One cannot simply walk into Mordor!"
     elsif request.path == "/api/v1/gems" && request.post?
       respond 200, "Successfully registered rake (0.8.7)"
+    elsif request.path == "/api/v1/gems/yank" && request.delete?
+      if request.params["version"].to_i > 0
+        respond 200, "Successfully yanked gem: #{request.params["gem_name"]} (#{request.params["version"]})"
+      else
+        respond 404, "This gem could not be found"
+      end
     elsif request.path == "/api/v1/gems/rake/owners"
       if request.post?
         respond 200, "Owner added successfully."
@@ -24,6 +30,8 @@ class FakeGemcutter
       yaml = YAML.dump([{'email' => 'geddy@example.com'},
                         {'email' => 'lerxst@example.com'}])
       respond(200, yaml)
+    else
+      respond(404, "Invalid request")
     end
   end
 end

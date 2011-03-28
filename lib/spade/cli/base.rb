@@ -13,6 +13,10 @@ module Spade::CLI
       :aliases => ['-V'],
       :desc => 'Show additional debug information while running'
 
+    class_option :version, :type => :string,
+      :aliases => ['-v'],
+      :desc => 'Package version'
+
     class_option :require, :type => :array, :required => false,
       :aliases => ['-r'],
       :desc => "optional JS files to require before invoking main command"
@@ -196,6 +200,20 @@ module Spade::CLI
         say remote.push(package)
       else
         say LOGIN_MESSAGE
+      end
+    end
+
+    desc "yank", "Remove a specific package version release from SproutCutter"
+    def yank(package)
+      if options[:version]
+        remote = Spade::Remote.new
+        if remote.logged_in?
+          say remote.yank(package, options[:version])
+        else
+          say LOGIN_MESSAGE
+        end
+      else
+        say "Version required"
       end
     end
 
