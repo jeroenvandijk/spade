@@ -13,7 +13,7 @@ module SpecHelpers
 
     @fake_pid = Process.fork do
       logger = Logger.new(StringIO.new)
-      Rack::Handler::WEBrick.run(app, :Port => 9292, :Logger => logger, :AccessLog => logger)
+      Rack::Handler::WEBrick.run(app, :Port => 9292, :Logger => logger, :AccessLog => [[logger, WEBrick::AccessLog::COMBINED_LOG_FORMAT]])
     end
     ready = false
     until ready
