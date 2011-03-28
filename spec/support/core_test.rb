@@ -32,18 +32,25 @@ module RSpecCoreTest
         end
 
         ctx.eval <<END
-Ct = require('core-test');
+var Ct;
+try {
+  Ct = require('core-test');
+} catch (e) { }
 
-RubyLogger = require('core-test/utils').extend(Ct.NodeLogger, {
-  add: function(status, testInfo, message){
-    checkRSpec(status, testInfo, message);
-  }
-});
-Ct.defaultLogger = new RubyLogger('ruby');
+if (Ct) {
+  RubyLogger = require('core-test/utils').extend(Ct.NodeLogger, {
+    add: function(status, testInfo, message){
+      checkRSpec(status, testInfo, message);
+    }
+  });
+  Ct.defaultLogger = new RubyLogger('ruby');
 
-require('file:#{path}');
+  require('file:#{path}');
 
-Ct.run();
+  Ct.run();
+} else {
+  console.log("CoreTest is not installed. Use `spade install core-test`.");
+}
 END
       end
     end
