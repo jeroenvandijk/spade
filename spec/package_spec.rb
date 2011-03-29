@@ -6,6 +6,7 @@ describe Spade::Package, "#to_spec" do
   before do
     cd(home)
     FileUtils.mkdir_p(home("lib"))
+    FileUtils.mkdir_p(home("resources"))
     FileUtils.mkdir_p(home("tests"))
   end
 
@@ -69,11 +70,11 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "expands paths from the directories" do
-    others     = ["resources/additions.css", "resources/runner.css"]
-    files      = ["bin/cot", "lib/main.js", "lib/core.js", "lib/test.js", "package.json"]
+    others     = ["tmp/blah.js", "tmp/whee.txt"]
+    files      = ["bin/cot", "lib/main.js", "lib/core.js", "lib/test.js", "package.json", "resources/additions.css", "resources/runner.css"]
     test_files = ["tests/apis/core-test.js", "tests/system/test/assert-test.js"]
 
-    FileUtils.mkdir_p(["bin/", "resources/", "lib/", "tests/apis", "tests/system/test"])
+    FileUtils.mkdir_p(["bin/", "resources/", "lib/", "tests/apis", "tests/system/test", "tmp/"])
     FileUtils.touch(files + test_files + others)
 
     expand_sort(subject.files).should == expand_sort(files + test_files)

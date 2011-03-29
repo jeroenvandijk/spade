@@ -13,6 +13,7 @@
   "engines": ["browser", "all"],
   "directories": {
     "lib": "./lib",
+    "resources": "./resources",
     "test": "./tests"
   },
   "main": "./lib/main",

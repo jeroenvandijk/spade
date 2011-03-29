@@ -26,8 +26,8 @@ module Spade
         spec.summary           = summary
         spec.description       = description
         spec.requirements      = [metadata.to_json]
-        spec.files             = glob_javascript(lib_path) + bin_files + ["package.json"]
-        spec.test_files        = glob_javascript(test_path) if test_path
+        spec.files             = directory_files + bin_files + ["package.json"]
+        spec.test_files        = glob_files(test_path) if test_path
         spec.rubyforge_project = "spade"
         def spec.file_name
           "#{full_name}.#{EXT}"
@@ -64,6 +64,10 @@ module Spade
     end
 
     private
+
+    def directory_files
+      directories.values.map{|dir| glob_files(dir) }.flatten
+    end
 
     def bin_files
       if @attributes["bin"]
@@ -131,8 +135,8 @@ module Spade
       false
     end
 
-    def glob_javascript(path)
-      Dir[File.join(path, "**", "*.js")]
+    def glob_files(path)
+      Dir[File.join(path, "**", "*")].reject{|f| File.directory?(f) }
     end
 
     def fill_from_gemspec(spec)
