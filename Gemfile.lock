@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    spade (0.0.1)
+    spade (0.0.2)
       eventmachine (~> 0.12.10)
       gemcutter (~> 0.6.1)
       highline (~> 1.6.1)

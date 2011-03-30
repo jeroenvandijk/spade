@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "spade yank" do
+describe "spade unyank" do
   let(:api_key) { "deadbeef" }
   let(:creds)   { spade_dir("credentials") }
 
@@ -16,35 +16,35 @@ describe "spade yank" do
       write_api_key(api_key)
     end
 
-    it "yanks a gem when sent with the right api key" do
-      spade "yank", "core-test", "-v", "1.4.3"
+    it "unyanks a gem when sent with the right api key" do
+      spade "yank", "core-test", "--undo", "-v", "1.4.3"
 
-      stdout.read.should include("Successfully yanked gem: core-test (1.4.3)")
+      stdout.read.should include("Successfully unyanked gem: core-test (1.4.3)")
     end
 
-    it "must yank a valid gem" do
-      spade "yank", "blahblah", "-v", "0.0.1"
+    it "must unyank a valid gem" do
+      spade "yank", "blahblah", "--undo", "-v", "0.0.1"
 
       stdout.read.should include("This gem could not be found")
     end
 
-    it "does not yank a yanked gem" do
-      spade "yank", "core-test", "-v", "2.4.3"
+    it "does not unyank and indexed gem" do
+      spade "yank", "core-test", "--undo", "-v", "2.4.3"
 
-      stdout.read.should include("The version 2.4.3 has already been yanked.")
+      stdout.read.should include("The version 2.4.3 is already indexed.")
     end
   end
 
   it "shows rejection message if wrong api key is supplied" do
     write_api_key("beefbeef")
 
-    spade "yank", "core-test", "-v", "1.4.3"
+    spade "yank", "core-test", "--undo", "-v", "1.4.3"
 
     stdout.read.should include("One cannot simply walk into Mordor!")
   end
 end
 
-describe "spade yank without api key" do
+describe "spade unyank with invalid api key" do
   before do
     cd(home)
     env["HOME"] = home.to_s
@@ -53,13 +53,13 @@ describe "spade yank without api key" do
   end
 
   it "must require a version" do
-    spade "yank", "core-test"
+    spade "yank", "core-test", "--undo"
 
     stdout.read.should include("Version required")
   end
 end
 
-describe "spade yank without api key" do
+describe "spade unyank without api key" do
   before do
     cd(home)
     env["HOME"] = home.to_s
@@ -67,7 +67,7 @@ describe "spade yank without api key" do
   end
 
   it "asks for login first if api key does not exist" do
-    spade "yank", "core-test", "-v", "1.4.3"
+    spade "yank", "core-test", "-v", "1.4.3", "--undo"
 
     stdout.read.should include("Please login first with `spade login`")
   end

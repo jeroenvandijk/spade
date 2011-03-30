@@ -39,6 +39,13 @@ module Spade
       end
     end
 
+    def unyank(package, version)
+      request :put, "api/v1/gems/unyank" do |req|
+        req.set_form_data 'gem_name' => package, 'version' => version
+        req.add_field "Authorization", creds.api_key
+      end
+    end
+
     def add_owner(package, email)
       request :post, "api/v1/gems/#{package}/owners" do |req|
         req.set_form_data 'email' => email

@@ -15,10 +15,22 @@ class FakeGemcutter
     elsif request.path == "/api/v1/gems" && request.post?
       respond 200, "Successfully registered rake (0.8.7)"
     elsif request.path == "/api/v1/gems/yank" && request.delete?
-      if request.params["version"].to_i > 0
+      version = request.params["version"].to_i
+      if version < 1
+        respond 404, "This gem could not be found"
+      elsif version < 2
         respond 200, "Successfully yanked gem: #{request.params["gem_name"]} (#{request.params["version"]})"
       else
+        respond 500, "The version #{request.params["version"]} has already been yanked."
+      end
+    elsif request.path == "/api/v1/gems/unyank" && request.put?
+      version = request.params["version"].to_i
+      if version < 1
         respond 404, "This gem could not be found"
+      elsif version < 2
+        respond 200, "Successfully unyanked gem: #{request.params["gem_name"]} (#{request.params["version"]})"
+      else
+        respond 500, "The version #{request.params["version"]} is already indexed."
       end
     elsif request.path == "/api/v1/gems/rake/owners"
       if request.post?
