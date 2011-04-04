@@ -24,6 +24,9 @@ module Spade
 
         installed = []
 
+
+        #TODO: Clean up duplication here
+
         Dir.glob(File.join(BUILTIN_PACKAGES, '*')).each do |path|
           next unless File.exists? File.join(path, 'package.json')
 
@@ -34,6 +37,23 @@ module Spade
           FileUtils.ln_s path, new_path, :force => true
           puts "Installing built-in package #{File.basename(path)}" if verbose
         end
+
+        # Do this to get the Gem.dir right
+        env = Spade::Environment.new
+        Dir.glob(File.join(env.spade_dir, 'gems', '*')).each do |path|
+          package_def = File.join(path, 'package.json')
+          next unless File.exists?(package_def)
+
+          next if installed.include? path
+          installed << path
+
+          json = JSON.load File.read(package_def)
+          package_name = json['name']
+          new_path = File.join(spade_path, 'packages', package_name)
+          FileUtils.ln_s path, new_path, :force => true
+          puts "Installing system package #{File.basename(path)}" if verbose
+        end
+
 
         Dir.glob(File.join(rootdir, 'packages', '*')).each do |path|
           next unless File.exists? File.join(path, 'package.json')
