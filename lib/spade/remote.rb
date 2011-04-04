@@ -1,3 +1,5 @@
+require 'spade/dependency_installer'
+
 module Spade
   class Remote < Repository
     extend Gem::GemcutterUtilities
@@ -72,7 +74,7 @@ module Spade
     end
 
     def install(package, version, prerelease)
-      inst = Gem::DependencyInstaller.new(:prerelease => prerelease)
+      inst = Spade::DependencyInstaller.new(:prerelease => prerelease)
       inst.install package, Gem::Requirement.new([version])
       inst.installed_gems
     end

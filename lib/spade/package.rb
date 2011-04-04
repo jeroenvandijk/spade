@@ -26,8 +26,10 @@ module Spade
         spec.summary           = summary
         spec.description       = description
         spec.requirements      = [metadata.to_json]
-        spec.files             = directory_files + bin_files + ["package.json"]
+        spec.files             = directory_files + ["package.json"]
         spec.test_files        = glob_files(test_path) if test_path
+        spec.bindir            = bin_path
+        spec.executables       = bin_files.map{|p| File.basename(p) } if bin_path
         spec.rubyforge_project = "spade"
         def spec.file_name
           "#{full_name}.#{EXT}"
@@ -75,6 +77,10 @@ module Spade
       else
         []
       end
+    end
+
+    def bin_path
+      @directories["bin"] || "bin"
     end
 
     def lib_path
