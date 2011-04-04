@@ -54,3 +54,5 @@ Ct.test('require a module that was just registered symbolically.  This is for co
   spade.register('not/a-module');
   t.ok(spade.require('not/a-module'));
 });
+
+Ct.test('require system installed packages');
