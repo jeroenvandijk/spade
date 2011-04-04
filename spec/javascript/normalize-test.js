@@ -46,7 +46,6 @@ Ct.test('normalize', function(t) {
 
 Ct.test('normalize package', function(t) {
   var spade = t.spade;
-  
   spade.register('sproutcore', {}); // register as a package
   t.equal(spade.normalize('sproutcore'), 'sproutcore/main');
   t.equal(spade.normalize('foo/sproutcore'), 'foo/sproutcore');
@@ -54,6 +53,21 @@ Ct.test('normalize package', function(t) {
 
 Ct.test('normalize relative require from main', function(t) {
   // I think this is a valid test, but not certain
-  t.spade.register('sproutcore', { main: './lib/sproutcore/main' });
-  t.equal(spade.normalize('./sproutcore/core', 'sproutcore/main'), 'sproutcore/sproutcore/core');
+  var spade = t.spade, mainRequire, otherRequire;
+  spade.register('foo', { main: './lib/foo', directories: { lib: './lib/foo' } });
+  spade.register('foo/main', 'return require;');
+  spade.register('foo/other/main', 'return require;');
+  mainRequire = spade.require('foo/main');
+  otherRequire = spade.require('foo/other/main');
+  t.equal(mainRequire.normalize('./foo/adfadf'), 'foo/adfadf', 'works for real main');
+  t.equal(otherRequire.normalize('./foo/core'), 'foo/other/foo/core', "no difference for fake main");
+});
+
+Ct.test('normalize tilde paths with lib', function(t){
+  var spade = t.spade, fooRequire;
+  spade.register('foo', { directories: { lib: './lib' }}); // register as a package
+  spade.register('foo/main', 'return require;');
+  fooRequire = spade.require('foo');
+  t.equal(fooRequire.normalize('foo/~lib/main'), 'foo/main');
+  t.equal(fooRequire.normalize('foo/~lib/core'), 'foo/core');
 });
