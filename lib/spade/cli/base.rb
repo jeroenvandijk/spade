@@ -1,5 +1,8 @@
 module Spade::CLI
   class Base < Thor
+    include Thor::Actions
+
+    source_root File.expand_path('../../templates', __FILE__)
 
     desc "owner", "Manage users for a package"
     subcommand "owner", Owner
@@ -226,6 +229,12 @@ module Spade::CLI
       remote = Spade::Remote.new
       index  = remote.list_packages(packages, options[:all], options[:prerelease])
       print_specs(packages, index)
+    end
+
+    desc "new [NAME]", "Generate a new project skeleton"
+    def new(name)
+      ProjectGenerator.new(self,
+        name, File.expand_path(name)).run
     end
 
     desc "build", "Build a spade package from a package.json"
