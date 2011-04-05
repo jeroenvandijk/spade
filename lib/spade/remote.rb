@@ -2,11 +2,11 @@ require 'spade/dependency_installer'
 
 module Spade
   class Remote < Repository
-    extend Gem::GemcutterUtilities
+    include Gem::UserInteraction
 
     def login(email, password)
-      response = self.class.rubygems_api_request :get, "api/v1/api_key" do |request|
-        request.basic_auth email, password
+      response = raw_request :get, "api/v1/api_key" do |req|
+        req.basic_auth email, password
       end
 
       case response
@@ -81,10 +81,18 @@ module Spade
 
     private
 
-    def request(method, path)
-      response = self.class.rubygems_api_request method, path do |req|
-        yield req
-      end
+    def raw_request(method, path, &block)
+      require 'net/http'
+      host = ENV['RUBYGEMS_HOST'] || Gem.host
+      uri = URI.parse "#{host}/#{path}"
+
+      request_method = Net::HTTP.const_get method.to_s.capitalize
+
+      Gem::RemoteFetcher.fetcher.request(uri, request_method, &block)
+    end
+
+    def request(method, path, &block)
+      response = raw_request(method, path, &block)
       response.body
     end
   end
