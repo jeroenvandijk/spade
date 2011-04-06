@@ -1,7 +1,7 @@
 module Spade
   class Local < Repository
     def uninstall(package)
-      Gem::Uninstaller.new(package, :ignore => true).uninstall
+      Gem::Uninstaller.new(package).uninstall
       true
     rescue Gem::InstallError
       false
