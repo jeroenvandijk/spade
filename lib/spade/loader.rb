@@ -178,11 +178,6 @@ module Spade
       @packages unless @packages.nil?
       @packages = {}
 
-      # add global packages in spade project
-      # globals = File.expand_path(File.join(__FILE__, '..', '..', '..', 'packages'))
-      # package_paths = Dir.glob File.join(globals,'*')
-      # package_paths.each { |path| add_package(path) }      
-
       # Do this to get the Gem.dir right
       env = Spade::Environment.new
 
