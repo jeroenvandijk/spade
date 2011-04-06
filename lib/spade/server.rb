@@ -1,6 +1,7 @@
 require 'rack'
 require 'rack/static'
 require 'tempfile'
+require 'child_labor'
 
 module Spade
   module Server
@@ -8,7 +9,7 @@ module Spade
       rootdir = Spade.discover_root(working)
       static = Rack::Static.new(nil, :urls => ['/'], :root => rootdir)
       static = CommandRunner.new(static)
-      static = Rack::ShowStatus.new(Rack::ShowExceptions.new(static))
+      static = Rack::ShowStatus.new(Rack::ShowExceptions.new(Rack::Chunked.new(Rack::ContentLength.new(static))))
 
       Rack::Handler::WEBrick.run static, :Port => port.to_i
     end
@@ -39,12 +40,22 @@ module Spade
           tempfile.write(params['code'])
           tempfile.close
 
+
           puts "Running: #{command_path}"
-          output = `#{command_path} < #{tempfile.path}`
+
+          output, error = nil
+          process = ChildLabor.subprocess("#{command_path} < #{tempfile.path}") do |p|
+            output = p.read
+            error = p.read_stderr
+          end
 
           tempfile.delete
 
-          [200, {}, output]
+          if process.exit_status == 0
+            [200, {}, output]
+          else
+            [500, {}, error]
+          end
         else
           @app.call(env)
         end

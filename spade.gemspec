@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency "json_pure",    "~> 1.4.6"
   s.add_dependency "rack",         "~> 1.2.1"
   s.add_dependency "thor",         "~> 0.14.3"
+  s.add_dependency "childlabor",   "~> 0.0.3"
   s.add_dependency "therubyracer", "~> 0.8.0" if mri
 
   s.add_development_dependency "rspec"
