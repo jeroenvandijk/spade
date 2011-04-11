@@ -6,7 +6,6 @@
 
 module Spade
   BOOT_PATH = File.expand_path(File.join(File.dirname(__FILE__), '..'));
-  BUILTIN_PACKAGES = File.join File.dirname(BOOT_PATH), 'packages'
 
   module Bundle
     class << self
@@ -24,48 +23,44 @@ module Spade
 
         installed = []
 
-
-        #TODO: Clean up duplication here
-
-        Dir.glob(File.join(BUILTIN_PACKAGES, '*')).each do |path|
-          next unless File.exists? File.join(path, 'package.json')
-
-          next if installed.include? path
-          installed << path
-
-          new_path = File.join(spade_path, 'packages', File.basename(path))
-          FileUtils.ln_s path, new_path, :force => true
-          puts "Installing built-in package #{File.basename(path)}" if verbose
-        end
-
         # Do this to get the Gem.dir right
         env = Spade::Environment.new
-        Dir.glob(File.join(env.spade_dir, 'gems', '*')).each do |path|
-          package_def = File.join(path, 'package.json')
-          next unless File.exists?(package_def)
 
-          next if installed.include? path
-          installed << path
+        # In reverse order of precedence
+        package_dirs = [File.join(env.spade_dir, 'gems')]
+        package_dirs += %w[vendor/cache vendor/packages packages].map{|p| File.join(rootdir, p.split('/')) }
 
-          json = JSON.load File.read(package_def)
-          package_name = json['name']
-          new_path = File.join(spade_path, 'packages', package_name)
-          FileUtils.ln_s path, new_path, :force => true
-          puts "Installing system package #{File.basename(path)}" if verbose
-        end
+        for package_dir in package_dirs
+          Dir.glob(File.join(package_dir, '*')).each do |path|
+            json_file = File.join(path, 'package.json')
+            next unless File.exists?(json_file)
 
+            # How would this happen?
+            next if installed.include? path
+            installed << path
 
-        Dir.glob(File.join(rootdir, 'packages', '*')).each do |path|
-          next unless File.exists? File.join(path, 'package.json')
+            json = JSON.load File.read(json_file)
+            package_name = json['name']
+            package_version = json['version']
 
-          next if installed.include? path
-          installed << path
+            local = path.index(rootdir) == 0
 
-          package_name = File.basename(path)
-          old_path = File.join('..','..','packages', package_name)
-          new_path = File.join(spade_path, 'packages', File.basename(path))
-          FileUtils.ln_s old_path, new_path, :force => true
-          puts "Installing local package #{File.basename(path)}" if verbose
+            # Use relative paths if embedded
+            old_path = if local
+              # Figure out how many levels deep the spade_path is in the project
+              levels = spade_path.sub(rootdir, '').split(File::SEPARATOR).reject{|p| p.empty? }.count
+              # Build relative path
+              File.join(['..'] * levels, path.sub(rootdir, ''))
+            else
+              path
+            end
+
+            new_path = File.join(spade_path, 'packages', package_name)
+
+            FileUtils.ln_s old_path, new_path, :force => true
+
+            puts "Installing #{local ? "local" : "remote"} package #{package_name}" if verbose
+          end
         end
 
         File.open(File.join(rootdir, 'spade-boot.js'), 'w+') do |fp|
