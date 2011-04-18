@@ -10,7 +10,7 @@ require 'spade/compiler'
 require 'spade/console'
 require 'spade/reactor'
 
-TIKIJS_PATH = File.expand_path File.join(File.dirname(__FILE__), '..', 'spade.js')
+SPADEJS_PATH = File.expand_path File.join(File.dirname(__FILE__), '..', 'spade.js')
 
 module Spade
   
@@ -86,7 +86,7 @@ module Spade
         ctx['ARGV'] = opts[:argv] || ARGV
         
         # Load spade and patch in compiler and loader plugins
-        ctx.load(TIKIJS_PATH)
+        ctx.load(SPADEJS_PATH)
         ctx['rubyLoader'] = Loader.new(self)
         ctx['rubyCompiler'] = Compiler.new(self)
         
