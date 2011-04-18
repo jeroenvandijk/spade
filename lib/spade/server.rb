@@ -57,6 +57,7 @@ module Spade
             [500, {}, error]
           end
         else
+          env['PATH_INFO'] == '/index.html' if env['PATH_INFO'] == '/'
           @app.call(env)
         end
       end
