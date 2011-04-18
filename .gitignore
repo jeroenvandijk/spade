@@ -12,3 +12,4 @@ packages/sproutcore-runtime/tests/ct-runner.js
 *.swp
 .DS_Store
 *.spd
+node_modules
