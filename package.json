@@ -1,6 +1,6 @@
 {
   "name": "spade",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "CommonJS Microkernel for Browser and Command Line",
 
   "maintainers": [
