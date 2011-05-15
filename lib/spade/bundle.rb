@@ -48,7 +48,7 @@ module Spade
             # Use relative paths if embedded
             old_path = if local
               # Figure out how many levels deep the spade_path is in the project
-              levels = spade_path.sub(rootdir, '').split(File::SEPARATOR).reject{|p| p.empty? }.count
+              levels = spade_path.sub(rootdir, '').split(File::SEPARATOR).reject{|p| p.empty? }.count + 1
               # Build relative path
               File.join(['..'] * levels, path.sub(rootdir, ''))
             else
