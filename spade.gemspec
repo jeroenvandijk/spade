@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.name        = "spade"
   s.version     = Spade::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Charles Jolley"]
-  s.email       = ["charles@sproutcore.com"]
+  s.authors     = ["Charles Jolley", "Peter Wagenet"]
+  s.email       = ["charles@sproutcore.com", "peterw@strobecorp.com"]
   s.homepage    = "http://github.com/strobecorp/spade"
   s.summary = s.description = "Unified JavaScript runner for browser and command line"
 
