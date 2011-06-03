@@ -2,7 +2,7 @@ require 'spade/dependency_installer'
 
 module Spade
   class Remote < Repository
-    include Gem::UserInteraction
+    include LibGems::UserInteraction
 
     def login(email, password)
       response = raw_request :get, "api/v1/api_key" do |req|
@@ -20,8 +20,8 @@ module Spade
 
     def push(package)
       begin
-        body = Gem.read_binary package
-        Gem::Format.from_file_by_path(package)
+        body = LibGems.read_binary package
+        LibGems::Format.from_file_by_path(package)
       rescue Exception => ex
         return "There was a problem opening your package.\n#{ex.class}: #{ex.to_s}"
       end
@@ -69,13 +69,13 @@ module Spade
     end
 
     def list_packages(packages, all, prerelease)
-      fetcher = Gem::SpecFetcher.fetcher
+      fetcher = LibGems::SpecFetcher.fetcher
       fetcher.find_matching(dependency_for(packages), all, false, prerelease).map(&:first)
     end
 
     def install(package, version, prerelease)
       inst = Spade::DependencyInstaller.new(:prerelease => prerelease)
-      inst.install package, Gem::Requirement.new([version])
+      inst.install package, LibGems::Requirement.new([version])
       inst.installed_gems
     end
 
@@ -83,12 +83,12 @@ module Spade
 
     def raw_request(method, path, &block)
       require 'net/http'
-      host = ENV['RUBYGEMS_HOST'] || Gem.host
+      host = ENV['RUBYGEMS_HOST'] || LibGems.host
       uri = URI.parse "#{host}/#{path}"
 
       request_method = Net::HTTP.const_get method.to_s.capitalize
 
-      Gem::RemoteFetcher.fetcher.request(uri, request_method, &block)
+      LibGems::RemoteFetcher.fetcher.request(uri, request_method, &block)
     end
 
     def request(method, path, &block)

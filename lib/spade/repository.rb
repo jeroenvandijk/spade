@@ -12,7 +12,7 @@ module Spade
     end
 
     def dependency_for(packages)
-      Gem::Dependency.new(/(#{packages.join('|')})/, Gem::Requirement.default)
+      LibGems::Dependency.new(/(#{packages.join('|')})/, LibGems::Requirement.default)
     end
   end
 end

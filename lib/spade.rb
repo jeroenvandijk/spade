@@ -4,12 +4,12 @@
 # License:   Licened under MIT license (see LICENSE)
 # ==========================================================================
 
-require 'rubygems'
-require 'rubygems/user_interaction'
-require 'rubygems/uninstaller'
-require 'rubygems/dependency_installer'
-require 'rubygems/gemcutter_utilities'
-require 'rubygems/validator'
+require 'libgems'
+require 'libgems/user_interaction'
+require 'libgems/uninstaller'
+require 'libgems/dependency_installer'
+require 'libgems/gemcutter_utilities'
+require 'libgems/validator'
 require 'rubygems_plugin' # Gemcutter
 
 require 'fileutils'

@@ -1,9 +1,9 @@
 module Spade
   class Local < Repository
     def uninstall(package)
-      Gem::Uninstaller.new(package).uninstall
+      LibGems::Uninstaller.new(package).uninstall
       true
-    rescue Gem::InstallError
+    rescue LibGems::InstallError
       false
     end
 
@@ -12,7 +12,7 @@ module Spade
       package.json_path = path
       if package.valid?
         silence do
-          Gem::Builder.new(package.to_spec).build
+          LibGems::Builder.new(package.to_spec).build
         end
       end
       package
@@ -22,12 +22,12 @@ module Spade
       package       = Spade::Package.new
       package.spade = path
       unpack_dir    = File.expand_path(File.join(Dir.pwd, target, package.to_full_name))
-      Gem::Installer.new(path, :unpack => true).unpack unpack_dir
+      LibGems::Installer.new(path, :unpack => true).unpack unpack_dir
       package
     end
 
     def installed(packages)
-      specs = Gem.source_index.search dependency_for(packages)
+      specs = LibGems.source_index.search dependency_for(packages)
 
       specs.map do |spec|
         [spec.name, spec.version, spec.original_platform]
@@ -37,9 +37,9 @@ module Spade
     private
 
     def silence
-      Gem.configuration.verbose = false
+      LibGems.configuration.verbose = false
       result = yield
-      Gem.configuration.verbose = true
+      LibGems.configuration.verbose = true
       result
     end
   end

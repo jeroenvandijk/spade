@@ -1,5 +1,5 @@
 module Spade
-  class Installer < Gem::Installer
+  class Installer < LibGems::Installer
 
     def app_script_text(bin_file_name)
       <<-TEXT
@@ -13,19 +13,19 @@ module Spade
 
 require 'spade'
 
-# Configures RubyGems properly
+# Configures LibGems properly
 env = Spade::Environment.new
 
-version = "#{Gem::Requirement.default}"
+version = "#{LibGems::Requirement.default}"
 
-if ARGV.first =~ /^_(.*)_$/ and Gem::Version.correct? $1 then
+if ARGV.first =~ /^_(.*)_$/ and LibGems::Version.correct? $1 then
   version = $1
   ARGV.shift
 end
 
 gem '#{@spec.name}', version
 
-path = Gem.bin_path('#{@spec.name}', '#{bin_file_name}', version)
+path = LibGems.bin_path('#{@spec.name}', '#{bin_file_name}', version)
 shebang = File.open(path){|f| f.readline }
 
 if shebang =~ /^\#\!.*ruby/

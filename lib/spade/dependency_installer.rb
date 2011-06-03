@@ -1,11 +1,11 @@
 require 'spade/installer'
 
 module Spade
-  class DependencyInstaller < Gem::DependencyInstaller
+  class DependencyInstaller < LibGems::DependencyInstaller
 
     # Had to overwrite this all just to change the match from /gem$/ to /spd$/
     def find_spec_by_name_and_version(gem_name,
-                                      version = Gem::Requirement.default,
+                                      version = LibGems::Requirement.default,
                                       prerelease = false)
       spec_and_source = nil
 
@@ -21,26 +21,26 @@ module Spade
         local_gems.each do |gem_file|
           next unless gem_file =~ /spd$/
           begin
-            spec = Gem::Format.from_file_by_path(gem_file).spec
+            spec = LibGems::Format.from_file_by_path(gem_file).spec
             spec_and_source = [spec, gem_file]
             break
-          rescue SystemCallError, Gem::Package::FormatError
+          rescue SystemCallError, LibGems::Package::FormatError
           end
         end
       end
 
       if spec_and_source.nil? then
-        dep = Gem::Dependency.new gem_name, version
+        dep = LibGems::Dependency.new gem_name, version
         dep.prerelease = true if prerelease
         spec_and_sources = find_gems_with_sources(dep).reverse
 
         spec_and_source = spec_and_sources.find { |spec, source|
-          Gem::Platform.match spec.platform
+          LibGems::Platform.match spec.platform
         }
       end
 
       if spec_and_source.nil? then
-        raise Gem::GemNotFoundException.new(
+        raise LibGems::GemNotFoundException.new(
           "Could not find a valid spd '#{gem_name}' (#{version}) locally or in a repository",
           gem_name, version, @errors)
       end
@@ -49,7 +49,7 @@ module Spade
     end
 
     # Overwrite this to use our custom installer
-    def install dep_or_name, version = Gem::Requirement.default
+    def install dep_or_name, version = LibGems::Requirement.default
       if String === dep_or_name then
         find_spec_by_name_and_version dep_or_name, version, @prerelease
       else
@@ -67,13 +67,13 @@ module Spade
         next if @source_index.any? { |n,_| n == spec.full_name } and not last
 
         # TODO: make this sorta_verbose so other users can benefit from it
-        say "Installing spd #{spec.full_name}" if Gem.configuration.really_verbose
+        say "Installing spd #{spec.full_name}" if LibGems.configuration.really_verbose
 
         _, source_uri = @specs_and_sources.assoc spec
         begin
-          local_gem_path = Gem::RemoteFetcher.fetcher.download spec, source_uri,
+          local_gem_path = LibGems::RemoteFetcher.fetcher.download spec, source_uri,
                                                                @cache_dir
-        rescue Gem::RemoteFetcher::FetchError
+        rescue LibGems::RemoteFetcher::FetchError
           next if @force
           raise
         end

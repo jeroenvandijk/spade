@@ -133,11 +133,11 @@ module Spade::CLI
             say "Successfully installed #{spec.full_name}"
           end
         end
-      rescue Gem::InstallError => e
+      rescue LibGems::InstallError => e
         abort "Install error: #{e}"
-      rescue Gem::GemNotFoundException => e
+      rescue LibGems::GemNotFoundException => e
         abort "Can't find package #{e.name} #{e.version} available for install"
-      rescue Errno::EACCES, Gem::FilePermissionError => e
+      rescue Errno::EACCES, LibGems::FilePermissionError => e
         abort e.message
       end
     end
@@ -266,7 +266,7 @@ module Spade::CLI
           package     = local.unpack(path, options[:target])
           unpack_path = File.expand_path(File.join(Dir.pwd, options[:target], package.to_full_name))
           puts "Unpacked spade into: #{unpack_path}"
-        rescue Errno::EACCES, Gem::FilePermissionError => ex
+        rescue Errno::EACCES, LibGems::FilePermissionError => ex
           abort "There was a problem unpacking #{path}:\n#{ex.message}"
         end
       end

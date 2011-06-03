@@ -19,9 +19,9 @@ describe "spade build when logged in" do
     output = stdout.read
     output.should include("Successfully built package: core-test-0.4.3.spd")
 
-    package = Gem::Format.from_file_by_path("core-test-0.4.3.spd")
+    package = LibGems::Format.from_file_by_path("core-test-0.4.3.spd")
     package.spec.name.should == "core-test"
-    package.spec.version.should == Gem::Version.new("0.4.3")
+    package.spec.version.should == LibGems::Version.new("0.4.3")
     package.spec.email.should == email
   end
 end

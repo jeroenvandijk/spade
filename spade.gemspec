@@ -13,11 +13,10 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/strobecorp/spade"
   s.summary = s.description = "Unified JavaScript runner for browser and command line"
 
-  s.required_rubygems_version = "~> 1.7.1"
-
   mswin = RbConfig::CONFIG["host_os"] =~ %r!(msdos|mswin|djgpp|mingw)!
   mri = !mswin && (!defined?(RUBY_ENGINE) || RUBY_ENGINE == "ruby")
 
+  s.add_dependency "libgems"
   s.add_dependency "gemcutter",    "~> 0.6.1"
   s.add_dependency "eventmachine", "~> 0.12.10"
   s.add_dependency "highline",     "~> 1.6.1"

@@ -23,7 +23,7 @@ module Spade
 
         installed = []
 
-        # Do this to get the Gem.dir right
+        # Do this to get the LibGems.dir right
         env = Spade::Environment.new
 
         # In reverse order of precedence

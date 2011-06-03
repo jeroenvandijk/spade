@@ -178,7 +178,7 @@ module Spade
       @packages unless @packages.nil?
       @packages = {}
 
-      # Do this to get the Gem.dir right
+      # Do this to get the LibGems.dir right
       env = Spade::Environment.new
 
       package_paths = Dir.glob(File.join(env.spade_dir, 'gems', '*'))

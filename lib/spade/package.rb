@@ -11,13 +11,13 @@ module Spade
     end
 
     def spade=(path)
-      format = Gem::Format.from_file_by_path(path)
+      format = LibGems::Format.from_file_by_path(path)
       fill_from_gemspec(format.spec)
     end
 
     def to_spec
       return unless valid?
-      Gem::Specification.new do |spec|
+      LibGems::Specification.new do |spec|
         spec.name              = name
         spec.version           = version
         spec.authors           = [author]
@@ -119,7 +119,7 @@ module Spade
     end
 
     def validate_version
-      Gem::Version.new(version)
+      LibGems::Version.new(version)
       true
     rescue ArgumentError => ex
       add_error ex.to_s

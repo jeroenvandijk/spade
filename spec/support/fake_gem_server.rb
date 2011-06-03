@@ -2,7 +2,7 @@ class FakeGemServer
   include SpecHelpers
 
   def index(name, version)
-    [name, Gem::Version.new(version), "ruby"]
+    [name, LibGems::Version.new(version), "ruby"]
   end
 
   def call(env)
@@ -36,8 +36,8 @@ class FakeGemServer
       [200, {"Content-Type" => "application/octet-stream"}, compress(big_index)]
     elsif request.path =~ /\/quick\/Marshal\.4\.8\/(.*)\.gemspec\.rz$/
 
-      spec  = Gem::Format.from_file_by_path(gem_or_spade($1).to_s).spec
-      value = Gem.deflate(Marshal.dump(spec))
+      spec  = LibGems::Format.from_file_by_path(gem_or_spade($1).to_s).spec
+      value = LibGems.deflate(Marshal.dump(spec))
 
       [200, {"Content-Type" => "application/octet-stream"}, value]
     elsif request.path =~ /\/gems\/(.*)\.gem$/

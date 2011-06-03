@@ -26,7 +26,7 @@ describe Spade::Package, "#to_spec" do
   end
 
   it "transforms the version" do
-    subject.version.should == Gem::Version.new("0.4.3")
+    subject.version.should == LibGems::Version.new("0.4.3")
   end
 
   it "transforms the author" do

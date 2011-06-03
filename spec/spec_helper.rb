@@ -1,7 +1,7 @@
 require 'spade'
 
 require 'logger'
-require 'rubygems/format'
+require 'libgems/format'
 
 Bundler.require :default, :development
 
