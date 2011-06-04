@@ -9,7 +9,7 @@ describe "spade list" do
   end
 
   it "lists latest spades by default" do
-    spade "list"
+    spade "package", "list"
 
     output = stdout.read
     output.should include("builder (3.0.0)")
@@ -17,7 +17,7 @@ describe "spade list" do
   end
 
   it "lists all spades when given the all argument" do
-    spade "list", "-a"
+    spade "package", "list", "-a"
 
     output = stdout.read
     output.should include("builder (3.0.0)")
@@ -25,7 +25,7 @@ describe "spade list" do
   end
 
   it "filters spades when given an argument" do
-    spade "list", "builder"
+    spade "package", "list", "builder"
 
     output = stdout.read
     output.should include("builder (3.0.0)")
@@ -33,7 +33,7 @@ describe "spade list" do
   end
 
   it "filters spades when given an argument and shows all versions" do
-    spade "list", "rake", "-a"
+    spade "package", "list", "rake", "-a"
 
     output = stdout.read
     output.should include("rake (0.8.7, 0.8.6)")
@@ -41,7 +41,7 @@ describe "spade list" do
   end
 
   it "filters multiple spades" do
-    spade "list", "rake", "highline"
+    spade "package", "list", "rake", "highline"
 
     output = stdout.read
     output.should include("highline (1.6.1)")
@@ -50,7 +50,7 @@ describe "spade list" do
   end
 
   it "shows prerelease spades" do
-    spade "list", "--prerelease"
+    spade "package", "list", "--prerelease"
 
     output = stdout.read
     output.should include("bundler (1.1.pre)")
@@ -60,14 +60,14 @@ describe "spade list" do
   end
 
   it "says it couldn't find any if none found" do
-    spade "list", "rails", :track_stderr => true
+    spade "package", "list", "rails", :track_stderr => true
 
     stderr.read.strip.should == 'No packages found matching "rails".'
     exit_status.should_not be_success
   end
 
   it "says it couldn't find any if none found matching multiple packages" do
-    spade "list", "rails", "bake", :track_stderr => true
+    spade "package", "list", "rails", "bake", :track_stderr => true
 
     stderr.read.strip.should == 'No packages found matching "rails", "bake".'
     exit_status.should_not be_success

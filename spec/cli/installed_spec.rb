@@ -11,9 +11,9 @@ describe "spade installed" do
   end
 
   it "lists installed spades" do
-    spade "install", "rake"
+    spade "package", "install", "rake"
     wait
-    spade "installed"
+    spade "package", "installed"
 
     output = stdout.read
     output.should include("rake (0.8.7)")
@@ -24,22 +24,22 @@ describe "spade installed" do
   end
 
   it "lists all installed spades from different versions" do
-    spade "install", "rake"
+    spade "package", "install", "rake"
     wait
-    spade "install", "rake", "-v", "0.8.6"
+    spade "package", "install", "rake", "-v", "0.8.6"
     wait
-    spade "installed"
+    spade "package", "installed"
 
     output = stdout.read
     output.should include("rake (0.8.7, 0.8.6)")
   end
 
   it "filters spades when given an argument" do
-    spade "install", "rake"
+    spade "package", "install", "rake"
     wait
-    spade "install", "builder"
+    spade "package", "install", "builder"
     wait
-    spade "installed", "builder"
+    spade "package", "installed", "builder"
 
     output = stdout.read
     output.should_not include("rake")
@@ -47,7 +47,7 @@ describe "spade installed" do
   end
 
   it "says it couldn't find any if none found" do
-    spade "installed", "rails", :track_stderr => true
+    spade "package", "installed", "rails", :track_stderr => true
 
     stderr.read.strip.should == 'No packages found matching "rails".'
     exit_status.should_not be_success

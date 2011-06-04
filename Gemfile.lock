@@ -8,12 +8,30 @@ PATH
   remote: .
   specs:
     spade (0.0.8.1)
+      spade-packager
+      spade-runtime
+
+PATH
+  remote: vendor/spade-packager
+  specs:
+    spade-packager (0.1.0)
       childlabor (~> 0.0.3)
       eventmachine (~> 0.12.10)
       gemcutter (~> 0.6.1)
       highline (~> 1.6.1)
       json_pure (~> 1.4.6)
       libgems
+      rack (~> 1.2.1)
+      thor (~> 0.14.3)
+
+PATH
+  remote: vendor/spade-runtime
+  specs:
+    spade-runtime (0.1.0)
+      childlabor (~> 0.0.3)
+      eventmachine (~> 0.12.10)
+      highline (~> 1.6.1)
+      json_pure (~> 1.4.6)
       rack (~> 1.2.1)
       therubyracer (~> 0.8.0)
       thor (~> 0.14.3)
@@ -47,4 +65,6 @@ DEPENDENCIES
   libgems!
   rspec
   spade!
+  spade-packager!
+  spade-runtime!
   test-unit

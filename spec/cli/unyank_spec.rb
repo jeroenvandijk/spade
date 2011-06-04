@@ -17,19 +17,19 @@ describe "spade unyank" do
     end
 
     it "unyanks a gem when sent with the right api key" do
-      spade "yank", "core-test", "--undo", "-v", "1.4.3"
+      spade "package", "yank", "core-test", "--undo", "-v", "1.4.3"
 
       stdout.read.should include("Successfully unyanked gem: core-test (1.4.3)")
     end
 
     it "must unyank a valid gem" do
-      spade "yank", "blahblah", "--undo", "-v", "0.0.1"
+      spade "package", "yank", "blahblah", "--undo", "-v", "0.0.1"
 
       stdout.read.should include("This gem could not be found")
     end
 
     it "does not unyank and indexed gem" do
-      spade "yank", "core-test", "--undo", "-v", "2.4.3"
+      spade "package", "yank", "core-test", "--undo", "-v", "2.4.3"
 
       stdout.read.should include("The version 2.4.3 is already indexed.")
     end
@@ -38,7 +38,7 @@ describe "spade unyank" do
   it "shows rejection message if wrong api key is supplied" do
     write_api_key("beefbeef")
 
-    spade "yank", "core-test", "--undo", "-v", "1.4.3"
+    spade "package", "yank", "core-test", "--undo", "-v", "1.4.3"
 
     stdout.read.should include("One cannot simply walk into Mordor!")
   end
@@ -53,7 +53,7 @@ describe "spade unyank with invalid api key" do
   end
 
   it "must require a version" do
-    spade "yank", "core-test", "--undo"
+    spade "package", "yank", "core-test", "--undo"
 
     stdout.read.should include("Version required")
   end
@@ -67,7 +67,7 @@ describe "spade unyank without api key" do
   end
 
   it "asks for login first if api key does not exist" do
-    spade "yank", "core-test", "-v", "1.4.3", "--undo"
+    spade "package", "yank", "core-test", "-v", "1.4.3", "--undo"
 
     stdout.read.should include("Please login first with `spade login`")
   end

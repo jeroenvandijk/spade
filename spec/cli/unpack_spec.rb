@@ -8,7 +8,7 @@ describe "spade unpack" do
 
   it "builds a gem from a given package.json" do
     FileUtils.cp fixtures("coffee-1.0.1.pre.spd"), "."
-    spade "unpack", "coffee-1.0.1.pre.spd"
+    spade "package", "unpack", "coffee-1.0.1.pre.spd"
 
     exit_status.should be_success
     output = stdout.read
@@ -24,7 +24,7 @@ describe "spade unpack" do
 
   it "can unpack to a different directory" do
     FileUtils.cp fixtures("coffee-1.0.1.pre.spd"), "."
-    spade "unpack", "coffee-1.0.1.pre.spd", "--target", "star/bucks"
+    spade "package", "unpack", "coffee-1.0.1.pre.spd", "--target", "star/bucks"
 
     exit_status.should be_success
     output = stdout.read
@@ -36,7 +36,7 @@ describe "spade unpack" do
   it "can unpack more than one spade" do
     FileUtils.cp fixtures("coffee-1.0.1.pre.spd"), "."
     FileUtils.cp fixtures("jquery-1.4.3.spd"), "."
-    spade "unpack", "coffee-1.0.1.pre.spd", "jquery-1.4.3.spd"
+    spade "package", "unpack", "coffee-1.0.1.pre.spd", "jquery-1.4.3.spd"
 
     exit_status.should be_success
     output = stdout.read
@@ -52,7 +52,7 @@ describe "spade unpack" do
     cd(home("bad"))
     FileUtils.cp fixtures("jquery-1.4.3.spd"), "."
     FileUtils.chmod 0555, "."
-    spade "unpack", "jquery-1.4.3.spd", :track_stderr => true
+    spade "package", "unpack", "jquery-1.4.3.spd", :track_stderr => true
 
     exit_status.should_not be_success
     output = stderr.read
@@ -63,7 +63,7 @@ describe "spade unpack" do
   it "shows a friendly error message if spade can't read the package" do
     FileUtils.cp fixtures("jquery-1.4.3.spd"), "."
     FileUtils.chmod 0000, "jquery-1.4.3.spd"
-    spade "unpack", "jquery-1.4.3.spd", :track_stderr => true
+    spade "package", "unpack", "jquery-1.4.3.spd", :track_stderr => true
 
     exit_status.should_not be_success
     output = stderr.read

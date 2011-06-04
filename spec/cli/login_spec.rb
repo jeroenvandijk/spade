@@ -23,7 +23,7 @@ describe "spade login" do
   end
 
   it "says email that user is logging in as" do
-    spade "login"
+    spade "package", "login"
     input email
     input password
     output = stdout.read
@@ -32,7 +32,7 @@ describe "spade login" do
   end
 
   it "makes a request out for the api key and stores it in SPADE_DIR/credentials" do
-    spade "login"
+    spade "package", "login"
     input email
     input password
 
@@ -43,7 +43,7 @@ describe "spade login" do
   end
 
   it "notifies user if bad creds given" do
-    spade "login", :track_stderr => true
+    spade "package", "login", :track_stderr => true
     input email
     input "badpassword"
     sleep 1
@@ -54,7 +54,7 @@ describe "spade login" do
   end
 
   it "allows the user to retry if bad creds given" do
-    spade "login"
+    spade "package", "login"
     input "bademail@example.com"
     input "badpassword"
 

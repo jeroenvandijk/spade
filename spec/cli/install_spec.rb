@@ -9,7 +9,7 @@ describe "spade install" do
   end
 
   it "installs a valid gem" do
-    spade "install", "rake"
+    spade "package", "install", "rake"
 
     stdout.read.should include("Successfully installed rake-0.8.7")
 
@@ -18,7 +18,7 @@ describe "spade install" do
   end
 
   it "installs a multiple gems" do
-    spade "install", "rake", "builder"
+    spade "package", "install", "rake", "builder"
 
     output = stdout.read
 
@@ -30,7 +30,7 @@ describe "spade install" do
   end
 
   it "installs valid gems while ignoring invalid ones" do
-    spade "install", "rake", "fake", :track_stderr => true
+    spade "package", "install", "rake", "fake", :track_stderr => true
 
     stdout.read.should include("Successfully installed rake-0.8.7")
     stderr.read.should include("Can't find package fake")
@@ -42,7 +42,7 @@ describe "spade install" do
   end
 
   it "fails when installing an invalid gem" do
-    spade "install", "fake", :track_stderr => true
+    spade "package", "install", "fake", :track_stderr => true
 
     stderr.read.should include("Can't find package fake")
     "rake-0.8.7".should_not be_fetched
@@ -55,7 +55,7 @@ describe "spade install" do
     FileUtils.mkdir_p spade_dir
     FileUtils.chmod 0555, spade_dir
 
-    spade "install", "rake", :track_stderr => true
+    spade "package", "install", "rake", :track_stderr => true
     exit_status.should_not be_success
 
     "rake-0.8.7".should_not be_fetched
@@ -63,7 +63,7 @@ describe "spade install" do
   end
 
   it "installs gems with a different version" do
-    spade "install", "rake", "-v", "0.8.6"
+    spade "package", "install", "rake", "-v", "0.8.6"
 
     stdout.read.should include("Successfully installed rake-0.8.6")
 
@@ -74,7 +74,7 @@ describe "spade install" do
   end
 
   it "installs a valid prerelease package" do
-    spade "install", "bundler", "--pre"
+    spade "package", "install", "bundler", "--pre"
 
     stdout.read.should include("Successfully installed bundler-1.1.pre")
 
@@ -83,7 +83,7 @@ describe "spade install" do
   end
 
   it "does not install the normal package when asking for a prerelease" do
-    spade "install", "rake", "--pre", :track_stderr => true
+    spade "package", "install", "rake", "--pre", :track_stderr => true
 
     stderr.read.should include("Can't find package rake")
 
@@ -94,18 +94,18 @@ describe "spade install" do
   end
 
   it "requires at least one package to install" do
-    spade "install", :track_stderr => true
+    spade "package", "install", :track_stderr => true
     stderr.read.should include("called incorrectly")
   end
 
   it "does not make a .gem directory" do
-    spade "install", "rake"
+    spade "package", "install", "rake"
     wait
     home(".gem").exist?.should be_false
   end
 
   it "installs gem dependencies" do
-    spade "install", "core-test"
+    spade "package", "install", "core-test"
 
     output = stdout.read
 

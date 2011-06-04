@@ -17,19 +17,19 @@ describe "spade owner" do
     end
 
     it "registers new owners if package is owned" do
-      spade "owner", "add", "rake", "geddy@example.com"
+      spade "package", "owner", "add", "rake", "geddy@example.com"
 
       stdout.read.should include("Owner added successfully.")
     end
 
     it "removes owners if package is owned" do
-      spade "owner", "remove", "rake", "geddy@example.com"
+      spade "package", "owner", "remove", "rake", "geddy@example.com"
 
       stdout.read.should include("Owner removed successfully.")
     end
 
     it "lists owners for a gem" do
-      spade "owner", "list", "rake"
+      spade "package", "owner", "list", "rake"
 
       stdout.read.should == <<EOF
 Owners for package: rake
@@ -45,19 +45,19 @@ EOF
     end
 
     it "shows rejection message for add if wrong api key is supplied" do
-      spade "owner", "add", "rake", "geddy@example.com"
+      spade "package", "owner", "add", "rake", "geddy@example.com"
 
       stdout.read.should include("One cannot simply walk into Mordor!")
     end
 
     it "shows rejection message for remove if wrong api key is supplied" do
-      spade "owner", "remove", "rake", "geddy@example.com"
+      spade "package", "owner", "remove", "rake", "geddy@example.com"
 
       stdout.read.should include("One cannot simply walk into Mordor!")
     end
 
     it "shows rejection message for list if wrong api key is supplied" do
-      spade "owner", "list", "rake"
+      spade "package", "owner", "list", "rake"
 
       stdout.read.should include("One cannot simply walk into Mordor!")
     end
@@ -72,43 +72,43 @@ describe "spade owner with wrong arguments" do
   end
 
   it "asks for login first if api key does not exist" do
-    spade "owner", "add", "rake", "geddy@example.com", :track_stderr => true
+    spade "package", "owner", "add", "rake", "geddy@example.com", :track_stderr => true
 
     stderr.read.should include("Please login first with `spade login`")
   end
 
   it "asks for login first if api key does not exist" do
-    spade "owner", "remove", "rake", "geddy@example.com", :track_stderr => true
+    spade "package", "owner", "remove", "rake", "geddy@example.com", :track_stderr => true
 
     stderr.read.should include("Please login first with `spade login`")
   end
 
   it "asks for login first if api key does not exist" do
-    spade "owner", "list", "rake", :track_stderr => true
+    spade "package", "owner", "list", "rake", :track_stderr => true
 
     stderr.read.should include("Please login first with `spade login`")
   end
 
   it "requires a package name for add" do
-    spade "owner", "add", :track_stderr => true
+    spade "package", "owner", "add", :track_stderr => true
 
     stderr.read.should include("called incorrectly")
   end
 
   it "requires a package name for remove" do
-    spade "owner", "remove", :track_stderr => true
+    spade "package", "owner", "remove", :track_stderr => true
 
     stderr.read.should include("called incorrectly")
   end
 
   it "requires a package name for list" do
-    spade "owner", "list", :track_stderr => true
+    spade "package", "owner", "list", :track_stderr => true
 
     stderr.read.should include("called incorrectly")
   end
 
   it "requires a package name for list with default command" do
-    spade "owner", :track_stderr => true
+    spade "package", "owner", :track_stderr => true
 
     stderr.read.should include("called incorrectly")
   end

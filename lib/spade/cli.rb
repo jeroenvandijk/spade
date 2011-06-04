@@ -4,12 +4,19 @@
 # License:   Licened under MIT license (see LICENSE)
 # ==========================================================================
 
+require 'thor'
+require 'spade/packager/cli/commands'
+require 'spade/packager/cli/project_generator'
+require 'spade/runtime/cli/commands'
+
 module Spade
   module CLI
-    require 'spade/cli/owner'
-    require 'spade/cli/base'
-    require 'spade/cli/project_generator'
+    class Base < Thor
+      desc "package", "Manage packages"
+      subcommand "package", Spade::Packager::CLI::Commands
 
-    LOGIN_MESSAGE = "Please login first with `spade login`."
+      desc "runtime", "Run Spade packages and applications"
+      subcommand "runtime", Spade::Runtime::CLI::Commands
+    end
   end
 end

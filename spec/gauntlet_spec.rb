@@ -17,7 +17,7 @@ describe "spade build the gauntlet" do
     it "builds a spade from #{package}" do
       FileUtils.cp_r root.join("packages/#{package}"), package
       cd package
-      spade "build"
+      spade "package", "build"
 
       exit_status.should be_success
       stdout.read.should include("Successfully built package: #{package}-#{version}.spd")
