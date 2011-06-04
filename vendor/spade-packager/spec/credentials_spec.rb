@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Spade::Credentials do
+describe Spade::Packager::Credentials do
   def new_creds
-    Spade::Credentials.new(Spade::Environment.new)
+    Spade::Packager::Credentials.new(Spade::Packager::Environment.new)
   end
 
   around do |example|

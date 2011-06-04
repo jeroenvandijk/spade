@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Spade::Package, "#to_spec" do
+describe Spade::Packager::Package, "#to_spec" do
   let(:email) { "user@example.com" }
 
   before do
@@ -11,7 +11,7 @@ describe Spade::Package, "#to_spec" do
   end
 
   subject do
-    package = Spade::Package.new(email)
+    package = Spade::Packager::Package.new(email)
     package.json_path = fixtures("package.json")
     if spec = package.to_spec
       spec
@@ -90,11 +90,11 @@ describe Spade::Package, "#to_spec" do
   end
 end
 
-describe Spade::Package, "#to_s" do
+describe Spade::Packager::Package, "#to_s" do
   let(:email) { "user@example.com" }
 
   subject do
-    package = Spade::Package.new
+    package = Spade::Packager::Package.new
     package.json_path = fixtures("package.json")
     package.valid?
     package
@@ -105,13 +105,13 @@ describe Spade::Package, "#to_s" do
   end
 end
 
-describe Spade::Package, "converting" do
+describe Spade::Packager::Package, "converting" do
   before do
     cd(home)
   end
 
   subject do
-    package = Spade::Package.new
+    package = Spade::Packager::Package.new
     package.spade = fixtures("core-test-0.4.3.spd")
     package.as_json
   end
@@ -121,12 +121,12 @@ describe Spade::Package, "converting" do
   end
 end
 
-describe Spade::Package, "validating" do
+describe Spade::Packager::Package, "validating" do
   before do
     cd(home)
   end
 
-  subject { Spade::Package.new }
+  subject { Spade::Packager::Package.new }
 
   shared_examples_for "a good parser" do
     it "had a problem parsing package.json" do
@@ -170,7 +170,7 @@ describe Spade::Package, "validating" do
 
 end
 
-describe Spade::Package, "validation errors" do
+describe Spade::Packager::Package, "validation errors" do
   let(:email) { "user@example.com" }
 
   before do
@@ -180,7 +180,7 @@ describe Spade::Package, "validation errors" do
   end
 
   subject do
-    Spade::Package.new(email)
+    Spade::Packager::Package.new(email)
   end
 
   def write_package
