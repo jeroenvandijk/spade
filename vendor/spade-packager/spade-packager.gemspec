@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
   s.add_dependency "childlabor",   "~> 0.0.3"
 
   s.add_development_dependency "rspec"
-  s.add_development_dependency "system_timer" if mri && RUBY_VERSION < "1.9"
 
   #paths = `git submodule`.split("\n").map do |line|
   #  path = line.gsub(/^ \w+ ([^\s]+) .+$/,'\1')

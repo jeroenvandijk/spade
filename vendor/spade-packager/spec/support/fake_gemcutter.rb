@@ -47,3 +47,4 @@ class FakeGemcutter
     end
   end
 end
+

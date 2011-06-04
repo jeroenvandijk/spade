@@ -1,0 +1,5 @@
+source 'http://rubygems.org'
+
+gem "libgems", :git => "git://github.com/strobecorp/libgems.git"
+
+gemspec

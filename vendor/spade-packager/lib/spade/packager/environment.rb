@@ -1,4 +1,4 @@
-module Spade
+module Spade::Packager
   class Environment
     def self.spade_dir=(spade_dir)
       @spade_dir = spade_dir
@@ -19,7 +19,7 @@ module Spade
 
       spade_fetcher = LibGems::SpecFetcher.new
       def spade_fetcher.cache_dir(uri)
-        Spade::Environment.spade_dir("#{uri.host}%#{uri.port}", File.dirname(uri.path))
+        Spade::Packager::Environment.spade_dir("#{uri.host}%#{uri.port}", File.dirname(uri.path))
       end
 
       # Do it again, since it got overridden
@@ -33,3 +33,4 @@ module Spade
     end
   end
 end
+

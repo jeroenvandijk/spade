@@ -1,4 +1,7 @@
-module Spade
+require 'spade/packager/environment'
+require 'spade/packager/credentials'
+
+module Spade::Packager
   class Repository
     attr_accessor :env, :creds
 
@@ -16,3 +19,4 @@ module Spade
     end
   end
 end
+

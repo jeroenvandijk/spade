@@ -1,4 +1,6 @@
-module Spade
+require 'json'
+
+module Spade::Packager
   class Package
     EXT      = "spd"
     METADATA = %w[keywords licenses engines main bin directories]
@@ -155,3 +157,4 @@ module Spade
     end
   end
 end
+

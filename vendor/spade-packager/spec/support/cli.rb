@@ -1,5 +1,13 @@
+require 'spade/packager/cli/commands'
+
 module SpecHelpers
   attr_reader :stdin, :stdout, :stderr
+
+  # Dummy wrapper for testing
+  class CLI < Thor
+    desc "package", "Package commands"
+    subcommand "package", Spade::Packager::CLI::Commands
+  end
 
   def env
     @env ||= {}
@@ -29,7 +37,7 @@ module SpecHelpers
         ENV[key] = val
       end
 
-      Spade::CLI::Base.start(argv)
+      CLI.start(argv)
     end
 
     @stdout_child.close
@@ -92,3 +100,4 @@ module SpecHelpers
     end
   end
 end
+

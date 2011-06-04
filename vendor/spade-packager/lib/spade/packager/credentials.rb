@@ -1,4 +1,4 @@
-module Spade
+module Spade::Packager
   class Credentials
     attr_reader :email, :api_key
 
@@ -34,3 +34,4 @@ module Spade
     end
   end
 end
+

@@ -1,4 +1,5 @@
 require "spec_helper"
+require "libgems/format"
 
 describe "spade build when logged in" do
   let(:email) { "who@example.com" }

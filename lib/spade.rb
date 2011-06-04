@@ -24,8 +24,6 @@ require 'thor'
 require 'v8'
 
 module Spade
-  SPADE_DIR = '.spade' # Would be nice to share this with node.js loader
-
   # find the current path with a package.json or .packages or cur_path
   def self.discover_root(cur_path)
     ret = File.expand_path(cur_path)

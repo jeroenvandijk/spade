@@ -1,3 +1,7 @@
+require 'thor'
+require 'highline'
+require 'spade/packager/local'
+require 'spade/packager/remote'
 require 'spade/packager/cli/owner'
 
 module Spade
@@ -22,7 +26,7 @@ module Spade
 
           begin
             packages.each do |package|
-              installed = Spade::Remote.new.install(package, options[:version], options[:prerelease])
+              installed = Spade::Packager::Remote.new.install(package, options[:version], options[:prerelease])
               installed.each do |spec|
                 say "Successfully installed #{spec.full_name}"
               end
@@ -38,14 +42,14 @@ module Spade
 
         desc "package installed [PACKAGE]", "Shows what spade packages are installed"
         def installed(*packages)
-          local = Spade::Local.new
+          local = Spade::Packager::Local.new
           index = local.installed(packages)
           print_specs(packages, index)
         end
 
         desc "package uninstall [PACKAGE]", "Uninstalls one or many packages"
         def uninstall(*packages)
-          local = Spade::Local.new
+          local = Spade::Packager::Local.new
           if packages.size > 0
             packages.each do |package|
               if !local.uninstall(package)
@@ -78,7 +82,7 @@ module Spade
 
           say "\nLogging in as #{email}..."
 
-          if Spade::Remote.new.login(email, password)
+          if Spade::Packager::Remote.new.login(email, password)
             say "Logged in!"
           else
             say "Incorrect email or password."
@@ -88,7 +92,7 @@ module Spade
 
         desc "package push", "Distribute your spade package"
         def push(package)
-          remote = Spade::Remote.new
+          remote = Spade::Packager::Remote.new
           if remote.logged_in?
             say remote.push(package)
           else
@@ -101,7 +105,7 @@ module Spade
         method_option :undo,    :type => :boolean, :default => false,                        :desc => 'Unyank package'
         def yank(package)
           if options[:version]
-            remote = Spade::Remote.new
+            remote = Spade::Packager::Remote.new
             if remote.logged_in?
               if options[:undo]
                 say remote.unyank(package, options[:version])
@@ -120,7 +124,7 @@ module Spade
         method_option :all,        :type => :boolean, :default => false, :aliases => ['-a'],    :desc => 'List all versions available'
         method_option :prerelease, :type => :boolean, :default => false, :aliases => ['--pre'], :desc => 'List prerelease versions available'
         def list(*packages)
-          remote = Spade::Remote.new
+          remote = Spade::Packager::Remote.new
           index  = remote.list_packages(packages, options[:all], options[:prerelease])
           print_specs(packages, index)
         end
@@ -133,7 +137,7 @@ module Spade
 
         desc "package build", "Build a spade package from a package.json"
         def build
-          local = Spade::Local.new
+          local = Spade::Packager::Local.new
           if local.logged_in?
             package = local.pack("package.json")
             if package.errors.empty?
@@ -153,7 +157,7 @@ module Spade
         desc "package unpack [PACKAGE]", "Extract files from a spade package"
         method_option :target, :type => :string, :default => ".", :aliases => ['-t'], :desc => 'Unpack to given directory'
         def unpack(*paths)
-          local = Spade::Local.new
+          local = Spade::Packager::Local.new
 
           paths.each do |path|
             begin

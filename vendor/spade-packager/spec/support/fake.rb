@@ -1,4 +1,7 @@
 require 'rack'
+require 'logger'
+require 'timeout'
+require 'net/http'
 
 module SpecHelpers
   class Fake
@@ -37,8 +40,9 @@ module SpecHelpers
           Net::HTTP.get_response(uri)
         end
         true
-      rescue Exception => ex
+      rescue Timeout::Error, SystemCallError
         false
       end
     end
 end
+

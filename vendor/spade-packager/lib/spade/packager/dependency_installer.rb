@@ -1,6 +1,7 @@
-require 'spade/installer'
+require 'spade/packager/installer'
+require 'libgems/dependency_installer'
 
-module Spade
+module Spade::Packager
   class DependencyInstaller < LibGems::DependencyInstaller
 
     # Had to overwrite this all just to change the match from /gem$/ to /spd$/
@@ -78,7 +79,7 @@ module Spade
           raise
         end
 
-        inst = Spade::Installer.new local_gem_path,
+        inst = Spade::Packager::Installer.new local_gem_path,
                                   :bin_dir             => @bin_dir,
                                   :development         => @development,
                                   :env_shebang         => @env_shebang,
@@ -101,3 +102,4 @@ module Spade
 
   end
 end
+

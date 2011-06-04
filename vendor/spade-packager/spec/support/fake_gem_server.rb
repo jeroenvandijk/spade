@@ -64,3 +64,4 @@ class FakeGemServer
     end
 
 end
+

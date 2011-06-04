@@ -1,6 +1,7 @@
-require 'spade/dependency_installer'
+require 'spade/packager/repository'
+require 'spade/packager/dependency_installer'
 
-module Spade
+module Spade::Packager
   class Remote < Repository
     include LibGems::UserInteraction
 
@@ -74,7 +75,7 @@ module Spade
     end
 
     def install(package, version, prerelease)
-      inst = Spade::DependencyInstaller.new(:prerelease => prerelease)
+      inst = Spade::Packager::DependencyInstaller.new(:prerelease => prerelease)
       inst.install package, LibGems::Requirement.new([version])
       inst.installed_gems
     end
@@ -97,3 +98,4 @@ module Spade
     end
   end
 end
+

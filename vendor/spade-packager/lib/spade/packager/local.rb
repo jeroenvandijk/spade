@@ -1,4 +1,8 @@
-module Spade
+require 'spade/packager/repository'
+require 'spade/packager/package'
+require 'libgems/uninstaller'
+
+module Spade::Packager
   class Local < Repository
     def uninstall(package)
       LibGems::Uninstaller.new(package).uninstall
@@ -8,7 +12,7 @@ module Spade
     end
 
     def pack(path)
-      package = Spade::Package.new(creds.email)
+      package = Spade::Packager::Package.new(creds.email)
       package.json_path = path
       if package.valid?
         silence do
@@ -19,7 +23,7 @@ module Spade
     end
 
     def unpack(path, target)
-      package       = Spade::Package.new
+      package       = Spade::Packager::Package.new
       package.spade = path
       unpack_dir    = File.expand_path(File.join(Dir.pwd, target, package.to_full_name))
       LibGems::Installer.new(path, :unpack => true).unpack unpack_dir
@@ -44,3 +48,4 @@ module Spade
     end
   end
 end
+

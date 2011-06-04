@@ -1,4 +1,6 @@
-module Spade
+require 'libgems/installer'
+
+module Spade::Packager
   class Installer < LibGems::Installer
 
     def app_script_text(bin_file_name)
@@ -11,10 +13,10 @@ module Spade
 # this file is here to facilitate running it.
 #
 
-require 'spade'
+require 'spade/packager/environment'
 
 # Configures LibGems properly
-env = Spade::Environment.new
+env = Spade::Packager::Environment.new
 
 version = "#{LibGems::Requirement.default}"
 
@@ -38,3 +40,4 @@ TEXT
 
   end
 end
+

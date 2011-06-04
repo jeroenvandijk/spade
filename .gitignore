@@ -1,7 +1,6 @@
 tmp
 .bundle
 devbin
-*.gem
 spade-boot.js
 .spade
 examples/web-app/spade-boot.js
