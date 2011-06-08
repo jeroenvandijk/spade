@@ -6,7 +6,7 @@
 
 require 'eventmachine'
 
-module Spade
+module Spade::Runtime
 
   # The reactor exposes some API 
   class Reactor

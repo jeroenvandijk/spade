@@ -5,7 +5,7 @@
 # ==========================================================================
 
 
-module Spade
+module Spade::Runtime
   
   class Console
     

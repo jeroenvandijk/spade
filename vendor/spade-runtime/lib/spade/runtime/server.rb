@@ -3,7 +3,7 @@ require 'rack/static'
 require 'tempfile'
 require 'child_labor'
 
-module Spade
+module Spade::Runtime
   module Server
     def self.run(working, port)
       rootdir = Spade.discover_root(working)

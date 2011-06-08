@@ -4,7 +4,7 @@
 # License:   Licened under MIT license (see LICENSE)
 # ==========================================================================
 
-module Spade
+module Spade::Runtime
 
   # Compiler plugin for the default context.  Know how to create a new
   # isolated context for the object

@@ -1,7 +1,9 @@
+require 'thor'
+
 module Spade
   module Runtime
     module CLI
-      class Commands < Thor
+      class Base < Thor
 
         class_option :working, :required => false,
           :default => Spade.discover_root(Dir.pwd),
@@ -17,15 +19,15 @@ module Spade
           :desc => "optional JS files to require before invoking main command"
 
         map  "-i" => "console", "--interactive" => "console"
-        desc "runtime console", "Opens an interactive JavaScript console"
+        desc "console", "Opens an interactive JavaScript console"
         def console
           require 'readline'
 
-          shell = Spade::Shell.new
+          shell = Spade::Runtime::Shell.new
           context(:with => shell) do |ctx|
             shell.ctx = ctx
             puts "help() for help. quit() to quit."
-            puts "Spade #{Spade::VERSION} (V8 #{V8::VERSION})"
+            puts "Spade #{Spade::Runtime::VERSION} (V8 #{V8::VERSION})"
             puts "WORKING=#{options[:working]}" if options[:verbose]
 
             trap("SIGINT") { puts "^C" }
@@ -34,7 +36,7 @@ module Spade
         end
 
         map  "-e" => "exec"
-        desc "runtime exec [FILENAME]", "Executes filename or stdin"
+        desc "exec [FILENAME]", "Executes filename or stdin"
         def exec(*)
           exec_args = ARGV.dup
           arg = exec_args.shift while arg != "exec" && !exec_args.empty?
@@ -94,7 +96,7 @@ module Spade
         end
 
         map  "server" => "preview"
-        desc "runtime preview", "Starts a preview server for testing"
+        desc "preview", "Starts a preview server for testing"
         long_desc %[
           The preview command starts a simple file server that can be used to
           load JavaScript-based apps in the browser.  This is a convenient way to
@@ -107,13 +109,13 @@ module Spade
           :desc => 'Port number'
         def preview
           require 'spade/server'
-          trap("SIGINT") { Spade::Server.shutdown }
-          Spade::Server.run(options[:working], options[:port]);
+          trap("SIGINT") { Spade::Runtime::Server.shutdown }
+          Spade::Runtime::Server.run(options[:working], options[:port]);
         end
 
-        desc "runtime update", "Update package info in the current project"
+        desc "update", "Update package info in the current project"
         def update
-          Spade::Bundle.update(options[:working], :verbose => options[:verbose])
+          Spade::Runtime::Bundle.update(options[:working], :verbose => options[:verbose])
         end
 
         private
@@ -127,7 +129,7 @@ module Spade
               rescue V8::JSError => e
                 puts e.message
                 puts e.backtrace(:javascript)
-              rescue StandaedError => e
+              rescue StandardError => e
                 puts e
                 puts e.backtrace.join("\n")
               end
@@ -155,7 +157,7 @@ module Spade
           def context(opts={})
             opts[:rootdir] ||= options[:working]
             opts[:verbose] = options[:verbose]
-            Spade::MainContext.new(opts) do |ctx|
+            Spade::Runtime::MainContext.new(opts) do |ctx|
 
               requires = opts[:require]
               requires.each { |r| load(ctx, r) } if requires

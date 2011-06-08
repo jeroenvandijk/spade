@@ -5,18 +5,17 @@
 # ==========================================================================
 
 require 'thor'
-require 'spade/packager/cli/commands'
-require 'spade/packager/cli/project_generator'
-require 'spade/runtime/cli/commands'
+require 'spade/packager'
+require 'spade/runtime'
 
 module Spade
   module CLI
     class Base < Thor
       desc "package", "Manage packages"
-      subcommand "package", Spade::Packager::CLI::Commands
+      subcommand "package", Spade::Packager::CLI::Base
 
       desc "runtime", "Run Spade packages and applications"
-      subcommand "runtime", Spade::Runtime::CLI::Commands
+      subcommand "runtime", Spade::Runtime::CLI::Base
     end
   end
 end

@@ -1,4 +1,4 @@
-require 'spade/packager/cli/commands'
+require 'spade/packager/cli/base'
 
 module SpecHelpers
   attr_reader :stdin, :stdout, :stderr
@@ -6,7 +6,7 @@ module SpecHelpers
   # Dummy wrapper for testing
   class CLI < Thor
     desc "package", "Package commands"
-    subcommand "package", Spade::Packager::CLI::Commands
+    subcommand "package", Spade::Packager::CLI::Base
   end
 
   def env

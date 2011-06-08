@@ -7,35 +7,7 @@
 require 'json'
 
 
-module Spade
-
-  def self.current_context
-    @current_context
-  end
-
-  def self.current_context=(ctx)
-    @current_context = ctx
-  end
-
-  def self.exports=(klass)
-    exports(klass, nil)
-  end
-
-  def self.exports(klass, path = nil)
-    path = @current_path if path.nil?
-    @exports ||= {}
-    @exports[path] = klass
-  end
-
-  def self.exports_for(path)
-    @current_path = path
-    require path
-    @current_path = nil
-
-    @exports ||= {}
-    @exports[path]
-  end
-
+module Spade::Runtime
 
   class Loader
 
@@ -179,7 +151,7 @@ module Spade
       @packages = {}
 
       # Do this to get the LibGems.dir right
-      env = Spade::Environment.new
+      env = Spade::Packager::Environment.new
 
       package_paths = Dir.glob(File.join(env.spade_dir, 'gems', '*'))
       package_paths.each{|path| add_package(path) }

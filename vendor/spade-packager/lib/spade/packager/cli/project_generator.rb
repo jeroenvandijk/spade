@@ -2,7 +2,7 @@ module Spade::Packager::CLI
   class ProjectGenerator
     include Thor::Actions
 
-    source_root File.expand_path('../../templates/project', __FILE__)
+    source_root File.join(TEMPLATES_DIR, 'project')
 
     attr_reader :name
 

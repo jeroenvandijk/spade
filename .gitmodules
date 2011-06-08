@@ -1,6 +1,6 @@
 [submodule "vendor/spade-packager/packages/optparse"]
-	path = packages/optparse
+	path = vendor/spade-packager/packages/optparse
 	url = https://github.com/qrush/optparse-js.git
 [submodule "vendor/spade-packager/packages/coffee-script"]
-	path = packages/coffee-script
+	path = vendor/spade-packager/packages/coffee-script
 	url = https://github.com/charlesjolley/coffee-script.git

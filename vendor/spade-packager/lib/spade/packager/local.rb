@@ -1,7 +1,3 @@
-require 'spade/packager/repository'
-require 'spade/packager/package'
-require 'libgems/uninstaller'
-
 module Spade::Packager
   class Local < Repository
     def uninstall(package)

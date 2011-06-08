@@ -7,7 +7,7 @@
 require 'fileutils'
 
 module WebFile
-  class FileSystemExports < Spade::Exports
+  class FileSystemExports < Spade::Ruby::Exports
 
     def initialize(ctx)
       super(ctx)

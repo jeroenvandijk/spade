@@ -5,14 +5,12 @@
 # ==========================================================================
 
 require 'v8'
-require 'spade/loader'
-require 'spade/compiler'
-require 'spade/console'
-require 'spade/reactor'
+require 'spade/runtime/compiler'
+require 'spade/runtime/console'
+require 'spade/runtime/loader'
+require 'spade/runtime/reactor'
 
-SPADEJS_PATH = File.expand_path File.join(File.dirname(__FILE__), '..', 'spade.js')
-
-module Spade
+module Spade::Runtime
   
   # Creates a basic context suitable for running modules.  The environments
   # setup in this context will mimic a browser worker thread context, 
@@ -44,9 +42,9 @@ module Spade
             clearInterval = function(t) { return r.clear_interval(t); };
             navigator     = {
               appName: 'spade',
-              appVersion: "#{Spade::VERSION}",
+              appVersion: "#{Spade::Runtime::VERSION}",
               platform: "#{RUBY_PLATFORM}",
-              userAgent: 'spade #{Spade::VERSION}; #{RUBY_PLATFORM}'
+              userAgent: 'spade #{Spade::Runtime::VERSION}; #{RUBY_PLATFORM}'
             }
             
             exit = function(status) { return r.exit(status || 0); };
@@ -86,7 +84,7 @@ module Spade
         ctx['ARGV'] = opts[:argv] || ARGV
         
         # Load spade and patch in compiler and loader plugins
-        ctx.load(SPADEJS_PATH)
+        ctx.load(Spade::Runtime::JSPATH)
         ctx['rubyLoader'] = Loader.new(self)
         ctx['rubyCompiler'] = Compiler.new(self)
         

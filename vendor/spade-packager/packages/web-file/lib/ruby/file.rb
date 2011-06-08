@@ -7,7 +7,7 @@
 require 'fileutils'
 
 module WebFile
-  class FileExports < Spade::Exports
+  class FileExports < Spade::Ruby::Exports
     
     class Blob
       

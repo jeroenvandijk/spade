@@ -1,10 +1,8 @@
-require 'spade/packager/remote'
-
 module Spade::Packager::CLI
   class Owner < Thor
     default_task :list
 
-    desc "package owner list [PACKAGE]", "Display owners of a package"
+    desc "list [PACKAGE]", "Display owners of a package"
     def list(package)
       remote = Spade::Packager::Remote.new
       if remote.logged_in?
@@ -24,7 +22,7 @@ module Spade::Packager::CLI
       end
     end
 
-    desc "package owner add [PACKAGE] [EMAIL]", "Allow another user to push new versions of your spade package"
+    desc "add [PACKAGE] [EMAIL]", "Allow another user to push new versions of your spade package"
     def add(package, email)
       remote = Spade::Packager::Remote.new
       if remote.logged_in?
@@ -34,7 +32,7 @@ module Spade::Packager::CLI
       end
     end
 
-    desc "package owner remove [PACKAGE] [EMAIL]", "Allow another user to push new versions of your spade package"
+    desc "remove [PACKAGE] [EMAIL]", "Allow another user to push new versions of your spade package"
     def remove(package, email)
       remote = Spade::Packager::Remote.new
       if remote.logged_in?

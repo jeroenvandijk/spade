@@ -1,6 +1,3 @@
-require 'spade/packager/repository'
-require 'spade/packager/dependency_installer'
-
 module Spade::Packager
   class Remote < Repository
     include LibGems::UserInteraction

@@ -4,7 +4,7 @@
 # License:   Licened under MIT license (see LICENSE)
 # ==========================================================================
 
-module Spade
+module Spade::Runtime
   BOOT_PATH = File.expand_path(File.join(File.dirname(__FILE__), '..'));
 
   module Bundle
@@ -24,7 +24,7 @@ module Spade
         installed = []
 
         # Do this to get the LibGems.dir right
-        env = Spade::Environment.new
+        env = Spade::Packager::Environment.new
 
         # In reverse order of precedence
         package_dirs = [File.join(env.spade_dir, 'gems')]

@@ -6,7 +6,7 @@
 
 module WebTypedArray
   
-  class ArrayBufferViewExports < Spade::Exports
+  class ArrayBufferViewExports < Spade::Ruby::Exports
     
     class ArrayBufferView
 

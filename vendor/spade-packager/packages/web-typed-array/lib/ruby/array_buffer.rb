@@ -6,7 +6,7 @@
 
 module WebTypedArray
   
-  class ArrayBufferExports < Spade::Exports
+  class ArrayBufferExports < Spade::Ruby::Exports
     
     # TODO: Use a string to keep the buffer packed instead of the much more
     # expensive Array

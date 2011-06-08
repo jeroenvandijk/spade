@@ -1,5 +1,1 @@
-module Spade
-  module Runtime
-
-  end
-end
+require 'spade/runtime'

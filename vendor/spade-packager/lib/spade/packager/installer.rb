@@ -1,5 +1,3 @@
-require 'libgems/installer'
-
 module Spade::Packager
   class Installer < LibGems::Installer
 

@@ -1,6 +1,3 @@
-require 'spade/packager/installer'
-require 'libgems/dependency_installer'
-
 module Spade::Packager
   class DependencyInstaller < LibGems::DependencyInstaller
 

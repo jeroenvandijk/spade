@@ -16,6 +16,10 @@ Gem::Specification.new do |s|
   mswin = RbConfig::CONFIG["host_os"] =~ %r!(msdos|mswin|djgpp|mingw)!
   mri = !mswin && (!defined?(RUBY_ENGINE) || RUBY_ENGINE == "ruby")
 
+  s.add_dependency "spade-core"
+  s.add_dependency "spade-packager"
+  s.add_dependency "spade-ruby" # Should we require this?
+
   # TODO: Do we need all of these?
   s.add_dependency "eventmachine", "~> 0.12.10"
   s.add_dependency "highline",     "~> 1.6.1"
@@ -38,7 +42,7 @@ Gem::Specification.new do |s|
   s.files = Dir.glob("lib/**/*.rb")
   s.test_files = Dir.glob("spec/**/*.rb")
 
-  #s.executables        = ['spade']
+  s.executables        = ['spaderun']
   s.require_paths      = ["lib"]
 end
 

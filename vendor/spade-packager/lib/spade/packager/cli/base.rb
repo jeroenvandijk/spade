@@ -1,24 +1,21 @@
 require 'thor'
 require 'highline'
-require 'spade/packager/local'
-require 'spade/packager/remote'
-require 'spade/packager/cli/owner'
 
 module Spade
   module Packager
     module CLI
       LOGIN_MESSAGE = "Please login first with `spade login`."
 
-      class Commands < Thor
+      class Base < Thor
 
         class_option :verbose, :type => :boolean, :default => false,
           :aliases => ['-V'],
           :desc => 'Show additional debug information while running'
 
-        desc "package owner", "Manage users for a package"
+        desc "owner", "Manage users for a package"
         subcommand "owner", Spade::Packager::CLI::Owner
 
-        desc "package install [PACKAGE]", "Installs one or many spade packages"
+        desc "install [PACKAGE]", "Installs one or many spade packages"
         method_option :version,    :type => :string,  :default => ">= 0", :aliases => ['-v'],    :desc => 'Specify a version to install'
         method_option :prerelease, :type => :boolean, :default => false,  :aliases => ['--pre'], :desc => 'Install a prerelease version'
         def install(*packages)
@@ -40,14 +37,14 @@ module Spade
           end
         end
 
-        desc "package installed [PACKAGE]", "Shows what spade packages are installed"
+        desc "installed [PACKAGE]", "Shows what spade packages are installed"
         def installed(*packages)
           local = Spade::Packager::Local.new
           index = local.installed(packages)
           print_specs(packages, index)
         end
 
-        desc "package uninstall [PACKAGE]", "Uninstalls one or many packages"
+        desc "uninstall [PACKAGE]", "Uninstalls one or many packages"
         def uninstall(*packages)
           local = Spade::Packager::Local.new
           if packages.size > 0
@@ -61,7 +58,7 @@ module Spade
           end
         end
 
-        desc "package login", "Log in with your Spade credentials"
+        desc "login", "Log in with your Spade credentials"
         def login
           highline = HighLine.new
           say "Enter your Spade credentials."
@@ -90,7 +87,7 @@ module Spade
           end
         end
 
-        desc "package push", "Distribute your spade package"
+        desc "push", "Distribute your spade package"
         def push(package)
           remote = Spade::Packager::Remote.new
           if remote.logged_in?
@@ -100,7 +97,7 @@ module Spade
           end
         end
 
-        desc "package yank", "Remove a specific package version release from SproutCutter"
+        desc "yank", "Remove a specific package version release from SproutCutter"
         method_option :version, :type => :string,  :default => nil,   :aliases => ['-v'],    :desc => 'Specify a version to yank'
         method_option :undo,    :type => :boolean, :default => false,                        :desc => 'Unyank package'
         def yank(package)
@@ -120,7 +117,7 @@ module Spade
           end
         end
 
-        desc "package list", "View available packages for download"
+        desc "list", "View available packages for download"
         method_option :all,        :type => :boolean, :default => false, :aliases => ['-a'],    :desc => 'List all versions available'
         method_option :prerelease, :type => :boolean, :default => false, :aliases => ['--pre'], :desc => 'List prerelease versions available'
         def list(*packages)
@@ -129,13 +126,13 @@ module Spade
           print_specs(packages, index)
         end
 
-        desc "package new [NAME]", "Generate a new project skeleton"
+        desc "new [NAME]", "Generate a new project skeleton"
         def new(name)
           ProjectGenerator.new(self,
             name, File.expand_path(name)).run
         end
 
-        desc "package build", "Build a spade package from a package.json"
+        desc "build", "Build a spade package from a package.json"
         def build
           local = Spade::Packager::Local.new
           if local.logged_in?
@@ -154,7 +151,7 @@ module Spade
           end
         end
 
-        desc "package unpack [PACKAGE]", "Extract files from a spade package"
+        desc "unpack [PACKAGE]", "Extract files from a spade package"
         method_option :target, :type => :string, :default => ".", :aliases => ['-t'], :desc => 'Unpack to given directory'
         def unpack(*paths)
           local = Spade::Packager::Local.new

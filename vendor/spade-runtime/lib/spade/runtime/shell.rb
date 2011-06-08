@@ -5,7 +5,7 @@
 # ==========================================================================
 
 # Global object used for the shell.
-module Spade
+module Spade::Runtime
   class Shell
     attr_accessor :ctx
 
