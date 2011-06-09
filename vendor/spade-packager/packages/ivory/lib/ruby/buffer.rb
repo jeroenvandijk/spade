@@ -7,7 +7,7 @@
 require 'v8'
 
 module Ivory
-  class BufferModule < Spade::Ruby::Exports
+  class BufferModule < Spade::Runtime::Exports
     
     class SlowBuffer
       attr_reader :data

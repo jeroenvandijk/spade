@@ -2,7 +2,6 @@ source 'http://rubygems.org'
 
 gem "spade-core", :path => "../spade-core"
 gem "spade-packager", :path => "../spade-packager"
-gem "spade-ruby", :path => "../spade-ruby"
 
 gemspec
 

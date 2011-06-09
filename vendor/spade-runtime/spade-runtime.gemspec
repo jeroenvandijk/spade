@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "spade-core"
   s.add_dependency "spade-packager"
-  s.add_dependency "spade-ruby" # Should we require this?
 
   # TODO: Do we need all of these?
   s.add_dependency "eventmachine", "~> 0.12.10"

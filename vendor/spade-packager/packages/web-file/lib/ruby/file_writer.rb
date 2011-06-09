@@ -5,7 +5,7 @@
 # ==========================================================================
 
 module WebFile
-  class FileWriterExports < Spade::Ruby::Exports
+  class FileWriterExports < Spade::Runtime::Exports
 
     def initialize(ctx)
       super(ctx)

@@ -5,7 +5,7 @@
 # ==========================================================================
 
 module Ivory
-  class Constants < Spade::Ruby::Exports
+  class Constants < Spade::Runtime::Exports
     
     def self.defc(name, value)
       self.send(:define_method, name) do ||

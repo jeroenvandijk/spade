@@ -5,7 +5,7 @@
 # ==========================================================================
 
 module Spade
-  module Ruby
+  module Runtime
     module Namespace
       
       def [](name)
@@ -69,16 +69,16 @@ module Spade
   end
 
   module Namespace
-    include Ruby::Namespace
+    include Runtime::Namespace
 
     def self.included(base)
-      warn("Spade::Namespace is deprecated. Use Spade::Ruby::Namespace instead. From #{base.name}")
+      warn("Spade::Namespace is deprecated. Use Spade::Runtime::Namespace instead. From #{base.name}")
     end
   end
 
-  class Exports < Ruby::Exports
+  class Exports < Runtime::Exports
     def self.inherited(subclass)
-      warn("Spade::Exports is deprecated. Used Spade::Ruby::Exports instead. From #{subclass.name}")
+      warn("Spade::Exports is deprecated. Used Spade::Runtime::Exports instead. From #{subclass.name}")
     end
   end
 

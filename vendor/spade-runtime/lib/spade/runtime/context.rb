@@ -84,7 +84,7 @@ module Spade::Runtime
         ctx['ARGV'] = opts[:argv] || ARGV
         
         # Load spade and patch in compiler and loader plugins
-        ctx.load(Spade::Runtime::JSPATH)
+        ctx.load(Spade::JSPATH)
         ctx['rubyLoader'] = Loader.new(self)
         ctx['rubyCompiler'] = Compiler.new(self)
         

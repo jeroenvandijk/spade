@@ -5,7 +5,7 @@
 # ==========================================================================
 
 module Ivory
-  class EventEmitterExports < Spade::Ruby::Exports
+  class EventEmitterExports < Spade::Runtime::Exports
 
     class EventEmitter
       attr_accessor :_events

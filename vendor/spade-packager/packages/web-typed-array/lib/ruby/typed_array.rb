@@ -6,7 +6,7 @@
 
 module WebTypedArray
   
-  class TypedArrayExports < Spade::Ruby::Exports
+  class TypedArrayExports < Spade::Runtime::Exports
     
     def initialize(ctx)
       super(ctx)
@@ -18,7 +18,7 @@ module WebTypedArray
     # expensive Array
     class TypedArray
       
-      include Spade::Ruby::Namespace
+      include Spade::Runtime::Namespace
       
       DataView    = WebTypedArray::ArrayBufferViewExports::DataView
       ArrayBuffer = WebTypedArray::ArrayBufferExports::ArrayBuffer

@@ -7,7 +7,7 @@
 require 'fileutils'
 
 module Ivory
-  class Fs < Spade::Ruby::Exports
+  class Fs < Spade::Runtime::Exports
   
     def initialize(ctx)
       @ctx = ctx
