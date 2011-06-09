@@ -9,7 +9,7 @@ var PATH = require('path'),
     SYS  = require('sys'),
     FS   = require('fs'),
     SPADE_DIR = '.spade'; // Would be nice if we could share Spade::SPADE_DIR
-    
+
 exports.Loader = function() {
   this.root = process.cwd();
 };
@@ -20,7 +20,7 @@ function addPackage(packages, dirname, filename) {
   if (filename[0] === '.') return ; // nothing to do
   var path = PATH.join(dirname, filename);
   if (!PATH.existsSync(path) || !FS.statSync(path).isDirectory()) return;
-  
+
   var jsonPath = PATH.join(path, 'package.json');
   if (!PATH.existsSync(jsonPath)) return ; // not a pkg
 
@@ -30,9 +30,9 @@ function addPackage(packages, dirname, filename) {
   } catch(e) {
     json = null;
   }
-  
+
   if (!json) return; // nothing to do
-  
+
   var directories = json.directories || { lib: 'lib' };
   if (!json.directories && json.lib) directories.lib = json.lib;
   var name = json.name || filename;
@@ -55,16 +55,16 @@ function registerModule(spade, id, path, done) {
 }
 
 function registerNode(spade, id, loader, done) {
-  
+
   // register a package the first time someone tries to load the module
   if (!loader._nodeRegistered) {
     loader._nodeRegistered = true;
     spade.register('node', { name: "node", version: process.version });
   }
-  
+
   // when loading this module, just do a native node require...
   spade.register(id, function(r, e, m) { m.exports = require(id.slice(5)); });
-  
+
 }
 
 Lp.packages = function() {
@@ -94,9 +94,9 @@ Lp.packages = function() {
       });
     }
   });
-  
+
   addPackage(packages, PATH.dirname(this.root), PATH.basename(this.root));
-  
+
   return packages;
 };
 
@@ -107,28 +107,28 @@ Lp.loadFactory = function(spade, id, formats, done) {
   if (id.indexOf('(file)/')===0) {
     return registerModule(spade, id, id.slice(6), done);
   }
-  
+
   if (id.indexOf('node/')===0) { return registerNode(spade, id, this, done); }
-  
+
   var parts = id.split('/');
   var packageName = parts.shift();
   var packageInfo = this.packages()[packageName];
-  
+
   if (!packageInfo) { return finishLoad(done); }
-  
+
   if (parts.length>0 && (parts[0][0] === '~')) {
     var dirname = parts.shift().slice(1);
     dirname = packageInfo.directories[dirname] || dirname;
   } else {
     dirname = packageInfo.directories['lib'] || 'lib';
   }
-  
+
   // register package first if needed
   if (!packageInfo.registered) {
     packageInfo.registered = true;
     spade.register(packageName, packageInfo.json);
   }
-  
+
   parts.unshift(dirname);
   parts.unshift(packageInfo.path);
 
