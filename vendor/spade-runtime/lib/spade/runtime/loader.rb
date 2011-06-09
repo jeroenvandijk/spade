@@ -150,10 +150,7 @@ module Spade::Runtime
       @packages unless @packages.nil?
       @packages = {}
 
-      # Do this to get the LibGems.dir right
-      env = Spade::Packager::Environment.new
-
-      package_paths = Dir.glob(File.join(env.spade_dir, 'gems', '*'))
+      package_paths = Dir.glob(File.join(LibGems.dir, 'gems', '*'))
       package_paths.each{|path| add_package(path) }
 
       # in reverse order of precedence

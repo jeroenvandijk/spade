@@ -1,4 +1,5 @@
 require 'libgems'
+require 'libgems_ext'
 
 module Spade
   module Packager
@@ -7,9 +8,6 @@ module Spade
 
     autoload :CLI,                  'spade/packager/cli'
     autoload :Credentials,          'spade/packager/credentials'
-    autoload :DependencyInstaller,  'spade/packager/dependency_installer'
-    autoload :Environment,          'spade/packager/environment'
-    autoload :Installer,            'spade/packager/installer'
     autoload :Local,                'spade/packager/local'
     autoload :Package,              'spade/packager/package'
     autoload :Remote,               'spade/packager/remote'

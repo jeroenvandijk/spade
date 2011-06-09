@@ -5,8 +5,7 @@ describe "spade build when logged in" do
   let(:email) { "who@example.com" }
 
   before do
-    cd(home)
-    env["HOME"] = home.to_s
+    goto_home
     write_creds(email, "deadbeef")
   end
 
@@ -29,8 +28,7 @@ end
 
 describe "spade build without logging in" do
   before do
-    cd(home)
-    env["HOME"] = home.to_s
+    goto_home
   end
 
   it "warns the user that they must log in first" do
@@ -43,8 +41,7 @@ end
 
 describe "spade build with an invalid package.json" do
   before do
-    cd(home)
-    env["HOME"] = home.to_s
+    goto_home
     write_api_key("deadbeef")
   end
 

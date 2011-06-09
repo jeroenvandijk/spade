@@ -1,7 +1,10 @@
-module Spade::Packager
-  class DependencyInstaller < LibGems::DependencyInstaller
+require 'libgems/dependency_installer'
+
+module LibGems
+  class DependencyInstaller
 
     # Had to overwrite this all just to change the match from /gem$/ to /spd$/
+    # TODO: Consider whether extension should be settable in LibGems
     def find_spec_by_name_and_version(gem_name,
                                       version = LibGems::Requirement.default,
                                       prerelease = false)
@@ -15,8 +18,11 @@ module Spade::Packager
 
       local_gems = Dir["#{glob}*"].sort.reverse
 
+      puts "local_gems: #{local_gems.inspect}"
+
       unless local_gems.empty? then
         local_gems.each do |gem_file|
+          puts "gem_file: #{gem_file}"
           next unless gem_file =~ /spd$/
           begin
             spec = LibGems::Format.from_file_by_path(gem_file).spec
@@ -76,7 +82,7 @@ module Spade::Packager
           raise
         end
 
-        inst = Spade::Packager::Installer.new local_gem_path,
+        inst = LibGems::Installer.new local_gem_path,
                                   :bin_dir             => @bin_dir,
                                   :development         => @development,
                                   :env_shebang         => @env_shebang,
@@ -97,6 +103,49 @@ module Spade::Packager
       @installed_gems
     end
 
+    def find_gems_with_sources(dep)
+      # Reset the errors
+      @errors = nil
+      gems_and_sources = []
+
+      if @domain == :both or @domain == :local then
+        Dir[File.join(Dir.pwd, "#{dep.name}-[0-9]*.spd")].each do |gem_file|
+          spec = LibGems::Format.from_file_by_path(gem_file).spec
+          gems_and_sources << [spec, gem_file] if spec.name == dep.name
+        end
+      end
+
+      if @domain == :both or @domain == :remote then
+        begin
+          requirements = dep.requirement.requirements.map do |req, ver|
+            req
+          end
+
+          all = !dep.prerelease? &&
+                # we only need latest if there's one requirement and it is
+                # guaranteed to match the newest specs
+                (requirements.length > 1 or
+                  (requirements.first != ">=" and requirements.first != ">"))
+
+          found, @errors = LibGems::SpecFetcher.fetcher.fetch_with_errors dep, all, true, dep.prerelease?
+
+          gems_and_sources.push(*found)
+
+        rescue LibGems::RemoteFetcher::FetchError => e
+          if LibGems.configuration.really_verbose then
+            say "Error fetching remote data:\t\t#{e.message}"
+            say "Falling back to local-only install"
+          end
+          @domain = :local
+        end
+      end
+
+      gems_and_sources.sort_by do |gem, source|
+        [gem, source =~ /^http:\/\// ? 0 : 1] # local gems win
+      end
+    end
+
   end
 end
+
 

@@ -2,9 +2,9 @@ require "spec_helper"
 
 describe "spade installed" do
   before do
-    cd(home)
-    env["HOME"] = home.to_s
-    env["RUBYGEMS_HOST"] = "http://localhost:9292"
+    goto_home
+    set_host
+    # TODO: Make this LibGems specific
     env["GEM_HOME"] = spade_dir.to_s
     env["GEM_PATH"] = spade_dir.to_s
     start_fake(FakeGemServer.new)

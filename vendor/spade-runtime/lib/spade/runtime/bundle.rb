@@ -23,11 +23,8 @@ module Spade::Runtime
 
         installed = []
 
-        # Do this to get the LibGems.dir right
-        env = Spade::Packager::Environment.new
-
         # In reverse order of precedence
-        package_dirs = [File.join(env.spade_dir, 'gems')]
+        package_dirs = [File.join(LibGems.dir, 'gems')]
         package_dirs += %w[vendor/cache vendor/packages packages].map{|p| File.join(rootdir, p.split('/')) }
 
         for package_dir in package_dirs

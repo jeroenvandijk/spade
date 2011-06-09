@@ -1,3 +1,5 @@
+require 'libgems/uninstaller'
+
 module Spade::Packager
   class Local < Repository
     def uninstall(package)
@@ -37,10 +39,11 @@ module Spade::Packager
     private
 
     def silence
+      original_verbose = LibGems.configuration.verbose
       LibGems.configuration.verbose = false
-      result = yield
-      LibGems.configuration.verbose = true
-      result
+      yield
+    ensure
+      LibGems.configuration.verbose = original_verbose
     end
   end
 end

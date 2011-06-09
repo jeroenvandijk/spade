@@ -2,8 +2,7 @@ require "spec_helper"
 
 describe "spade unpack" do
   before do
-    cd(home)
-    env["HOME"] = home.to_s
+    goto_home
   end
 
   it "builds a gem from a given package.json" do

@@ -50,6 +50,12 @@ module SpecHelpers
     home(Spade::Packager::SPADE_DIR, *path)
   end
 
-  module_function :root, :tmp, :home, :local
+  def goto_home
+    cd(home)
+    env["HOME"] = home.to_s
+    LibGems.clear_paths
+  end
+
+  module_function :root, :tmp, :home, :local, :goto_home
 end
 

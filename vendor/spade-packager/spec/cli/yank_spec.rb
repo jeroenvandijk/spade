@@ -5,9 +5,8 @@ describe "spade yank" do
   let(:creds)   { spade_dir("credentials") }
 
   before do
-    cd(home)
-    env["HOME"] = home.to_s
-    env["RUBYGEMS_HOST"] = "http://localhost:9292"
+    goto_home
+    set_host
     start_fake(FakeGemcutter.new(api_key))
   end
 

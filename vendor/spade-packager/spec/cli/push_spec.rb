@@ -5,9 +5,8 @@ describe "spade push" do
   let(:creds)   { spade_dir("credentials") }
 
   before do
-    cd(home)
-    env["HOME"] = home.to_s
-    env["RUBYGEMS_HOST"] = "http://localhost:9292"
+    goto_home
+    set_host
     start_fake(FakeGemcutter.new(api_key))
   end
 
@@ -17,7 +16,7 @@ describe "spade push" do
     end
 
     it "registers a gem when sent with the right api key" do
-      spade "package", "push", "../../spec/fixtures/rake-0.8.7.gem"
+      spade "package", "push", "../../spec/fixtures/rake-0.8.7.spd"
 
       stdout.read.should include("Successfully registered rake (0.8.7)")
     end
@@ -26,7 +25,7 @@ describe "spade push" do
   it "shows rejection message if wrong api key is supplied" do
     write_api_key("beefbeef")
 
-    spade "package", "push", "../../spec/fixtures/rake-0.8.7.gem"
+    spade "package", "push", "../../spec/fixtures/rake-0.8.7.spd"
 
     stdout.read.should include("One cannot simply walk into Mordor!")
   end
@@ -41,13 +40,13 @@ describe "spade push without api key" do
   end
 
   it "ignores files that don't exist" do
-    spade "package", "push", "rake-1.0.0.gem"
+    spade "package", "push", "rake-1.0.0.spd"
 
     stdout.read.should include("No such file")
   end
 
   it "must push a valid gem" do
-    spade "package", "push", "../../spec/fixtures/badrake-0.8.7.gem"
+    spade "package", "push", "../../spec/fixtures/badrake-0.8.7.spd"
 
     stdout.read.should include("There was a problem opening your package.")
   end
@@ -67,7 +66,7 @@ describe "spade push without api key" do
   end
 
   it "asks for login first if api key does not exist" do
-    spade "package", "push", "../../spec/fixtures/rake-0.8.7.gem"
+    spade "package", "push", "../../spec/fixtures/rake-0.8.7.spd"
 
     stdout.read.should include("Please login first with `spade login`")
   end

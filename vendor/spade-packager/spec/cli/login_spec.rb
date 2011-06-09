@@ -7,7 +7,7 @@ describe "spade login" do
   let(:creds)    { spade_dir("credentials") }
 
   before do
-    cd(home)
+    goto_home
 
     fake = lambda { |env|
       [200, {"Content-Type" => "text/plain"}, [api_key]]
@@ -17,8 +17,7 @@ describe "spade login" do
       user == email && password == pass
     end
 
-    env["HOME"] = home.to_s
-    env["RUBYGEMS_HOST"] = "http://localhost:9292"
+    LibGems.host = "http://localhost:9292"
     start_fake(protected_fake)
   end
 

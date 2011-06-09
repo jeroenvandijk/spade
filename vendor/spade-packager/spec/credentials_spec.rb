@@ -2,15 +2,14 @@ require 'spec_helper'
 
 describe Spade::Packager::Credentials do
   def new_creds
-    Spade::Packager::Credentials.new(Spade::Packager::Environment.new)
+    Spade::Packager::Credentials.new
   end
 
   around do |example|
     cd(home)
-    old_home    = ENV["HOME"]
-    ENV["HOME"] = home.to_s
+    LibGems.send(:set_home, home)
     example.call
-    ENV["HOME"] = old_home
+    LibGems.clear_paths
   end
 
   subject { new_creds }

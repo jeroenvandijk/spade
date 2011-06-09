@@ -7,6 +7,13 @@ require 'support/fake_gemcutter'
 require 'support/matchers'
 require 'support/path'
 
+module SpecHelpers
+  def set_host(host='http://localhost:9292')
+    LibGems.host = host
+    LibGems.sources = [LibGems.host]
+  end
+end
+
 RSpec.configure do |config|
   working_dir = Dir.pwd
 

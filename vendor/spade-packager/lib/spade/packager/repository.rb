@@ -1,10 +1,9 @@
 module Spade::Packager
   class Repository
-    attr_accessor :env, :creds
+    attr_accessor :creds
 
     def initialize
-      self.env   = Environment.new
-      self.creds = Credentials.new(@env)
+      self.creds = Credentials.new
     end
 
     def logged_in?

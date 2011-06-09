@@ -72,7 +72,7 @@ module Spade::Packager
     end
 
     def install(package, version, prerelease)
-      inst = Spade::Packager::DependencyInstaller.new(:prerelease => prerelease)
+      inst = LibGems::DependencyInstaller.new(:prerelease => prerelease)
       inst.install package, LibGems::Requirement.new([version])
       inst.installed_gems
     end
@@ -81,7 +81,7 @@ module Spade::Packager
 
     def raw_request(method, path, &block)
       require 'net/http'
-      host = ENV['RUBYGEMS_HOST'] || LibGems.host
+      host = ENV['SPADE_HOST'] || LibGems.host
       uri = URI.parse "#{host}/#{path}"
 
       request_method = Net::HTTP.const_get method.to_s.capitalize

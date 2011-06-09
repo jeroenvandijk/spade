@@ -2,9 +2,9 @@ require "spec_helper"
 
 describe "spade uninstall" do
   before do
-    cd(home)
-    env["HOME"] = home.to_s
-    env["RUBYGEMS_HOST"] = "http://localhost:9292"
+    goto_home
+    set_host
+    # TODO: Fix for LibGems
     env["GEM_HOME"] = spade_dir.to_s
     env["GEM_PATH"] = spade_dir.to_s
     start_fake(FakeGemServer.new)
