@@ -8,7 +8,8 @@
 var PATH = require('path'),
     SYS  = require('sys'),
     FS   = require('fs'),
-    SPADE_DIR = '.spade'; // Would be nice if we could share Spade::SPADE_DIR
+    SPADE_DIR = '.spade', // Would be nice if we could share Spade::SPADE_DIR
+    PACKAGE_DIR = PATH.join(process.env.HOME, SPADE_DIR, 'gems');
 
 exports.Loader = function() {
   this.root = process.cwd();
@@ -41,7 +42,7 @@ function addPackage(packages, dirname, filename) {
     path:     path,
     directories: directories,
     json: json
-  };
+};
 }
 
 function finishLoad(done) {
@@ -73,10 +74,9 @@ Lp.packages = function() {
   this._packages = packages;
 
   // add spade install dir
-  var spadeDir = PATH.join(process.env.HOME, SPADE_DIR, 'gems');
-  if (PATH.existsSync(spadeDir) && FS.statSync(spadeDir).isDirectory()) {
-    FS.readdirSync(spadeDir).forEach(function(name){
-      addPackage(packages, spadeDir, name);
+  if (PATH.existsSync(PACKAGE_DIR) && FS.statSync(PACKAGE_DIR).isDirectory()) {
+    FS.readdirSync(PACKAGE_DIR).forEach(function(name){
+      addPackage(packages, PACKAGE_DIR, name);
     });
   }
 
