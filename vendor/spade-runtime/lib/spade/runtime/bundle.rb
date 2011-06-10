@@ -24,9 +24,10 @@ module Spade::Runtime
         FileUtils.ln_s BOOT_PATH, File.join(spade_path, 'boot')
 
         installed = []
+        package_dirs = []
 
         # In reverse order of precedence
-        package_dirs = [File.join(LibGems.dir, 'gems')]
+        package_dirs << File.join(LibGems.dir, 'gems') if defined?(Spade::Packager)
         package_dirs += %w[vendor/cache vendor/packages packages].map{|p| File.join(rootdir, p.split('/')) }
 
         for package_dir in package_dirs

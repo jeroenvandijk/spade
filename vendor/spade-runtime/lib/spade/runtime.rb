@@ -1,5 +1,11 @@
 require 'spade/core'
-require 'spade/packager'
+require 'libgems'
+
+begin
+  require 'spade/packager'
+rescue LoadError
+  # Packager isn't necessary, but we should use it if available
+end
 
 module Spade
   module Runtime

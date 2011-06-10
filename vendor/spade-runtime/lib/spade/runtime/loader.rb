@@ -150,8 +150,10 @@ module Spade::Runtime
       @packages unless @packages.nil?
       @packages = {}
 
-      package_paths = Dir.glob(File.join(LibGems.dir, 'gems', '*'))
-      package_paths.each{|path| add_package(path) }
+      if defined?(Spade::Packager)
+        package_paths = Dir.glob(File.join(LibGems.dir, 'gems', '*'))
+        package_paths.each{|path| add_package(path) }
+      end
 
       # in reverse order of precedence
       %w[.spade/packages vendor/cache vendor/packages packages].each do |p|
