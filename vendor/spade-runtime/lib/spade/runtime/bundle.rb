@@ -4,8 +4,10 @@
 # License:   Licened under MIT license (see LICENSE)
 # ==========================================================================
 
+require 'json'
+
 module Spade::Runtime
-  BOOT_PATH = File.expand_path(File.join(File.dirname(__FILE__), '..'));
+  BOOT_PATH = File.dirname(Spade::JSPATH)
 
   module Bundle
     class << self
@@ -13,7 +15,7 @@ module Spade::Runtime
       def update(rootdir, opts ={})
 
         verbose = opts[:verbose]
-        spade_path = File.join(rootdir, SPADE_DIR)
+        spade_path = File.join(rootdir, Spade::Packager::SPADE_DIR)
         FileUtils.rm_r(spade_path) if File.exists? spade_path
 
         FileUtils.mkdir_p spade_path
@@ -70,12 +72,12 @@ module Spade::Runtime
 
       def gen_spade_boot(rootdir, opts={})
         verbose = opts[:verbose]
-        spade_path = File.join(rootdir, SPADE_DIR, 'packages', '*')
+        spade_path = File.join(rootdir, Spade::Packager::SPADE_DIR, 'packages', '*')
         known_packages = Dir.glob(spade_path).map do |path|
           package_name = File.basename path
           info = JSON.load File.read(File.join(path, 'package.json'))
           info["sync"] = true
-          info["root"] = "#{SPADE_DIR}/packages/#{package_name}"
+          info["root"] = "#{Spade::Packager::SPADE_DIR}/packages/#{package_name}"
           info["files"] = package_file_list(path)
           info
         end
@@ -106,7 +108,7 @@ module Spade::Runtime
 (function() {
   // load spade itself
   var script = document.createElement('script');
-  script.src = "#{SPADE_DIR}/boot/spade.js";
+  script.src = "#{Spade::Packager::SPADE_DIR}/boot/spade.js";
   script.onload = function() {
 
     // Register remaining packages with spade
