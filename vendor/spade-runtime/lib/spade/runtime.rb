@@ -1,6 +1,5 @@
 require 'spade/core'
 require 'spade/packager'
-require 'spade/ruby' # Should we always require this?
 
 module Spade
   module Runtime

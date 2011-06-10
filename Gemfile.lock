@@ -23,11 +23,6 @@ PATH
       thor (~> 0.14.3)
 
 PATH
-  remote: vendor/spade-ruby
-  specs:
-    spade-ruby (0.1.0)
-
-PATH
   remote: vendor/spade-runtime
   specs:
     spade-runtime (0.1.0)
@@ -38,7 +33,6 @@ PATH
       rack (~> 1.2.1)
       spade-core
       spade-packager
-      spade-ruby
       therubyracer (~> 0.8.0)
       thor (~> 0.14.3)
 
@@ -73,6 +67,5 @@ DEPENDENCIES
   spade!
   spade-core!
   spade-packager!
-  spade-ruby!
   spade-runtime!
   test-unit
