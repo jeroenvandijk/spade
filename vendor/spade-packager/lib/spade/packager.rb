@@ -3,7 +3,6 @@ require 'libgems_ext'
 
 module Spade
   module Packager
-    SPADE_DIR = '.spade' # Would be nice to share this with node.js loader
     TEMPLATES_DIR = File.expand_path("../../../templates", __FILE__)
 
     autoload :CLI,                  'spade/packager/cli'

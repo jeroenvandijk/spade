@@ -6,7 +6,7 @@ module LibGems
   end
 
   def self.default_dir
-    File.join(ENV["HOME"], Spade::Packager::SPADE_DIR)
+    File.join(ENV["HOME"], Spade::SPADE_DIR)
   end
 
   def self.config_file

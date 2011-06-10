@@ -47,7 +47,7 @@ module SpecHelpers
   end
 
   def spade_dir(*path)
-    home(Spade::Packager::SPADE_DIR, *path)
+    home(Spade::SPADE_DIR, *path)
   end
 
   def goto_home

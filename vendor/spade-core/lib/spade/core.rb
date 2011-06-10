@@ -3,6 +3,7 @@ module Spade
   end
 
   JSPATH = File.expand_path("../js/spade.js", __FILE__)
+  SPADE_DIR = '.spade'
 
   # find the current path with a package.json or .packages or cur_path
   def self.discover_root(cur_path)
