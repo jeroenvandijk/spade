@@ -22,6 +22,5 @@
 
   "dependencies": {},
 
-  "main": "./lib/index"
-
+  "main": "./lib/main"
 }

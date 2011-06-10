@@ -5,7 +5,7 @@
 // ==========================================================================
 /*globals process */
 
-var spade = require('../spade'),
+var spade = require('../core/spade'),
     VM    = require('vm');
 
 var OriginalSandbox = spade.Sandbox;
