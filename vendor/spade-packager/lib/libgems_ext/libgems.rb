@@ -5,6 +5,10 @@ module LibGems
     %w[https://sproutcutter.heroku.com/]
   end
 
+  def self.host
+    @host ||= "https://sproutcutter.heroku.com"
+  end
+
   def self.default_dir
     File.join LibGems.user_home, Spade::SPADE_DIR
   end
