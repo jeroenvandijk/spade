@@ -51,53 +51,55 @@ module LibGems
 
     # Overwrite this to use our custom installer
     def install dep_or_name, version = LibGems::Requirement.default
-      if String === dep_or_name then
-        find_spec_by_name_and_version dep_or_name, version, @prerelease
-      else
-        dep_or_name.prerelease = @prerelease
-        @specs_and_sources = [find_gems_with_sources(dep_or_name).last]
-      end
-
-      @installed_gems = []
-
-      gather_dependencies
-
-      @gems_to_install.each do |spec|
-        last = spec == @gems_to_install.last
-        # HACK is this test for full_name acceptable?
-        next if @source_index.any? { |n,_| n == spec.full_name } and not last
-
-        # TODO: make this sorta_verbose so other users can benefit from it
-        say "Installing spd #{spec.full_name}" if LibGems.configuration.really_verbose
-
-        _, source_uri = @specs_and_sources.assoc spec
-        begin
-          local_gem_path = LibGems::RemoteFetcher.fetcher.download spec, source_uri,
-                                                               @cache_dir
-        rescue LibGems::RemoteFetcher::FetchError
-          next if @force
-          raise
+      LibGems.with_rubygems_compat do
+        if String === dep_or_name then
+          find_spec_by_name_and_version dep_or_name, version, @prerelease
+        else
+          dep_or_name.prerelease = @prerelease
+          @specs_and_sources = [find_gems_with_sources(dep_or_name).last]
         end
 
-        inst = LibGems::Installer.new local_gem_path,
-                                  :bin_dir             => @bin_dir,
-                                  :development         => @development,
-                                  :env_shebang         => @env_shebang,
-                                  :force               => @force,
-                                  :format_executable   => @format_executable,
-                                  :ignore_dependencies => @ignore_dependencies,
-                                  :install_dir         => @install_dir,
-                                  :security_policy     => @security_policy,
-                                  :source_index        => @source_index,
-                                  :user_install        => @user_install,
-                                  :wrappers            => @wrappers
+        @installed_gems = []
 
-        spec = inst.install
+        gather_dependencies
 
-        @installed_gems << spec
+        @gems_to_install.each do |spec|
+          last = spec == @gems_to_install.last
+          # HACK is this test for full_name acceptable?
+          next if @source_index.any? { |n,_| n == spec.full_name } and not last
+
+          # TODO: make this sorta_verbose so other users can benefit from it
+          say "Installing spd #{spec.full_name}" if LibGems.configuration.really_verbose
+
+          _, source_uri = @specs_and_sources.assoc spec
+          begin
+            local_gem_path = LibGems::RemoteFetcher.fetcher.download spec, source_uri,
+                                                                 @cache_dir
+          rescue LibGems::RemoteFetcher::FetchError
+            next if @force
+            raise
+          end
+
+          inst = LibGems::Installer.new local_gem_path,
+                                    :bin_dir             => @bin_dir,
+                                    :development         => @development,
+                                    :env_shebang         => @env_shebang,
+                                    :force               => @force,
+                                    :format_executable   => @format_executable,
+                                    :ignore_dependencies => @ignore_dependencies,
+                                    :install_dir         => @install_dir,
+                                    :security_policy     => @security_policy,
+                                    :source_index        => @source_index,
+                                    :user_install        => @user_install,
+                                    :wrappers            => @wrappers
+
+          spec = inst.install
+
+          @installed_gems << spec
+        end
+
+        @installed_gems
       end
-
-      @installed_gems
     end
 
     def find_gems_with_sources(dep)

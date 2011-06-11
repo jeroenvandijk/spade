@@ -1,3 +1,4 @@
+require 'spade/core'
 require 'libgems'
 require 'libgems_ext'
 
