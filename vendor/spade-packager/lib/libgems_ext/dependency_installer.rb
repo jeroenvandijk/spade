@@ -18,11 +18,8 @@ module LibGems
 
       local_gems = Dir["#{glob}*"].sort.reverse
 
-      puts "local_gems: #{local_gems.inspect}"
-
       unless local_gems.empty? then
         local_gems.each do |gem_file|
-          puts "gem_file: #{gem_file}"
           next unless gem_file =~ /spd$/
           begin
             spec = LibGems::Format.from_file_by_path(gem_file).spec
