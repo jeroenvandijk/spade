@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   mri = !mswin && (!defined?(RUBY_ENGINE) || RUBY_ENGINE == "ruby")
 
   # TODO: Do we need all of these still?
-  s.add_dependency "libgems"
+  s.add_dependency "libgems",      "~> 0.0.2"
   s.add_dependency "gemcutter",    "~> 0.6.1"
   s.add_dependency "eventmachine", "~> 0.12.10"
   s.add_dependency "highline",     "~> 1.6.1"
